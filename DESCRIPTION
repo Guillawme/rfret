@@ -1,0 +1,15 @@
+Package: rfret
+Title: Analyze FRET Binding Data
+Version: 0.0.0.9000
+Authors@R: person("Guillaume", "Gaullier", email = "guillaume@gaullier.org", role = c("aut", "cre"))
+Description: This package provides functions to analyze FRET binding data.
+    Given raw fluorescence data from a FRET titration experiment's donor,
+    acceptor and FRET channels, it allows to: (1) plot all channels to visually
+    inspect raw data; (2) correct FRET signal; (3) estimate parameters of the
+    quadratic binding equation (Kd, signal_min, signal_max); (4) fit the
+    quadratic binding equation to the data; (5) report Kd; and (6) plot the
+    corrected FRET and resulting binding curve.
+Depends: R (>= 3.3.2)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
