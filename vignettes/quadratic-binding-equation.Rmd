@@ -1,0 +1,85 @@
+---
+title: "Deriving the quadratic binding equation"
+author: "Guillaume Gaullier"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Deriving the quadratic binding equation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This documentation explains how the quadratic binding equation used to fit
+binding data from a FRET experiment is derived from the law of mass action.
+
+## Binding equilibrium
+
+In this document, we will call M the macromolecule, L the ligand, ML the
+macromolecule/ligand complex, and [M], [L] and [ML] their molar concentrations
+at equilibrium. Moreover, we will call $M_{tot}$ the total concentration of
+macromolecule, and $L_{tot}$ the total concentration of ligand. We have, by
+definition because of mass conservation:
+
+1: $M_{tot} = [M] + [ML]$
+2: $L_{tot} = [L] + [ML]$
+
+The binding equilibrium is represented by the following reaction:
+
+$M + L \rightleftharpoons ML$
+
+The equilibrium binding constant $K_D$ is defined by the following equation (law
+of mass action):
+
+3: $K_D = \frac{[M] \times [L]}{[ML]}$
+
+Determining $K_D$ is the goal of a binding assay, like a FRET
+titration experiment.
+
+## Deriving the quadratic binding equation
+
+To determine $K_D$, we need to measure [ML] at equilibrium. [M] and [L] can be
+expressed as a function of [ML] from equations 1 and 2, and $M_{tot}$ and
+$L_{tot}$ are known parameters of the experiment.
+
+Rewriting equation 3 gives us:
+
+4: $K_D \times [ML] - [M] \times [L] = 0$
+
+By substituting into equation 4 [M] and [L] using equations 1 and 2, we have:
+
+$K_D \times [ML] - (M_{tot} - [ML]) \times (L_{tot} - [ML]) = 0$
+
+We can now solve this equation for [ML]:
+
+$K_D \times [ML] - (M_{tot} \times L_{tot} - M_{tot} \times [ML] - L_{tot} \times [ML] + [ML]^2) = 0$
+
+$K_D \times [ML] - M_{tot} \times L_{tot} + M_{tot} \times [ML] + L_{tot} \times [ML] - [ML]^2 = 0$
+
+5: $[ML]^2 - (K_D + M_{tot} + L_{tot}) \times [ML] + M_{tot} \times L_{tot} = 0$
+
+Equation 5 is of the form $ax^2 + bx + c = 0$, of solutions $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$.
+
+This gives us [ML] expressed as a function of $K_D$ and the known parameters
+$M_{tot}$ and $L_{tot}$:
+
+6: $[ML] = \frac{(K_D + M_{tot} + L_{tot}) \pm \sqrt{(-(K_D + M_{tot} + L_{tot}))^2 - 4 \times M_{tot} \times L_{tot}}}{2}$
+
+## Using the quadratic binding equation to fit a binding curve
+
+If we have a detectable signal $S$ proportional to [ML] (like FRET), we can
+express it as a function of its minimal and maximal values ($S_{min}$ and
+$S_{max}$) and the fraction of ligand bound $\frac{[ML]}{M_{tot}}$:
+
+7: $S = S_{min} + (S_{max} - S_{min}) \times \frac{[ML]}{M_{tot}}$
+
+With this expression, $S = S_{min}$ when $\frac{[ML]}{M_{tot}} = 0$ and
+$S = S_{max}$ when $\frac{[ML]}{M_{tot}} = 1$.
+
+Substituting equation 6 into equation 7 gives:
+
+8: $S = S_{min} + (S_{max} - S_{min}) \times \frac{(K_D + M_{tot} + L_{tot}) \pm \sqrt{(-(K_D + M_{tot} + L_{tot}))^2 - 4 \times M_{tot} \times L_{tot}}}{2 \times M_{tot}}$
+
+In equation 8, $S$ and $S_{min}$ can be measured experimentally: they are the
+signal observed without ligand, and across the titration series at given values of $L_{tot}$. The experimental data is, indeed, $S = f(L_{tot})$. $M_{tot}$ and
+$L_{tot}$ are known experimental parameters. Therefore, $K_D$ and $S_{max}$ can
+be determined by fitting equation 8 to the experimental data.
