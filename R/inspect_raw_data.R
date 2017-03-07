@@ -33,6 +33,7 @@ inspect_raw_data <- function(raw_data) {
                                      ggplot2::aes(x = concentration,
                                                   y = acceptor_channel))
     acceptor_plot <- acceptor_plot + ggplot2::geom_point(ggplot2::aes(shape = Content))
+    acceptor_plot <- acceptor_plot + ggplot2::geom_smooth(method = "lm")
     acceptor_plot <- acceptor_plot + ggplot2::theme_bw()
 
     fret_plot <- ggplot2::ggplot(data = raw_data,
