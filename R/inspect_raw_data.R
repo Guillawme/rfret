@@ -12,7 +12,8 @@
 #'     a word describing which data series or replicate this row belongs to
 #'     (like \code{control_1}, \code{titration_1}, etc.).
 #' @return A list containing three \code{ggplot2} graph objects (named
-#'     \code{donor}, \code{acceptor} and \code{fret}).
+#'     \code{donor}, \code{acceptor} and \code{fret}). Warning messages appear
+#'     when missing values are encountered, and can be safely ignored.
 #' @examples
 #' inspect_raw_data(my_data) # Send all plots to the output device.
 #' my_plots <- inspect_raw_data(my_data) # Store plots in a variable.
