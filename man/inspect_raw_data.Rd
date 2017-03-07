@@ -4,7 +4,7 @@
 \alias{inspect_raw_data}
 \title{Inspect raw fluorescence data}
 \usage{
-inspect_raw_data(raw_data)
+inspect_raw_data(raw_data, blank = NULL)
 }
 \arguments{
 \item{raw_data}{A dataframe containing the raw fluorescence data. It must
@@ -14,10 +14,15 @@ The \code{Content} column is used to plot distinct data series with
 different symbols: simply add in the \code{Content} column, for each row,
 a word describing which data series or replicate this row belongs to
 (like \code{control_1}, \code{titration_1}, etc.).}
+
+\item{blank}{An optional character vector containing the names associated to
+the blank titrations. If not specified, the donor channel plot will not
+display the mean and +/- 10 % shaded area.}
 }
 \value{
 A list containing three \code{ggplot2} graph objects (named
-    \code{donor}, \code{acceptor} and \code{fret}).
+    \code{donor}, \code{acceptor} and \code{fret}). Warning messages appear
+    when missing values are encountered, and can be safely ignored.
 }
 \description{
 This function plots the raw fluorescence data from the donor,
