@@ -4,20 +4,20 @@
 \alias{inspect_raw_data}
 \title{Inspect raw fluorescence data}
 \usage{
-inspect_raw_data(raw_data, blank = NULL)
+inspect_raw_data(raw_data, blanks = NULL)
 }
 \arguments{
 \item{raw_data}{A dataframe containing the raw fluorescence data. It must
-contain at least five columns named \code{Content}, \code{concentration},
-\code{donor_channel}, \code{acceptor_channel} and \code{fret_channel}.
+contain at least five columns named \code{Content}, \code{donor_channel},
+\code{acceptor_channel}, \code{fret_channel} and \code{concentration}.
 The \code{Content} column is used to plot distinct data series with
-different symbols: simply add in the \code{Content} column, for each row,
-a word describing which data series or replicate this row belongs to
-(like \code{control_1}, \code{titration_1}, etc.).}
+different symbols; it should contain, for each row, a word describing
+which data series or replicate this row belongs to (like \code{blank_1},
+\code{titration_1}, etc.).}
 
-\item{blank}{An optional character vector containing the names associated to
-the blank titrations. If not specified, the donor channel plot will not
-display the mean and +/- 10 % shaded area.}
+\item{blanks}{An optional character vector containing the names associated to
+the blank experiments. If not specified, the donor channel plot will not
+display the mean and +/- 10 \% shaded area.}
 }
 \value{
 A list containing three \code{ggplot2} graph objects (named
@@ -26,11 +26,12 @@ A list containing three \code{ggplot2} graph objects (named
 }
 \description{
 This function plots the raw fluorescence data from the donor,
-  acceptor and FRET channels, as a function of the acceptor concentration
-  (titration series).
+    acceptor and FRET channels, as a function of the acceptor concentration
+    (titration series).
 }
 \examples{
 inspect_raw_data(my_data) # Send all plots to the output device.
+inspect_raw_data(my_data, c("blank")) # Donor plot will display pipetting precision.
 my_plots <- inspect_raw_data(my_data) # Store plots in a variable.
 my_plots # Send all plots to the output device.
 my_plots$donor # Send only donor channel plot to the output device.
