@@ -11,24 +11,24 @@
 #'     different symbols; it must contain, for each row, a word describing
 #'     which data series or replicate this row belongs to (like
 #'     \code{"blank_1"}, \code{"titration_1"}, etc.).
-#' @param blanks An optional character vector containing the names associated to
-#'     the blank experiments. If not specified, the donor channel plot will not
-#'     display the mean and +/- 10 \% shaded area.
+#' @param titrations An optional character vector containing the names
+#'     associated to the titration series. If not specified, the donor channel
+#'     plot will not display the mean and +/- 10 \% shaded area.
 #' @return A list containing three \code{ggplot2} graph objects (named
 #'     \code{donor}, \code{acceptor} and \code{fret}). Warning messages appear
 #'     when missing values are encountered, and can be safely ignored.
 #' @examples
 #' inspect_raw_data(my_data) # Send all plots to the output device.
-#' inspect_raw_data(my_data, c("blank")) # Donor plot will display pipetting precision.
+#' inspect_raw_data(my_data, "titration") # Donor plot will display pipetting precision.
 #' my_plots <- inspect_raw_data(my_data) # Store plots in a variable.
 #' my_plots # Send all plots to the output device.
 #' my_plots$donor # Send only donor channel plot to the output device.
 #' @export
 
-inspect_raw_data <- function(raw_data, blanks = NULL) {
+inspect_raw_data <- function(raw_data, titrations = NULL){
     # Sanity checks
-    if(!is.null(blanks) && class(blanks) != "character"){
-        stop("Invalid blank names. The 'blanks' argument should be a character vector.")
+    if(!is.null(titrations) && class(titrations) != "character"){
+        stop("Invalid titration names. The 'titrations' argument should be a character vector.")
     }
 
     # Build the donor channel plot
@@ -36,8 +36,8 @@ inspect_raw_data <- function(raw_data, blanks = NULL) {
                                   ggplot2::aes(x = concentration,
                                                y = donor_channel))
     donor_plot <- donor_plot + ggplot2::geom_point(ggplot2::aes(shape = Content))
-    if(!is.null(blanks)){
-        donor_average <- mean(raw_data$donor_channel[!(raw_data$Content %in% blanks)],
+    if(!is.null(titrations)){
+    donor_average <- mean(raw_data$donor_channel[raw_data$Content %in% titrations],
                               na.rm = TRUE)
         donor_plot <- donor_plot + ggplot2::geom_hline(yintercept = donor_average)
         donor_plot <- donor_plot + ggplot2::geom_ribbon(ggplot2::aes(ymin = donor_average - donor_average * 10 / 100,

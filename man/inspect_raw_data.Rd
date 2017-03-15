@@ -4,7 +4,7 @@
 \alias{inspect_raw_data}
 \title{Inspect raw fluorescence data}
 \usage{
-inspect_raw_data(raw_data, blanks = NULL)
+inspect_raw_data(raw_data, titrations = NULL)
 }
 \arguments{
 \item{raw_data}{A dataframe containing the raw fluorescence data. It must
@@ -15,9 +15,9 @@ different symbols; it must contain, for each row, a word describing
 which data series or replicate this row belongs to (like
 \code{"blank_1"}, \code{"titration_1"}, etc.).}
 
-\item{blanks}{An optional character vector containing the names associated to
-the blank experiments. If not specified, the donor channel plot will not
-display the mean and +/- 10 \% shaded area.}
+\item{titrations}{An optional character vector containing the names
+associated to the titration series. If not specified, the donor channel
+plot will not display the mean and +/- 10 \% shaded area.}
 }
 \value{
 A list containing three \code{ggplot2} graph objects (named
@@ -31,7 +31,7 @@ This function plots the raw fluorescence data from the donor,
 }
 \examples{
 inspect_raw_data(my_data) # Send all plots to the output device.
-inspect_raw_data(my_data, c("blank")) # Donor plot will display pipetting precision.
+inspect_raw_data(my_data, "titration") # Donor plot will display pipetting precision.
 my_plots <- inspect_raw_data(my_data) # Store plots in a variable.
 my_plots # Send all plots to the output device.
 my_plots$donor # Send only donor channel plot to the output device.
