@@ -4,28 +4,49 @@
 \alias{correct_fret_signal}
 \title{Correct FRET signal}
 \usage{
-correct_fret_signal(fret_data, F_donor_only, D_donor_only)
+correct_fret_signal(reduced_dataset, blank = "blank",
+  titration = "titration")
 }
 \arguments{
-\item{fret_data}{A dataframe containing the fluorescence data (possibly an
-average of technical replicates). It must contain at least four columns
-named \code{fret_acceptor_only} (FRET channel of the blank titration with
-only acceptor-labeled molecule), \code{acceptor_acceptor_only} (acceptor
-channel of the blank titration with only acceptor-labeled molecule),
-\code{fret_titration} (FRET channel of the actual titration) and
-\code{concentration}.}
+\item{reduced_dataset}{A dataframe containing the fluorescence data, after
+averaging of the technical replicates by the
+\code{\link{average_technical_replicates}} function. It must contain at
+least five columns named \code{Content}, \code{donor_channel},
+\code{acceptor_channel}, \code{fret_channel} and \code{concentration}.
+The \code{Content} column must contain, for each row, a word describing
+which data series this row belongs to (like \code{"blank"} or
+\code{"titration"}).}
 
-\item{F_donor_only}{A FRET channel fluorescence count measured from a sample
-with donor only (typically, an average from 2 to 4 technical replicates).}
+\item{blank}{A character vector containing a word that identifies the blank
+experiment series (e.g. \code{"blank"}). This word must match the one
+in \code{reduced_dataset$Content} (case sensitive). Defaults to
+\code{"blank"}, as set by the \code{\link{average_technical_replicates}}
+function.}
 
-\item{D_donor_only}{A donor channel fluorescence count measured from a sample
-with donor only (typically, an average from 2 to 4 technical replicates).}
+\item{titration}{A character vector containing a word that identifies the
+titration series (e.g. \code{titration}). This word must match the one in
+\code{reduced_dataset$Content} (case sensitive). Defaults to
+\code{"titration"}, as set by the
+\code{\link{average_technical_replicates}} function.}
 }
 \value{
 A dataframe containing the corrected FRET signal. It contains two
-  columns named \code{fret_corrected} and \code{concentration}.
+    columns named \code{concentration} and \code{fret_corrected}.
 }
 \description{
-This function subtracts the FRET background of the blank
-  titration (without donor) from the raw FRET signal of the actual titration.
+This function subtracts the FRET background measured by the
+    blank experiment (without donor) from the raw FRET signal of the actual
+    titration, applying corrections given by
+    \href{https://doi.org/10.1093/nar/gkr1045}{Hieb AR \emph{et al} (2012)}.
+}
+\seealso{
+\code{\link{average_technical_replicates}} to prepare a dataset for
+    use with \code{correct_fret_signal}.
+
+    Hieb AR \emph{et al} (2012) Fluorescence Strategies for High-Throughput
+    Quantification of Protein Interactions. \emph{Nucleic Acids Research}
+    40 (5): e33
+    (\href{https://doi.org/10.1093/nar/gkr1045}{doi:10.1093/nar/gkr1045}) for
+    the details on the signal correction applied by
+    \code{correct_fret_signal}.
 }
