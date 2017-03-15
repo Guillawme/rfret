@@ -11,9 +11,9 @@ inspect_raw_data(raw_data, blanks = NULL)
 contain at least five columns named \code{Content}, \code{donor_channel},
 \code{acceptor_channel}, \code{fret_channel} and \code{concentration}.
 The \code{Content} column is used to plot distinct data series with
-different symbols; it should contain, for each row, a word describing
-which data series or replicate this row belongs to (like \code{blank_1},
-\code{titration_1}, etc.).}
+different symbols; it must contain, for each row, a word describing
+which data series or replicate this row belongs to (like
+\code{"blank_1"}, \code{"titration_1"}, etc.).}
 
 \item{blanks}{An optional character vector containing the names associated to
 the blank experiments. If not specified, the donor channel plot will not
