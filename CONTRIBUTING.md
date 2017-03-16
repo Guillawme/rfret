@@ -10,8 +10,8 @@ Contributors, please follow this standard workflow:
 Also please follow these additional guidelines:
 
 - Follow these [package development guidelines][r-pkg].
-- Before submitting a pull request, make sure your updated the documentation
-  (for example, using `devtools::document()`).
+- Before submitting a pull request, make sure you updated the documentation (for
+  example, using `devtools::document()`).
 - Before submitting a pull request, make sure the package builds and installs
   without errors.
 
