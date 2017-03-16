@@ -4,7 +4,7 @@
 \alias{average_technical_replicates}
 \title{Average technical replicates}
 \usage{
-average_technical_replicates(raw_data, blanks, titrations)
+average_technical_replicates(raw_data, blanks = NULL, titrations = NULL)
 }
 \arguments{
 \item{raw_data}{A dataframe containing the raw fluorescence data. It must

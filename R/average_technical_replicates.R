@@ -21,7 +21,17 @@
 #'     contains only two words: \code{"blank"} and \code{"titration"}.
 #' @export
 
-average_technical_replicates <- function(raw_data, blanks, titrations){
+average_technical_replicates <- function(raw_data,
+                                         blanks = NULL,
+                                         titrations = NULL){
+    # Sanity checks
+    if(is.null(blanks) || is.null(titrations)){
+        stop("You need to specify the names of your blanks and titrations data series.")
+    }
+    if(!is.character(blanks) || !is.character(titrations)){
+        stop("Invalid blanks and titrations names. These arguments must be character vectors.")
+    }
+
     # Get concentration column from initial data
     new_concentration <- raw_data$concentration[1:24]
 
