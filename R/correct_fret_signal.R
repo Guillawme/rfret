@@ -5,14 +5,13 @@
 #'     titration, applying corrections given by
 #'     \href{https://doi.org/10.1093/nar/gkr1045}{Hieb AR \emph{et al} (2012)}.
 #'
-#' @param reduced_dataset A dataframe containing the fluorescence data, after
-#'     averaging of the technical replicates by the
-#'     \code{\link{average_technical_replicates}} function. It must contain at
-#'     least five columns named \code{Content}, \code{donor_channel},
+#' @param reduced_dataset A dataframe containing the fluorescence data. It must
+#'     contain at least five columns named \code{Content}, \code{donor_channel},
 #'     \code{acceptor_channel}, \code{fret_channel} and \code{concentration}.
 #'     The \code{Content} column must contain, for each row, a word describing
 #'     which data series this row belongs to (like \code{"blank"} or
-#'     \code{"titration"}).
+#'     \code{"titration"}). The \code{\link{average_technical_replicates}}
+#'     function produces a dataframe with this exact format.
 #' @param blank A character vector containing a word that identifies the blank
 #'     experiment series (e.g. \code{"blank"}). This word must match the one
 #'     in \code{reduced_dataset$Content} (case sensitive). Defaults to
