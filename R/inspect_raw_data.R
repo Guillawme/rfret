@@ -38,7 +38,7 @@ inspect_raw_data <- function(raw_data, titrations = NULL){
     donor_plot <- donor_plot + ggplot2::geom_point(ggplot2::aes(shape = Content))
     if(!is.null(titrations)){
     donor_average <- mean(raw_data$donor_channel[raw_data$Content %in% titrations],
-                              na.rm = TRUE)
+                          na.rm = TRUE)
         donor_plot <- donor_plot + ggplot2::geom_hline(yintercept = donor_average)
         donor_plot <- donor_plot + ggplot2::geom_ribbon(ggplot2::aes(ymin = donor_average - donor_average * 10 / 100,
                                                                      ymax = donor_average + donor_average * 10 / 100),

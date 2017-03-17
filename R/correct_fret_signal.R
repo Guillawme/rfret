@@ -49,11 +49,13 @@ correct_fret_signal <- function(reduced_dataset,
     donor_bleed_through <-
         mean(
             reduced_dataset$fret_channel[(reduced_dataset$Content == titration) &
-                                             is.na(reduced_dataset$concentration)]
+                                             is.na(reduced_dataset$concentration)],
+            na.rm = TRUE
         ) /
         mean(
             reduced_dataset$donor_channel[(reduced_dataset$Content == titration) &
-                                              is.na(reduced_dataset$concentration)]
+                                              is.na(reduced_dataset$concentration)],
+            na.rm = TRUE
         )
 
     # Calculate corrected FRET (equation 6 in Hieb et al 2012)

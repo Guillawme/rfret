@@ -56,16 +56,16 @@ average_technical_replicates <- function(raw_data,
 
     # Compute the row-by-row means of replicates and rearrange into vectors
     # with blank followed by titration
-    donor_blank_av <- rowMeans(donor_blanks_df)
-    donor_titration_av <- rowMeans(donor_titrations_df)
+    donor_blank_av <- rowMeans(donor_blanks_df, na.rm = TRUE)
+    donor_titration_av <- rowMeans(donor_titrations_df, na.rm = TRUE)
     donor <- c(donor_blank_av, donor_titration_av)
 
-    acceptor_blank_av <- rowMeans(acceptor_blanks_df)
-    acceptor_titration_av <- rowMeans(acceptor_titrations_df)
+    acceptor_blank_av <- rowMeans(acceptor_blanks_df, na.rm = TRUE)
+    acceptor_titration_av <- rowMeans(acceptor_titrations_df, na.rm = TRUE)
     acceptor <- c(acceptor_blank_av, acceptor_titration_av)
 
-    fret_blank_av <- rowMeans(fret_blanks_df)
-    fret_titration_av <- rowMeans(fret_titrations_df)
+    fret_blank_av <- rowMeans(fret_blanks_df, na.rm = TRUE)
+    fret_titration_av <- rowMeans(fret_titrations_df, na.rm = TRUE)
     fret <- c(fret_blank_av, fret_titration_av)
 
     # Build a final dataset with average values instead of replicates, and
