@@ -7,7 +7,7 @@ ultimately allow to:
 - [x] 1. plot all channels (donor, acceptor, FRET) to visually inspect raw data;
 - [x] 2. average fluorescence values of technical replicates of a same experiment;
 - [x] 3. correct FRET signal by subtracting signal from a blank experiment;
-- [ ] 4. guess initial values for the parameters of the quadratic binding equation
+- [x] 4. guess initial values for the parameters of the quadratic binding equation
       (Kd, signal_min, signal_max);
 - [ ] 5. fit the quadratic binding equation to the data;
 - [ ] 6. report the value of Kd;
