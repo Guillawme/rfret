@@ -76,7 +76,7 @@ fit_binding_model <- function(fret_corrected,
         ggplot2::scale_x_log10() +
         ggplot2::xlab("Concentration") +
         ggplot2::ylab("Residuals")
-    figure <- cowplot::plot_grid(binding_curve,
+    figure <- cowplot::plot_grid(binding_plot,
                                  resid_plot,
                                  ncol = 1,
                                  nrow = 2,
