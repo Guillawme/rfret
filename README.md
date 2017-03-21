@@ -9,9 +9,9 @@ ultimately allow to:
 - [x] 3. correct FRET signal by subtracting signal from a blank experiment;
 - [x] 4. guess initial values for the parameters of the quadratic binding equation
       (Kd, signal_min, signal_max);
-- [ ] 5. fit the quadratic binding equation to the data;
-- [ ] 6. report the value of Kd;
-- [ ] 7. plot the corrected FRET signal and the binding curve obtained by fitting
+- [x] 5. fit the quadratic binding equation to the data;
+- [x] 6. report the value of Kd;
+- [x] 7. plot the corrected FRET signal and the binding curve obtained by fitting
       the data;
 - [ ] 8. optionally perform steps 2 to 6 in a batch processing mode.
 
