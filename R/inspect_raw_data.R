@@ -34,34 +34,46 @@ inspect_raw_data <- function(raw_data, titrations = NULL){
     # Build the donor channel plot
     donor_plot <- ggplot2::ggplot(data = raw_data,
                                   ggplot2::aes(x = concentration,
-                                               y = donor_channel))
-    donor_plot <- donor_plot + ggplot2::geom_point(ggplot2::aes(shape = Content))
+                                               y = donor_channel,
+                                               shape = Content)) +
+        ggplot2::geom_point() +
+        ggplot2::theme_bw() +
+        ggplot2::scale_x_log10() +
+        ggplot2::xlab("Concentration") +
+        ggplot2::ylab("Fluorescence Intensity") +
+        ggplot2::ggtitle("Donor channel")
     if(!is.null(titrations)){
-    donor_average <- mean(raw_data$donor_channel[raw_data$Content %in% titrations],
-                          na.rm = TRUE)
-        donor_plot <- donor_plot + ggplot2::geom_hline(yintercept = donor_average)
-        donor_plot <- donor_plot + ggplot2::geom_ribbon(ggplot2::aes(ymin = donor_average - donor_average * 10 / 100,
-                                                                     ymax = donor_average + donor_average * 10 / 100),
-                                                        alpha = "0.3")
+        donor_average <- mean(raw_data$donor_channel[raw_data$Content %in% titrations],
+                              na.rm = TRUE)
+        donor_plot <- donor_plot +
+            ggplot2::geom_hline(yintercept = donor_average) +
+            ggplot2::geom_ribbon(ggplot2::aes(ymin = donor_average - donor_average * 10 / 100,
+                                              ymax = donor_average + donor_average * 10 / 100),
+                                 alpha = "0.1")
     }
-    donor_plot <- donor_plot + ggplot2::theme_bw()
-    donor_plot <- donor_plot + ggplot2::scale_x_log10()
 
     # Build the acceptor channel plot
     acceptor_plot <- ggplot2::ggplot(data = raw_data,
                                      ggplot2::aes(x = concentration,
-                                                  y = acceptor_channel))
-    acceptor_plot <- acceptor_plot + ggplot2::geom_point(ggplot2::aes(shape = Content))
-    acceptor_plot <- acceptor_plot + ggplot2::geom_smooth(method = "lm")
-    acceptor_plot <- acceptor_plot + ggplot2::theme_bw()
+                                                  y = acceptor_channel)) +
+        ggplot2::geom_point(ggplot2::aes(shape = Content)) +
+        ggplot2::geom_smooth(method = "lm") +
+        ggplot2::theme_bw() +
+        ggplot2::xlab("Concentration") +
+        ggplot2::ylab("Fluorescence Intensity") +
+        ggplot2::ggtitle("Acceptor channel")
 
     # Build the fret channel plot
     fret_plot <- ggplot2::ggplot(data = raw_data,
                                  ggplot2::aes(x = concentration,
-                                              y = fret_channel))
-    fret_plot <- fret_plot + ggplot2::geom_point(ggplot2::aes(shape = Content))
-    fret_plot <- fret_plot + ggplot2::theme_bw()
-    fret_plot <- fret_plot + ggplot2::scale_x_log10()
+                                              y = fret_channel,
+                                              shape = Content)) +
+        ggplot2::geom_point() +
+        ggplot2::theme_bw() +
+        ggplot2::scale_x_log10() +
+        ggplot2::xlab("Concentration") +
+        ggplot2::ylab("Fluorescence Intensity") +
+        ggplot2::ggtitle("FRET channel")
 
     # Return all three plots
     list(donor    = donor_plot,
