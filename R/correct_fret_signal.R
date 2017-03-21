@@ -41,20 +41,20 @@ correct_fret_signal <- function(reduced_dataset,
     # Calculate acceptor direct excitation (equation 5 in Hieb et al 2012)
     acceptor_direct_exc <-
         reduced_dataset$fret_channel[(reduced_dataset$Content == blank) &
-                                         !is.na(reduced_dataset$concentration)] /
+                                         (reduced_dataset$concentration != 0)] /
         reduced_dataset$acceptor_channel[(reduced_dataset$Content == blank) &
-                                             !is.na(reduced_dataset$concentration)]
+                                             (reduced_dataset$concentration != 0)]
 
     # Calculate donor bleed through (equation 4 in Hieb et al 2012)
     donor_bleed_through <-
         mean(
             reduced_dataset$fret_channel[(reduced_dataset$Content == titration) &
-                                             is.na(reduced_dataset$concentration)],
+                                             (reduced_dataset$concentration == 0)],
             na.rm = TRUE
         ) /
         mean(
             reduced_dataset$donor_channel[(reduced_dataset$Content == titration) &
-                                              is.na(reduced_dataset$concentration)],
+                                              (reduced_dataset$concentration == 0)],
             na.rm = TRUE
         )
 
@@ -62,13 +62,13 @@ correct_fret_signal <- function(reduced_dataset,
     fret_corr <-
         reduced_dataset$fret_channel[
             (reduced_dataset$Content == titration) &
-                !is.na(reduced_dataset$concentration)] -
+                (reduced_dataset$concentration != 0)] -
         donor_bleed_through * reduced_dataset$donor_channel[
             (reduced_dataset$Content == titration) &
-                !is.na(reduced_dataset$concentration)] -
+                (reduced_dataset$concentration != 0)] -
         acceptor_direct_exc * reduced_dataset$acceptor_channel[
             (reduced_dataset$Content == titration) &
-                !is.na(reduced_dataset$concentration)]
+                (reduced_dataset$concentration != 0)]
     # Add a constant to shift all points such that the lowest is 0
     fret_corr <- fret_corr + abs(min(fret_corr))
 
@@ -76,7 +76,7 @@ correct_fret_signal <- function(reduced_dataset,
     fret_corrected <- data.frame(
         concentration = reduced_dataset$concentration[
             (reduced_dataset$Content == titration) &
-                !is.na(reduced_dataset$concentration)],
+                (reduced_dataset$concentration != 0)],
         fret_corrected = fret_corr
         )
 }
