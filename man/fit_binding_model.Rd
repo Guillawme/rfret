@@ -23,9 +23,11 @@ input here.}
 \value{
 A list containing estimates and standard errors of the model
     parameters from \code{\link[stats]{nls}}, stored in a
-    data frame (list item named \code{results}), and a \code{ggplot2}
-    graph object of the data points and fit curve (list item named
-    \code{graph}).
+    data frame (list item named \code{results}), and three \code{ggplot2}
+    graph objects of the data points and fit curve (list item named
+    \code{binding_curve}), residual plot (list item named
+    \code{residual_plot}) and final figure with both plots (list item named
+    \code{final_figure}).
 }
 \description{
 This function uses initial guesses of a binding model equation

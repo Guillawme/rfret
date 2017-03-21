@@ -15,16 +15,18 @@
 #'     input here.
 #' @return A list containing estimates and standard errors of the model
 #'     parameters from \code{\link[stats]{nls}}, stored in a
-#'     data frame (list item named \code{results}), and a \code{ggplot2}
-#'     graph object of the data points and fit curve (list item named
-#'     \code{graph}).
+#'     data frame (list item named \code{results}), and three \code{ggplot2}
+#'     graph objects of the data points and fit curve (list item named
+#'     \code{binding_curve}), residual plot (list item named
+#'     \code{residual_plot}) and final figure with both plots (list item named
+#'     \code{final_figure}).
 #' @export
 
 fit_binding_model <- function(fret_corrected,
                               donor_concentration = 10,
                               parameters){
     # Get donor concentration
-    donor_conc <- donor_concentration
+    donor_conc <<- donor_concentration
 
     # Define the equation to be fitted to the data
     equation <- c(
@@ -39,9 +41,9 @@ fit_binding_model <- function(fret_corrected,
 
     # Fit equation to the experimental data, using the provided initial guesses
     # of parameters
-    fit_curve <- nls(formula = equation,
-                     data = fret_corrected,
-                     start = parameters)
+    fit_curve <- stats::nls(formula = equation,
+                            data = fret_corrected,
+                            start = parameters)
 
     # Build a result table
     params <- broom::tidy(fit_curve)
@@ -55,8 +57,9 @@ fit_binding_model <- function(fret_corrected,
                         ".fitted",
                         ".resid")]
 
-    # Build a graph with data points and fit curve
-    final_graph <- ggplot2::ggplot(data = graph_data) +
+    # Build a graph with data points and fit curve, and a smaller residual plot
+    # below the main graph
+    binding_plot <- ggplot2::ggplot(data = graph_data) +
         ggplot2::geom_point(ggplot2::aes(x = concentration,
                                          y = fret_corrected)) +
         ggplot2::geom_line(ggplot2::aes(x = concentration,
@@ -65,8 +68,23 @@ fit_binding_model <- function(fret_corrected,
         ggplot2::scale_x_log10() +
         ggplot2::xlab("Concentration") +
         ggplot2::ylab("FRET corrected")
+    resid_plot <- ggplot2::ggplot(data = graph_data) +
+        ggplot2::geom_point(ggplot2::aes(x = concentration,
+                                         y = .resid)) +
+        ggplot2::geom_hline(yintercept = 0) +
+        ggplot2::theme_bw() +
+        ggplot2::scale_x_log10() +
+        ggplot2::xlab("Concentration") +
+        ggplot2::ylab("Residuals")
+    figure <- cowplot::plot_grid(binding_curve,
+                                 resid_plot,
+                                 ncol = 1,
+                                 nrow = 2,
+                                 rel_heights=c(7, 3))
 
-    # Return result table and graph
+    # Return result table and plots
     list(results = result_table,
-         graph = final_graph)
+         binding_curve = binding_plot,
+         residual_plot = resid_plot,
+         final_figure = figure)
 }
