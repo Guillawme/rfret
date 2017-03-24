@@ -9,12 +9,12 @@
 #'     The \code{Content} column must contain, for each row, a word describing
 #'     which data series or replicate this row belongs to (like
 #'     \code{blank_1}, \code{titration_1}, etc.).
-#' @param blanks A character vector containing words that identify the blank
-#'     experiment series (e.g. \code{blank}). These words must match the ones
-#'     in \code{raw_data$Content} (case sensitive).
 #' @param titrations A character vector containing words that identify the
 #'     titration series (e.g. \code{titration}). These words must match the
 #'     ones in \code{raw_data$Content} (case sensitive).
+#' @param blanks A character vector containing words that identify the blank
+#'     experiment series (e.g. \code{blank}). These words must match the ones
+#'     in \code{raw_data$Content} (case sensitive).
 #' @return A dataframe containing the reduced dataset. It contains five columns
 #'     named \code{Content}, \code{donor_channel}, \code{acceptor_channel},
 #'     \code{fret_channel} and \code{concentration}. The \code{Content} column
@@ -22,11 +22,11 @@
 #' @export
 
 average_technical_replicates <- function(raw_data,
-                                         blanks = NULL,
-                                         titrations = NULL){
+                                         titrations = NULL,
+                                         blanks = NULL){
     # Sanity checks
     if(is.null(blanks) || is.null(titrations)){
-        stop("You need to specify the names of your blanks and titrations data series.")
+        stop("You must specify the names of your blanks and titrations data series.")
     }
     if(!is.character(blanks) || !is.character(titrations)){
         stop("Invalid blanks and titrations names. These arguments must be character vectors.")

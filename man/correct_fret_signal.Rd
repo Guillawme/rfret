@@ -4,8 +4,8 @@
 \alias{correct_fret_signal}
 \title{Correct FRET signal}
 \usage{
-correct_fret_signal(reduced_dataset, blank = "blank",
-  titration = "titration")
+correct_fret_signal(reduced_dataset, titration = "titration",
+  blank = "blank")
 }
 \arguments{
 \item{reduced_dataset}{A dataframe containing the fluorescence data. It must
@@ -16,17 +16,17 @@ which data series this row belongs to (like \code{"blank"} or
 \code{"titration"}). The \code{\link{average_technical_replicates}}
 function produces a dataframe with this exact format.}
 
-\item{blank}{A character vector containing a word that identifies the blank
-experiment series (e.g. \code{"blank"}). This word must match the one
-in \code{reduced_dataset$Content} (case sensitive). Defaults to
-\code{"blank"}, as set by the \code{\link{average_technical_replicates}}
-function.}
-
 \item{titration}{A character vector containing a word that identifies the
 titration series (e.g. \code{titration}). This word must match the one in
 \code{reduced_dataset$Content} (case sensitive). Defaults to
 \code{"titration"}, as set by the
 \code{\link{average_technical_replicates}} function.}
+
+\item{blank}{A character vector containing a word that identifies the blank
+experiment series (e.g. \code{"blank"}). This word must match the one
+in \code{reduced_dataset$Content} (case sensitive). Defaults to
+\code{"blank"}, as set by the \code{\link{average_technical_replicates}}
+function.}
 }
 \value{
 A dataframe containing the corrected FRET signal. It contains two

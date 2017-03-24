@@ -4,7 +4,7 @@
 \alias{average_technical_replicates}
 \title{Average technical replicates}
 \usage{
-average_technical_replicates(raw_data, blanks = NULL, titrations = NULL)
+average_technical_replicates(raw_data, titrations = NULL, blanks = NULL)
 }
 \arguments{
 \item{raw_data}{A dataframe containing the raw fluorescence data. It must
@@ -14,13 +14,13 @@ The \code{Content} column must contain, for each row, a word describing
 which data series or replicate this row belongs to (like
 \code{blank_1}, \code{titration_1}, etc.).}
 
-\item{blanks}{A character vector containing words that identify the blank
-experiment series (e.g. \code{blank}). These words must match the ones
-in \code{raw_data$Content} (case sensitive).}
-
 \item{titrations}{A character vector containing words that identify the
 titration series (e.g. \code{titration}). These words must match the
 ones in \code{raw_data$Content} (case sensitive).}
+
+\item{blanks}{A character vector containing words that identify the blank
+experiment series (e.g. \code{blank}). These words must match the ones
+in \code{raw_data$Content} (case sensitive).}
 }
 \value{
 A dataframe containing the reduced dataset. It contains five columns

@@ -12,16 +12,16 @@
 #'     which data series this row belongs to (like \code{"blank"} or
 #'     \code{"titration"}). The \code{\link{average_technical_replicates}}
 #'     function produces a dataframe with this exact format.
-#' @param blank A character vector containing a word that identifies the blank
-#'     experiment series (e.g. \code{"blank"}). This word must match the one
-#'     in \code{reduced_dataset$Content} (case sensitive). Defaults to
-#'     \code{"blank"}, as set by the \code{\link{average_technical_replicates}}
-#'     function.
 #' @param titration A character vector containing a word that identifies the
 #'     titration series (e.g. \code{titration}). This word must match the one in
 #'     \code{reduced_dataset$Content} (case sensitive). Defaults to
 #'     \code{"titration"}, as set by the
 #'     \code{\link{average_technical_replicates}} function.
+#' @param blank A character vector containing a word that identifies the blank
+#'     experiment series (e.g. \code{"blank"}). This word must match the one
+#'     in \code{reduced_dataset$Content} (case sensitive). Defaults to
+#'     \code{"blank"}, as set by the \code{\link{average_technical_replicates}}
+#'     function.
 #' @return A dataframe containing the corrected FRET signal. It contains two
 #'     columns named \code{concentration} and \code{fret_corrected}.
 #' @seealso \code{\link{average_technical_replicates}} to prepare a dataset for
@@ -36,8 +36,8 @@
 #' @export
 
 correct_fret_signal <- function(reduced_dataset,
-                                blank = "blank",
-                                titration = "titration"){
+                                titration = "titration",
+                                blank = "blank"){
     # Calculate acceptor direct excitation (equation 5 in Hieb et al 2012)
     acceptor_direct_exc <-
         reduced_dataset$fret_channel[(reduced_dataset$Content == blank) &
