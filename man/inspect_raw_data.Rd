@@ -30,9 +30,16 @@ This function plots the raw fluorescence data from the donor,
     (titration series).
 }
 \examples{
-inspect_raw_data(my_data) # Send all plots to the output device.
-inspect_raw_data(my_data, "titration") # Donor plot will display pipetting precision.
-my_plots <- inspect_raw_data(my_data) # Store plots in a variable.
-my_plots # Send all plots to the output device.
-my_plots$donor # Send only donor channel plot to the output device.
+\dontrun{
+# Send all plots to the output device.
+inspect_raw_data(fret_good)
+
+# Donor plot will display pipetting precision.
+inspect_raw_data(fret_good, c("titration_1", "titration_2")
+
+# Store plots in a variable, print all plots, print only one of them.
+my_plots <- inspect_raw_data(fret_good)
+my_plots
+my_plots$acceptor
+}
 }
