@@ -14,7 +14,15 @@
 #' @param titrations An optional character vector containing the names
 #'     associated to the titration series. If not specified, the donor channel
 #'     plot will not display the mean and +/- 10 \% shaded area.
-#' @return A list containing three \code{ggplot2} graph objects (named
+#' @param highest_signal An optional number corresponding to the maximal signal
+#'     measurable by the plate reader instrument used. Defaults to \code{NULL},
+#'     which won't check for the presence of saturated reads. The input number
+#'     is not checked in any way: make sure it really corresponds to a saturated
+#'     read with your instrument.
+#' @return A list containing a logical value `saturated_reads` indicating the
+#'     presence of saturated reads in the dataset (equals to `TRUE` if saturated
+#'     reads are present, `FALSE` if there is no saturated read, or `NULL` if
+#'     this was not tested), and three \code{ggplot2} graph objects (named
 #'     \code{donor}, \code{acceptor} and \code{fret}). Warning messages appear
 #'     when missing values are encountered, and can be safely ignored.
 #' @examples
@@ -32,10 +40,37 @@
 #' }
 #' @export
 
-inspect_raw_data <- function(raw_data, titrations = NULL){
+inspect_raw_data <- function(raw_data,
+                             titrations = NULL,
+                             highest_signal = NULL){
     # Sanity checks
     if(!is.null(titrations) && class(titrations) != "character"){
-        stop("Invalid titration names. The 'titrations' argument should be a character vector.")
+        stop("Invalid parameter: 'titrations' must be a character vector.")
+    }
+    if(!is.null(highest_signal) && class(highest_signal) != "numeric"){
+        stop("Invalid parameter: 'highest_signal' must be a number.")
+    }
+
+    # Check whether the data contains saturated reads
+    if(is.null(highest_signal)){
+        sat_reads <- NULL
+    } else {
+        sat_donor <- highest_signal %in% raw_data$donor_channel
+        sat_acceptor <- highest_signal %in% raw_data$acceptor_channel
+        sat_fret <- highest_signal %in% raw_data$fret_channel
+        sat_reads <- sat_donor | sat_acceptor | sat_fret
+        if(sat_donor){
+            warning("Dataset contains saturated reads in donor channel. Measure again with a lower gain for this channel.",
+                    call. = FALSE)
+        }
+        if(sat_acceptor){
+            warning("Dataset contains saturated reads in acceptor channel. Measure again with a lower gain for this channel.",
+                    call. = FALSE)
+        }
+        if(sat_fret){
+            warning("Dataset contains saturated reads in FRET channel. Measure again with a lower gain for this channel.",
+                    call. = FALSE)
+        }
     }
 
     # Build the donor channel plot
@@ -82,8 +117,9 @@ inspect_raw_data <- function(raw_data, titrations = NULL){
         ggplot2::ylab("Fluorescence Intensity") +
         ggplot2::ggtitle("FRET channel")
 
-    # Return all three plots
-    list(donor    = donor_plot,
-         acceptor = acceptor_plot,
-         fret     = fret_plot)
+    # Return saturated read check and all three plots
+    list(saturated_reads = sat_reads,
+         donor           = donor_plot,
+         acceptor        = acceptor_plot,
+         fret            = fret_plot)
 }

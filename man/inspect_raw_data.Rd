@@ -4,7 +4,7 @@
 \alias{inspect_raw_data}
 \title{Inspect raw fluorescence data}
 \usage{
-inspect_raw_data(raw_data, titrations = NULL)
+inspect_raw_data(raw_data, titrations = NULL, highest_signal = NULL)
 }
 \arguments{
 \item{raw_data}{A dataframe containing the raw fluorescence data. It must
@@ -18,9 +18,18 @@ which data series or replicate this row belongs to (like
 \item{titrations}{An optional character vector containing the names
 associated to the titration series. If not specified, the donor channel
 plot will not display the mean and +/- 10 \% shaded area.}
+
+\item{highest_signal}{An optional number corresponding to the maximal signal
+measurable by the plate reader instrument used. Defaults to \code{NULL},
+which won't check for the presence of saturated reads. The input number
+is not checked in any way: make sure it really corresponds to a saturated
+read with your instrument.}
 }
 \value{
-A list containing three \code{ggplot2} graph objects (named
+A list containing a logical value `saturated_reads` indicating the
+    presence of saturated reads in the dataset (equals to `TRUE` if saturated
+    reads are present, `FALSE` if there is no saturated read, or `NULL` if
+    this was not tested), and three \code{ggplot2} graph objects (named
     \code{donor}, \code{acceptor} and \code{fret}). Warning messages appear
     when missing values are encountered, and can be safely ignored.
 }
