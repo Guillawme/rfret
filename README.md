@@ -39,8 +39,5 @@ You can access a detailed tutorial using the following commands:
 
 ```R
 library(rfret)
-browseVignettes("rfret")
+vignette("using-rfret")
 ```
-
-In the browser window that just opened, select the vignette titled "Using rfret"
-for a detailed tutorial.
