@@ -232,12 +232,48 @@ my_fit$final_figure
 # Detecting outliers
 
 The previous example featured a good dataset, making the analysis
-straightforward. The following two examples show how the function
-`inspect_raw_data` can be useful to detect outliers.
+straightforward. The following examples show how the function `inspect_raw_data`
+can be used to detect outliers.
+
+## Saturated fluorescence reads
+
+All fluorescence detection instruments have a defined dynamic range, and will
+not report any fluorescence intensity higher than a certain arbitrary number
+when reading an intensity that exceeds this threshold. In these situations, the
+instrument should warn the user right away, but the resulting dataset can still
+be saved and meaningless results can be obtained if these outliers go unnoticed.
+
+The function `inspect_raw_data` can optionnaly detect the presence of such reads
+in a raw dataset and report it to the user. For this, it needs the value of a
+saturated fluorescence read. All datasets discussed in this document were
+collected using an instrument that saturates at a fluorescence intensity value
+of 260000. Let's inspect another dataset that contains such values:
+```{r Saturated reads}
+inspection <- inspect_raw_data(fret_saturated_reads,
+                               highest_signal = 260000)
+```
+
+The function gives a warning indicating which channel contains saturated reads.
+The user then has the opportunity to inspect the numbers and possibly exclude
+outliers from the subsequent analysis, or even repeat the measurement with a
+lower gain. Collecting new data avoiding saturation of the fluorescence detector
+is indeed necessary to get meaningful results.
+
+The function also returns `saturated_reads = TRUE`, which can be used to
+programmatically test for the presence of saturated reads in a raw dataset:
+```{r}
+inspection$saturated_reads
+```
+
+No further checks are performed on the number provided for `highest_signal`, and
+the function will return meaningless information if this number does not match
+the actual saturation value of the instrument. As every instrument will have a
+different arbitrary saturation value, the user is responsible for finding and
+using the correct number.
 
 ## Donor outliers
 
-Let's inspect a different dataset:
+Let's inspect another different dataset:
 ```{r Donor outliers}
 plots_2 <- inspect_raw_data(fret_donor_outliers, ttn)
 plots_2$donor
@@ -258,7 +294,7 @@ data points from the subsequent analysis.
 
 ## Acceptor outliers
 
-Let's inspect another different dataset:
+Let's inspect a third dataset:
 ```{r Acceptor outliers}
 plots_3 <- inspect_raw_data(fret_acceptor_outliers)
 plots_3$acceptor

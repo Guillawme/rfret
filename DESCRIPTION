@@ -17,6 +17,6 @@ RoxygenNote: 6.0.1
 Imports: ggplot2 (>= 2.2.1),
     broom (>= 0.4.2),
     cowplot (>= 0.7.0)
-Suggests: knitr,
-    rmarkdown
+Suggests: knitr (>= 1.15.1),
+    rmarkdown (>= 1.3)
 VignetteBuilder: knitr
