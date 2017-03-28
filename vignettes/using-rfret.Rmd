@@ -250,7 +250,7 @@ titration series. We can easily find them in the raw data:
 fret_donor_outliers$donor_channel[fret_donor_outliers$Content == "titration_1"][c(5, 13, 21, 24)]
 ```
 
-These outliers come from pipeting errors: the three wells that have a higher
+These outliers come from pipetting errors: the three wells that have a higher
 fluorescence intensity received too much donor-labeled molecule, whereas the
 one that has a lower fluorescence intensity did not receive enough donor-labeled
 molecule. Knowing that, one can decide on a rationale basis to exclude these
