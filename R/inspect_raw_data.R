@@ -45,7 +45,7 @@ inspect_raw_data <- function(raw_data,
                              highest_signal = NULL){
     # Sanity checks
     if(!is.null(titrations) && class(titrations) != "character"){
-        stop("Invalid parameter: 'titrations' must be a character vector.")
+        stop("Invalid parameter: 'titrations' must be a vector of words.")
     }
     if(!is.null(highest_signal) && class(highest_signal) != "numeric"){
         stop("Invalid parameter: 'highest_signal' must be a number.")
@@ -60,15 +60,15 @@ inspect_raw_data <- function(raw_data,
         sat_fret <- highest_signal %in% raw_data$fret_channel
         sat_reads <- sat_donor | sat_acceptor | sat_fret
         if(sat_donor){
-            warning("Dataset contains saturated reads in donor channel. Measure again with a lower gain for this channel.",
+            warning("Donor channel contains saturated reads. Measure again with a lower gain for this channel.",
                     call. = FALSE)
         }
         if(sat_acceptor){
-            warning("Dataset contains saturated reads in acceptor channel. Measure again with a lower gain for this channel.",
+            warning("Acceptor channel contains saturated reads. Measure again with a lower gain for this channel.",
                     call. = FALSE)
         }
         if(sat_fret){
-            warning("Dataset contains saturated reads in FRET channel. Measure again with a lower gain for this channel.",
+            warning("FRET channel contains saturated reads. Measure again with a lower gain for this channel.",
                     call. = FALSE)
         }
     }
