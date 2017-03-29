@@ -4,6 +4,7 @@ author: "Guillaume Gaullier"
 date: "`r Sys.Date()`"
 output: 
     rmarkdown::html_vignette:
+        toc: yes
         fig_width: 5
         fig_height: 3.76
 vignette: >
