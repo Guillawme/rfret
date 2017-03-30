@@ -1,7 +1,11 @@
 # rfret: Analyze FRET Binding Data with R
 
-This R package allows one to analyze FRET binding data. Given raw fluorescence
-data from a FRET binding experiment, you can:
+This R package allows you to analyze FRET binding data and produce this kind of
+binding curve figure:
+
+![Binding curve](binding-curve.png)
+
+Given raw fluorescence data from a FRET binding experiment, you can:
 
 1. plot all channels (donor, acceptor, FRET) to visually inspect raw data;
 2. average fluorescence values of technical replicates of a same experiment
@@ -14,10 +18,8 @@ data from a FRET binding experiment, you can:
 7. plot the corrected FRET signal and the binding curve obtained by fitting
    the data.
 
-The package will eventually allow to optionally perform steps 2 and 3 in a batch
-processing mode.
-
-![Binding curve](binding-curve.png)
+Eventually, the package will allow to optionally perform steps 2 and 3 in a
+batch-processing mode.
 
 ## Installation
 
