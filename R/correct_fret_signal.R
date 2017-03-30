@@ -69,8 +69,9 @@ correct_fret_signal <- function(reduced_dataset,
         acceptor_direct_exc * reduced_dataset$acceptor_channel[
             (reduced_dataset$Content == titration) &
                 (reduced_dataset$concentration != 0)]
-    # Add a constant to shift all points such that the lowest is 0
-    fret_corr <- fret_corr + abs(min(fret_corr))
+    # Vertically shift all points such that the lowest (be it positive or
+    # negative) becomes 0:
+    fret_corr <- fret_corr - min(fret_corr)
 
     # Build final dataframe
     fret_corrected <- data.frame(
