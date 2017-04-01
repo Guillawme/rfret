@@ -189,6 +189,25 @@ final_dataset <- correct_fret_signal(reduced_dataset)
 final_dataset
 ```
 
+## Batch processing
+
+The two previous functions, `average_technical_replicates` and
+`correct_fret_signal`, can not only be used independently on individual
+datasets: they can also be applied in a batch processing mode on all raw data
+files present in one folder. This involves a wrapper function called
+`batch_process`. Here is an example of the use of this function:
+```r
+setwd("/path/to/raw/data/files")
+batch_process(directory_in = ".",
+              titrations = c("titration_1", "titration_2"),
+              blanks = c("blank_1", "blank_2"),
+              skip_lines = 4,
+              directory_out = "/save/processed/data/here")
+```
+If no output directory is specified, the function returns all corrected datasets
+as a list of dataframes, which can then be accessd and manipulated
+programmatically.
+
 ## Guess initial values of the binding model equation parameters
 
 The function `guess_quadratic_parameters` takes a corrected dataset from
