@@ -202,7 +202,10 @@ that has the closest FRET value to `(fret_max - fret_min) / 2` (fluorescence
 intensity at half-maximum).
 
 These naive guesses are most of the time close enough to the actual value to
-make the fit converge properly.
+make the fit converge properly. If the fitting procedure fails using these
+initial values, one can visually find a better approximation of `kd` by plotting
+the corrected FRET data as a function of the titration series. Alternatively,
+failure to fit the data can reveal data quality problems.
 
 Let's try that on our example dataset:
 ```{r Guess parameters}
