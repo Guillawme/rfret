@@ -21,7 +21,11 @@ Also please follow these additional guidelines:
 
 - Follow these [package development guidelines][r-pkg].
 - Before submitting a pull request, make sure that:
-    * you updated the documentation (for example, using `devtools::document()`);
+    * you updated the documentation (use `devtools::document()`);
+    * vignettes build without errors (use `devtools::build_vignettes()`);
+    * all unit tests pass (use `devtools::test()`);
+    * in case you modified an interface, you updated the corresponding unit test
+      or added an appropriate unit test to cover this new case;
     * `devtools::check()` finishes with no errors and no warnings (notes are OK,
       but please explain what caused them in your PR);
     * `devtools::install()` finishes with no errors and no warnings.
