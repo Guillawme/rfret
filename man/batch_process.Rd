@@ -4,11 +4,12 @@
 \alias{batch_process}
 \title{Batch process FRET data}
 \usage{
-batch_process(directory_in = NULL, titrations = NULL, blanks = NULL,
-  skip_lines = 4, directory_out = NULL)
+batch_process(input = NULL, titrations = NULL, blanks = NULL,
+  skip_lines = 4, output = NULL)
 }
 \arguments{
-\item{directory_in}{A directory containing raw data files.}
+\item{input}{A directory containing raw data files, or a named list of
+already loaded datasets (as dataframes).}
 
 \item{titrations}{A character vector containing words that identify the
 titration series (e.g. \code{titration}). These words must match the
@@ -21,7 +22,7 @@ in \code{raw_data$Content} (case sensitive).}
 \item{skip_lines}{Number of lines to skip at the beginning of CSV files (see
 \code{\link[utils]{read.csv}}). Defaults to 4.}
 
-\item{directory_out}{An optional directory where to write output files.}
+\item{output}{An optional directory where to write output files.}
 }
 \value{
 Write to \code{directory_out} data files containing the corrected

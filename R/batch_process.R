@@ -6,7 +6,8 @@
 #'     returns a list containing corrected datasets for programmatic
 #'     manipulation.
 #'
-#' @param directory_in A directory containing raw data files.
+#' @param input A directory containing raw data files, or a named list of
+#'     already loaded datasets (as dataframes).
 #' @param titrations A character vector containing words that identify the
 #'     titration series (e.g. \code{titration}). These words must match the
 #'     ones in \code{raw_data$Content} (case sensitive).
@@ -15,7 +16,7 @@
 #'     in \code{raw_data$Content} (case sensitive).
 #' @param skip_lines Number of lines to skip at the beginning of CSV files (see
 #'     \code{\link[utils]{read.csv}}). Defaults to 4.
-#' @param directory_out An optional directory where to write output files.
+#' @param output An optional directory where to write output files.
 #' @return Write to \code{directory_out} data files containing the corrected
 #'     FRET signal from each input raw data file. Each output file contains two
 #'     columns named \code{concentration} and \code{fret_corrected}, and has the
@@ -28,11 +29,11 @@
 #'     individual dataset.
 #' @export
 
-batch_process <- function(directory_in = NULL,
+batch_process <- function(input = NULL,
                           titrations = NULL,
                           blanks = NULL,
                           skip_lines = 4,
-                          directory_out = NULL){
+                          output = NULL){
     # Sanity checks
     if(is.null(blanks) || is.null(titrations)){
         stop("You must specify the names of your blanks and titrations data series.")
@@ -40,24 +41,26 @@ batch_process <- function(directory_in = NULL,
     if(!is.character(blanks) || !is.character(titrations)){
         stop("Invalid blanks and titrations names. These arguments must be character vectors.")
     }
-    if(is.null(directory_in)){
-        stop("You must specify an input directory.")
+    if(is.null(input)){
+        stop("You must specify an input directory or list of loaded datasets.")
     }
-    if(!dir.exists(directory_in)){
+    if(!is.list(input) && !dir.exists(input)){
         stop("Input directory not found.")
     }
 
-    # Read input files, load associated datasets into a list
-    data_files <- list.files(directory_in, pattern = ".csv", full.names = TRUE)
-    filenames <- list.files(directory_in, pattern = ".csv", full.names = FALSE)
-    filenames <- sub(filenames,
-                     pattern = ".csv",
-                     replacement = "")
-    data_tables <- lapply(data_files, read.csv, skip = skip_lines)
-    names(data_tables) <- filenames
+    # If input is a directory, turn it into a list of loaded datasets
+    if(!is.list(input)){
+        data_files <- list.files(input, pattern = ".csv", full.names = TRUE)
+        filenames <- list.files(input, pattern = ".csv", full.names = FALSE)
+        filenames <- sub(filenames,
+                         pattern = ".csv",
+                         replacement = "")
+        input <- lapply(data_files, utils::read.csv, skip = skip_lines)
+        names(input) <- filenames
+    }
 
     # Apply replicate averaging
-    datasets_reduced <- lapply(data_tables,
+    datasets_reduced <- lapply(input,
                                average_technical_replicates,
                                titrations = titrations,
                                blanks = blanks)
@@ -66,16 +69,16 @@ batch_process <- function(directory_in = NULL,
     datasets_corrected <- lapply(datasets_reduced, correct_fret_signal)
 
     # Depending on input, write output files or simply return the list
-    if(is.null(directory_out)){
+    if(is.null(output)){
         return(datasets_corrected)
     } else {
-        if(!dir.exists(directory_out)){
-            message(paste("Creating directory:", directory_out))
-            dir.create(directory_out)
+        if(!dir.exists(output)){
+            message(paste("Creating directory:", output))
+            dir.create(output)
         }
-        mapply(write.csv,
+        mapply(utils::write.csv,
                datasets_corrected,
-               file = paste(directory_out,
+               file = paste(output,
                             names(datasets_corrected),
                             "_corrected.csv",
                             sep = ""),

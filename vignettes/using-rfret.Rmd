@@ -198,11 +198,11 @@ files present in one folder. This involves a wrapper function called
 `batch_process`. Here is an example of the use of this function:
 ```r
 setwd("/path/to/raw/data/files")
-batch_process(directory_in = ".",
+batch_process(input = ".",
               titrations = c("titration_1", "titration_2"),
               blanks = c("blank_1", "blank_2"),
               skip_lines = 4,
-              directory_out = "/save/processed/data/here")
+              output = "/save/processed/data/here")
 ```
 If no output directory is specified, the function returns all corrected datasets
 as a list of dataframes, which can then be accessd and manipulated
