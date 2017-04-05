@@ -42,32 +42,32 @@
 
 inspect_raw_data <- function(raw_data,
                              titrations = NULL,
-                             highest_signal = NULL){
+                             highest_signal = NULL) {
     # Sanity checks
-    if(!is.null(titrations) && class(titrations) != "character"){
+    if (!is.null(titrations) && class(titrations) != "character") {
         stop("Invalid parameter: 'titrations' must be a vector of words.")
     }
-    if(!is.null(highest_signal) && class(highest_signal) != "numeric"){
+    if (!is.null(highest_signal) && class(highest_signal) != "numeric") {
         stop("Invalid parameter: 'highest_signal' must be a number.")
     }
 
     # Check whether the data contains saturated reads
-    if(is.null(highest_signal)){
+    if (is.null(highest_signal)) {
         sat_reads <- NULL
     } else {
         sat_donor <- highest_signal %in% raw_data$donor_channel
         sat_acceptor <- highest_signal %in% raw_data$acceptor_channel
         sat_fret <- highest_signal %in% raw_data$fret_channel
         sat_reads <- sat_donor | sat_acceptor | sat_fret
-        if(sat_donor){
+        if (sat_donor) {
             warning("Donor channel contains saturated reads. Measure again with a lower gain for this channel.",
                     call. = FALSE)
         }
-        if(sat_acceptor){
+        if (sat_acceptor) {
             warning("Acceptor channel contains saturated reads. Measure again with a lower gain for this channel.",
                     call. = FALSE)
         }
-        if(sat_fret){
+        if (sat_fret) {
             warning("FRET channel contains saturated reads. Measure again with a lower gain for this channel.",
                     call. = FALSE)
         }
@@ -84,7 +84,7 @@ inspect_raw_data <- function(raw_data,
         ggplot2::xlab("Concentration") +
         ggplot2::ylab("Fluorescence Intensity") +
         ggplot2::ggtitle("Donor channel")
-    if(!is.null(titrations)){
+    if (!is.null(titrations)) {
         donor_average <- mean(raw_data$donor_channel[raw_data$Content %in% titrations],
                               na.rm = TRUE)
         donor_plot <- donor_plot +

@@ -11,7 +11,7 @@
 #'     and \code{fret_max}.
 #' @export
 
-guess_quadratic_parameters <- function(fret_corr){
+guess_quadratic_parameters <- function(fret_corr) {
     # Minimal value of measured FRET signal is a good approximation
     # for signa_min
     fret_min_guess <- min(fret_corr$fret_corrected)

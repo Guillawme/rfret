@@ -37,7 +37,7 @@
 
 correct_fret_signal <- function(reduced_dataset,
                                 titration = "titration",
-                                blank = "blank"){
+                                blank = "blank") {
     # Calculate acceptor direct excitation (equation 5 in Hieb et al 2012)
     acceptor_direct_exc <-
         reduced_dataset$fret_channel[(reduced_dataset$Content == blank) &

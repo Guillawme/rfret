@@ -33,23 +33,23 @@ batch_process <- function(input = NULL,
                           titrations = NULL,
                           blanks = NULL,
                           skip_lines = 4,
-                          output = NULL){
+                          output = NULL) {
     # Sanity checks
-    if(is.null(blanks) || is.null(titrations)){
+    if (is.null(blanks) || is.null(titrations)) {
         stop("You must specify the names of your blanks and titrations data series.")
     }
-    if(!is.character(blanks) || !is.character(titrations)){
+    if (!is.character(blanks) || !is.character(titrations)) {
         stop("Invalid blanks and titrations names. These arguments must be character vectors.")
     }
-    if(is.null(input)){
+    if (is.null(input)) {
         stop("You must specify an input directory or list of loaded datasets.")
     }
-    if(!is.list(input) && !dir.exists(input)){
+    if (!is.list(input) && !dir.exists(input)) {
         stop("Input directory not found.")
     }
 
     # If input is a directory, turn it into a list of loaded datasets
-    if(!is.list(input)){
+    if (!is.list(input)) {
         data_files <- list.files(input, pattern = ".csv", full.names = TRUE)
         filenames <- list.files(input, pattern = ".csv", full.names = FALSE)
         filenames <- sub(filenames,
@@ -69,10 +69,10 @@ batch_process <- function(input = NULL,
     datasets_corrected <- lapply(datasets_reduced, correct_fret_signal)
 
     # Depending on input, write output files or simply return the list
-    if(is.null(output)){
+    if (is.null(output)) {
         return(datasets_corrected)
     } else {
-        if(!dir.exists(output)){
+        if (!dir.exists(output)) {
             message(paste("Creating directory:", output))
             dir.create(output)
         }

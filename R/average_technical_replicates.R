@@ -23,12 +23,12 @@
 
 average_technical_replicates <- function(raw_data,
                                          titrations = NULL,
-                                         blanks = NULL){
+                                         blanks = NULL) {
     # Sanity checks
-    if(is.null(blanks) || is.null(titrations)){
+    if (is.null(blanks) || is.null(titrations)) {
         stop("You must specify the names of your blanks and titrations data series.")
     }
-    if(!is.character(blanks) || !is.character(titrations)){
+    if (!is.character(blanks) || !is.character(titrations)) {
         stop("Invalid blanks and titrations names. These arguments must be character vectors.")
     }
 

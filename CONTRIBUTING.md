@@ -20,6 +20,8 @@ Contributors, please follow this standard workflow:
 Also please follow these additional guidelines:
 
 - Follow these [package development guidelines][r-pkg].
+- Follow this [style guide][style-guide] (except, use 4 spaces for indentation
+  instead of 2).
 - Before submitting a pull request, make sure that:
     * you updated the documentation (use `devtools::document()`);
     * vignettes build without errors (use `devtools::build_vignettes()`);
@@ -35,3 +37,4 @@ Also please follow these additional guidelines:
 [bugs]: https://github.com/Guilz/rfret/issues/new
 [open-issues]: https://github.com/Guilz/rfret/issues
 [closed-issues]: https://github.com/Guilz/rfret/issues?q=is%3Aissue+is%3Aclosed
+[style-guide]: http://adv-r.had.co.nz/Style.html

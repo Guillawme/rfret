@@ -24,7 +24,7 @@
 
 fit_binding_model <- function(fret_corrected,
                               donor_concentration = 10,
-                              parameters){
+                              parameters) {
     # Get donor concentration
     donor_conc <<- donor_concentration
 
