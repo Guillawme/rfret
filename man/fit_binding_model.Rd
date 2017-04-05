@@ -4,32 +4,35 @@
 \alias{fit_binding_model}
 \title{Fit a binding model equation to the experimental FRET data}
 \usage{
-fit_binding_model(fret_corrected, donor_concentration = 10, parameters)
+fit_binding_model(corrected_data, binding_model = NULL, parameters,
+  donor_concentration = 10)
 }
 \arguments{
-\item{fret_corrected}{A dataframe containing the corrected FRET signal. It
+\item{corrected_data}{A dataframe containing the corrected FRET signal. It
 must contain at least two columns named \code{fret_corrected} and
 \code{concentration}. The output of the \code{\link{correct_fret_signal}}
 function can be used directly as input here.}
 
+\item{binding_model}{A binding model equation to fit to the experimental
+data. Possible values are \code{hyperbola}, \code{quadratic} and
+\code{quadratic_homodimer}.}
+
+\item{parameters}{A named list containing initial guesses for \code{kd},
+\code{fret_min} and \code{fret_max}. The output of
+\code{\link{guess_parameters}} can be used directly as input here.}
+
 \item{donor_concentration}{The concentration of donor-labeled molecule.
 Defaults to 10.}
-
-\item{parameters}{A named list containing initial guesses for the parameters
-of the equation associated to the binding model. The output of
-\code{\link{guess_quadratic_parameters}} can be used directly as
-input here.}
 }
 \value{
-A list containing estimates and standard errors of the model
-    parameters from \code{\link[stats]{nls}}, stored in a
-    data frame (list item named \code{results}), and three \code{ggplot2}
-    graph objects of the data points and fit curve (list item named
-    \code{binding_curve}), residual plot (list item named
-    \code{residual_plot}) and final figure with both plots (list item named
-    \code{final_figure}).
+An \code{\link[stats]{nls}} object containing the results of the fit.
+    This object can be directly used as input to \code{\link{make_figure}}.
 }
 \description{
-This function uses initial guesses of a binding model equation
-    parameters to fit this equation to the corrected experimental FRET data.
+This function uses initial guesses of \code{kd}, \code{fret_min}
+    and \code{fret_max} to fit a binding model equation to the corrected
+    experimental FRET data. This function is a wrapper around
+    \code{\link[stats]{nls}} and provides reasonnable default settings (i.e.
+    refine only \code{kd}, \code{fret_min} and \code{fret_max}, and possibly
+    the Hill coefficient \code{n}, but keep probe concentration fixed).
 }
