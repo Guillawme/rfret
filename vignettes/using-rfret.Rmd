@@ -210,7 +210,7 @@ programmatically.
 
 ## Guess initial values of the binding model equation parameters
 
-The function `guess_quadratic_parameters` takes a corrected dataset from
+The function `guess_parameters` takes a corrected dataset from
 `correct_fret_signal` (or any similarly formatted dataset) and outputs initial
 values for `kd`, `fret_min` and `fret_max`.
 
@@ -228,28 +228,35 @@ failure to fit the data can reveal data quality problems.
 
 Let's try that on our example dataset:
 ```{r Guess parameters}
-guessed_params <- guess_quadratic_parameters(final_dataset)
+guessed_params <- guess_parameters(final_dataset)
 guessed_params
 ```
 
 ## Curve fitting
 
 The last step involves the function `fit_binding_model`, which is simply a
-wrapper for R's `stats::nls` function. It has the quadratic binding equation
-built-in. It takes a corrected dataset (output of `correct_fret_signal`), the
-fixed concentration of donor-labeled molecule, and a list of initial values for
-`kd`, `fret_min` and `fret_max` (either provided by the user, or directly the
-output of `guess_quadratic_parameters`), and returns a result table, a plot of
-the binding curve, a residual plot, and a figure with those two plots combined.
+wrapper around R's `stats::nls` function. It takes a corrected dataset (output
+of `correct_fret_signal`), a binding model (currently available models are:
+`hyperbola`, `quadratic` and `quadratic_homodimer`), a list of initial values
+for `kd`, `fret_min` and `fret_max` (either provided by the user, or directly
+the output of `guess_parameters`), and  the fixed concentration of donor-labeled
+molecule. It returns an `nls` object that can be further examined with standard
+functions (like `summary`) or used as input for `make_figure`.
+
+The function `make_figure` takes an `nls` object and the associated corrected
+fret data, and returns a result table, a plot of the binding curve, a residual
+plot, and a figure with those two plots combined.
 
 Let's finish analyzing our example dataset, display the result table and the
 final figure:
 ```{r Fit binding model}
-my_fit <- fit_binding_model(fret_corrected = final_dataset,
-                            donor_concentration = 10,
-                            parameters = guessed_params)
-my_fit$results
-my_fit$final_figure
+my_fit <- fit_binding_model(corrected_data = final_dataset,
+                            binding_model = quadratic,
+                            parameters = guessed_params,
+                            donor_concentration = 10)
+my_results <- make_figure(final_dataset, my_fit)
+my_results$results
+my_results$final_figure
 ```
 
 # Detecting outliers
