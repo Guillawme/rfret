@@ -44,10 +44,10 @@ inspect_raw_data <- function(raw_data,
                              titrations = NULL,
                              highest_signal = NULL) {
     # Sanity checks
-    if (!is.null(titrations) && class(titrations) != "character") {
+    if (!is.null(titrations) && !is.character(titrations)) {
         stop("Invalid parameter: 'titrations' must be a vector of words.")
     }
-    if (!is.null(highest_signal) && class(highest_signal) != "numeric") {
+    if (!is.null(highest_signal) && !is.numeric(highest_signal)) {
         stop("Invalid parameter: 'highest_signal' must be a number.")
     }
 
