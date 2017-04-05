@@ -1,8 +1,8 @@
-#' @title Guess initial values for parameters of the quadratic binding equation
+#' @title Guess initial values for parameters of the binding model equations
 #'
 #' @description This function guesses initial values for \code{kd},
-#'     \code{fret_min} and \code{fret_max} (the parameters of the quadratic
-#'     binding equation), using the corrected FRET data.
+#'     \code{fret_min} and \code{fret_max} (the parameters of the binding model
+#'     equations), using the corrected FRET data.
 #'
 #' @param fret_corr A dataframe containing the corrected FRET signal. It must
 #'     contain at least two columns named \code{fret_corrected} and
@@ -11,7 +11,7 @@
 #'     and \code{fret_max}.
 #' @export
 
-guess_quadratic_parameters <- function(fret_corr) {
+guess_parameters <- function(fret_corr) {
     # Minimal value of measured FRET signal is a good approximation
     # for signa_min
     fret_min_guess <- min(fret_corr$fret_corrected)
