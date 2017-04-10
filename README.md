@@ -7,19 +7,20 @@ binding curve figure:
 
 Given raw fluorescence data from a FRET binding experiment, you can:
 
-1. plot all channels (donor, acceptor, FRET) to visually inspect raw data;
+1. plot all channels (donor, acceptor, FRET) to visually inspect raw data and
+   find possible outliers;
 2. average fluorescence values of technical replicates of a same experiment
    (currently limited to two replicates);
 3. correct FRET signal by subtracting signal from a blank experiment;
-4. guess initial values for the parameters of the quadratic binding equation
-   (`kd`, `fret_min`, `fret_max`);
-5. fit the quadratic binding equation to the data;
+4. guess initial values for the parameters of the binding model equation (`kd`,
+   `fret_min`, `fret_max`);
+5. fit a binding model equation to the data;
 6. report the value of Kd;
 7. plot the corrected FRET signal and the binding curve obtained by fitting
    the data.
 
-Eventually, the package will allow to optionally perform steps 2 and 3 in a
-batch-processing mode.
+Optionally, the package also allows to perform steps 2 and 3 in
+a batch-processing mode.
 
 ## Installation
 
