@@ -60,8 +60,8 @@ make_figure <- function(corrected_data, fit) {
                                  rel_heights=c(7, 3))
 
     # Return result table and plots
-    list(results = result_table,
+    list(results       = result_table,
          binding_curve = binding_plot,
          residual_plot = resid_plot,
-         final_figure = figure)
+         final_figure  = figure)
 }
