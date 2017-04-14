@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 CONTRIBUTING.md
 binding-curve.png
+.travis.yml
