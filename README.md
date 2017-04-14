@@ -1,5 +1,7 @@
 # rfret: Analyze FRET Binding Data with R
 
+[![Build Status](https://travis-ci.org/Guilz/rfret.svg?branch=master)](https://travis-ci.org/Guilz/rfret)
+
 This R package allows you to analyze FRET binding data and produce this kind of
 binding curve figure:
 
