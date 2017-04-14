@@ -1,0 +1,7 @@
+language: r
+r:
+    - oldrel
+    - release
+cache: packages
+pandoc_version: 1.19.2.1
+
