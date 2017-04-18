@@ -3,3 +3,4 @@ r: release
 cache: packages
 pandoc_version: 1.19.2.1
 latex: false
+sudo: false
