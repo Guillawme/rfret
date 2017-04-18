@@ -12,11 +12,14 @@ must contain at least two columns named \code{fret_corrected} and
 \code{concentration}. The output of the \code{\link{correct_fret_signal}}
 function can be used directly as input here.}
 
-\item{fit}{A model object from \code{\link{fit_binding_model}} or
-\code{\link[stats]{nls}}.}
+\item{fit}{A named list containing a model object from
+\code{\link[stats]{nls}} (named \code{fit}), a binding model equation
+(named \code{binding_model}), and a donor concentration used for the
+fitting procedure (named \code{donor_concentration}). The output of
+\code{\link{fit_binding_model}} can be used directly as input here.}
 }
 \value{
-A list containing estimates and standard errors of the model
+A named list containing estimates and standard errors of the model
     parameters from \code{\link[stats]{nls}}, stored in a
     data frame (list item named \code{results}), and three \code{ggplot2}
     graph objects of the data points and fit curve (list item named

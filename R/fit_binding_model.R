@@ -19,8 +19,11 @@
 #'     \code{\link{guess_parameters}} can be used directly as input here.
 #' @param donor_concentration The concentration of donor-labeled molecule.
 #'     Defaults to 10.
-#' @return An \code{\link[stats]{nls}} object containing the results of the fit.
-#'     This object can be directly used as input to \code{\link{make_figure}}.
+#' @return An named list containing: \code{fit}, an \code{\link[stats]{nls}}
+#'     object containing the results of the fit; \code{binding_model}, the
+#'     equation used in the fitting procedure; and \code{donor_concentration},
+#'     the donor concentration used in the fitting procedure.
+#'     This list can be directly used as input to \code{\link{make_figure}}.
 #' @export
 
 fit_binding_model <- function(corrected_data,
@@ -42,12 +45,19 @@ fit_binding_model <- function(corrected_data,
 
     # Fit binding model to the experimental data, using the provided initial
     # guesses of parameters
-    stats::nls(formula = fret_corrected ~ binding_model(concentration,
-                                                        kd,
-                                                        n,
-                                                        fret_min,
-                                                        fret_max,
-                                                        donor_concentration),
-               data = corrected_data,
-               start = parameters)
+    fit <- stats::nls(formula =
+                          fret_corrected ~ binding_model(concentration,
+                                                         kd,
+                                                         n,
+                                                         fret_min,
+                                                         fret_max,
+                                                         donor_concentration),
+                      data = corrected_data,
+                      start = parameters)
+
+    # Return a list containing the fit object, binding model and donor
+    # concentration used to fit the model
+    list(fit                 = fit,
+         binding_model       = binding_model,
+         donor_concentration = donor_concentration)
 }

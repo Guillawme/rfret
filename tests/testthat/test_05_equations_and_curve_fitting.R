@@ -17,8 +17,8 @@ fit_quadratic <- fit_binding_model(my_data,
 
 # Get result tables for easy access to numerical values of kd, fret_min
 # and fret_max
-results_hyperbola <- broom::tidy(fit_hyperbola)
-results_quadratic <- broom::tidy(fit_quadratic)
+results_hyperbola <- broom::tidy(fit_hyperbola$fit)
+results_quadratic <- broom::tidy(fit_quadratic$fit)
 
 # Test whether computed results are equal to expected values
 # Using hyperbola equation

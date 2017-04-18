@@ -10,9 +10,12 @@
 #'     must contain at least two columns named \code{fret_corrected} and
 #'     \code{concentration}. The output of the \code{\link{correct_fret_signal}}
 #'     function can be used directly as input here.
-#' @param fit A model object from \code{\link{fit_binding_model}} or
-#'     \code{\link[stats]{nls}}.
-#' @return A list containing estimates and standard errors of the model
+#' @param fit A named list containing a model object from
+#'     \code{\link[stats]{nls}} (named \code{fit}), a binding model equation
+#'     (named \code{binding_model}), and a donor concentration used for the
+#'     fitting procedure (named \code{donor_concentration}). The output of
+#'     \code{\link{fit_binding_model}} can be used directly as input here.
+#' @return A named list containing estimates and standard errors of the model
 #'     parameters from \code{\link[stats]{nls}}, stored in a
 #'     data frame (list item named \code{results}), and three \code{ggplot2}
 #'     graph objects of the data points and fit curve (list item named
@@ -23,28 +26,43 @@
 
 make_figure <- function(corrected_data, fit) {
     # Build a result table
-    params <- broom::tidy(fit)
+    params <- broom::tidy(fit$fit)
     result_table <- params[c("term", "estimate", "std.error")]
 
-    # Build a data frame containing original data, prediction from fit and
-    # residuals
-    dat <- broom::augment(fit, corrected_data)
-    graph_data <- dat[c("concentration",
-                        "fret_corrected",
-                        ".fitted",
-                        ".resid")]
+    # Get parameters for the binding model equation
+    kd <- result_table$estimate[result_table$term == "kd"]
+    fret_min <- result_table$estimate[result_table$term == "fret_min"]
+    fret_max <- result_table$estimate[result_table$term == "fret_max"]
+    donor_conc <- fit$donor_concentration
+
+    # Check whether we need to retrieve a Hill coefficient for subsequent use
+    if ("n" %in% result_table$term) {
+        hill <- result_table$estimate[result_table$term == "n"]
+    } else {
+        hill <- 1
+    }
+
+    # Build a data frame containing original data and residuals from fit
+    graph_data <- broom::augment(fit$fit, corrected_data)
+    graph_data <- graph_data[c("concentration",
+                               "fret_corrected",
+                               ".resid")]
 
     # Build a graph with data points and fit curve, and a smaller residual plot
     # below the main graph
     binding_plot <- ggplot2::ggplot(data = graph_data) +
         ggplot2::geom_point(ggplot2::aes(x = concentration,
                                          y = fret_corrected)) +
-        ggplot2::geom_line(ggplot2::aes(x = concentration,
-                                        y = .fitted)) +
         ggplot2::theme_bw() +
         ggplot2::scale_x_log10() +
         ggplot2::xlab("Concentration") +
-        ggplot2::ylab("FRET corrected")
+        ggplot2::ylab("FRET corrected") +
+        ggplot2::stat_function(fun = fit$binding_model,
+                               args = list(kd = kd,
+                                           signal_min = fret_min,
+                                           signal_max = fret_max,
+                                           probe_conc = donor_conc,
+                                           n = hill))
     resid_plot <- ggplot2::ggplot(data = graph_data) +
         ggplot2::geom_point(ggplot2::aes(x = concentration,
                                          y = .resid)) +

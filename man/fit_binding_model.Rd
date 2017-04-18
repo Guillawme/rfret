@@ -25,8 +25,11 @@ data. Possible values are \code{hyperbola}, \code{quadratic} and
 Defaults to 10.}
 }
 \value{
-An \code{\link[stats]{nls}} object containing the results of the fit.
-    This object can be directly used as input to \code{\link{make_figure}}.
+An named list containing: \code{fit}, an \code{\link[stats]{nls}}
+    object containing the results of the fit; \code{binding_model}, the
+    equation used in the fitting procedure; and \code{donor_concentration},
+    the donor concentration used in the fitting procedure.
+    This list can be directly used as input to \code{\link{make_figure}}.
 }
 \description{
 This function uses initial guesses of \code{kd}, \code{fret_min}
