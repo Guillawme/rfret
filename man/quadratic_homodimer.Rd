@@ -4,14 +4,12 @@
 \alias{quadratic_homodimer}
 \title{Quadratic homodimer equation}
 \usage{
-quadratic_homodimer(titrated_conc, kd, n, signal_min, signal_max, probe_conc)
+quadratic_homodimer(titrated_conc, kd, signal_min, signal_max, probe_conc)
 }
 \arguments{
 \item{titrated_conc}{Concentrations in the titration series.}
 
 \item{kd}{Binding constant.}
-
-\item{n}{Hill coefficient.}
 
 \item{signal_min}{Minimal observed signal.}
 
