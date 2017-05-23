@@ -3,3 +3,5 @@
 CONTRIBUTING.md
 binding-curve.png
 .travis.yml
+^docs$
+_pkgdown.yml
