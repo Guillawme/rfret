@@ -30,6 +30,7 @@ hyperbola <- function(titrated_conc,
 #'
 #' @param titrated_conc Concentrations in the titration series.
 #' @param kd Binding constant.
+#' @param n Not used in this equation.
 #' @param signal_min Minimal observed signal.
 #' @param signal_max Maximal observed signal.
 #' @param probe_conc Fixed concentration of probe.
@@ -54,6 +55,7 @@ quadratic <- function(titrated_conc,
 #'
 #' @param titrated_conc Concentrations in the titration series.
 #' @param kd Binding constant.
+#' @param n Not used in this equation.
 #' @param signal_min Minimal observed signal.
 #' @param signal_max Maximal observed signal.
 #' @param probe_conc Fixed concentration of probe.

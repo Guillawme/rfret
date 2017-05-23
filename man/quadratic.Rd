@@ -4,12 +4,14 @@
 \alias{quadratic}
 \title{Quadratic equation}
 \usage{
-quadratic(titrated_conc, kd, signal_min, signal_max, probe_conc)
+quadratic(titrated_conc, kd, n, signal_min, signal_max, probe_conc)
 }
 \arguments{
 \item{titrated_conc}{Concentrations in the titration series.}
 
 \item{kd}{Binding constant.}
+
+\item{n}{Not used in this equation.}
 
 \item{signal_min}{Minimal observed signal.}
 
