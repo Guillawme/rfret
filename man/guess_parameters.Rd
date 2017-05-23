@@ -12,11 +12,11 @@ contain at least two columns named \code{fret_corrected} and
 \code{concentration}.}
 }
 \value{
-A list containing initial guesses for \code{kd}, \code{fret_min}
-    and \code{fret_max}.
+A list containing initial guesses for \code{kd}, \code{signal_min}
+    and \code{signal_max}.
 }
 \description{
 This function guesses initial values for \code{kd},
-    \code{fret_min} and \code{fret_max} (the parameters of the binding model
-    equations), using the corrected FRET data.
+    \code{signal_min} and \code{signal_max} (the parameters of the binding
+    model equations), using the corrected FRET data.
 }
