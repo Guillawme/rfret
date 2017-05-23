@@ -1,0 +1,41 @@
+reference:
+  - title: "Experiment planning"
+    desc: >
+      Function for simulating a binding curve while planning an experiment
+    contents:
+      - plan_experiment
+  - title: "Inspection of raw data"
+    desc: >
+      Function for inspecting raw data, finding outliers
+    contents:
+      - inspect_raw_data
+  - title: "Data processing"
+    desc: >
+      Functions for processing raw data
+    contents:
+      - average_technical_replicates
+      - correct_fret_signal
+      - batch_process
+  - title: "Curve fitting"
+    desc: >
+      Functions for fitting experimental data and making a final figure
+    contents:
+      - guess_parameters
+      - fit_binding_model
+      - make_figure
+  - title: "Equations"
+    desc: >
+       Definitions of binding model equations
+    contents:
+      - hyperbola
+      - quadratic
+      - quadratic_homodimer
+  - title: "Datasets"
+  - desc: >
+      Example datasets
+  - contents:
+      - fret_good
+      - fret_donor_outliers
+      - fret_acceptor_outliers
+      - fret_saturated_reads
+      - fret_bad
