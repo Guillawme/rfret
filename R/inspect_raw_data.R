@@ -19,19 +19,20 @@
 #'     which won't check for the presence of saturated reads. The input number
 #'     is not checked in any way: make sure it really corresponds to a saturated
 #'     read with your instrument.
-#' @return A list containing a logical value `saturated_reads` indicating the
-#'     presence of saturated reads in the dataset (equals to `TRUE` if saturated
-#'     reads are present, `FALSE` if there is no saturated read, or `NULL` if
-#'     this was not tested), and three \code{ggplot2} graph objects (named
-#'     \code{donor}, \code{acceptor} and \code{fret}). Warning messages appear
-#'     when missing values are encountered, and can be safely ignored.
+#' @return A list containing a logical value \code{saturated_reads} indicating
+#'     the presence of saturated reads in the dataset (equals to \code{TRUE} if
+#'     saturated reads are present, \code{FALSE} if there is no saturated read,
+#'     or \code{NULL} if this was not tested), and three \code{ggplot2} graph
+#'     objects (named \code{donor}, \code{acceptor} and \code{fret}). Warning
+#'     messages appear when missing values are encountered, and can be safely
+#'     ignored.
 #' @examples
 #' \dontrun{
 #' # Send all plots to the output device.
 #' inspect_raw_data(fret_good)
 #'
 #' # Donor plot will display pipetting precision.
-#' inspect_raw_data(fret_good, c("titration_1", "titration_2")
+#' inspect_raw_data(fret_good, c("titration_1", "titration_2"))
 #'
 #' # Store plots in a variable, print all plots, print only one of them.
 #' my_plots <- inspect_raw_data(fret_good)
