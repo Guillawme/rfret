@@ -4,20 +4,15 @@
 \alias{quadratic}
 \title{Quadratic equation}
 \usage{
-quadratic(titrated_conc, kd, n, signal_min, signal_max, probe_conc)
+quadratic(titrated_conc, parameters)
 }
 \arguments{
 \item{titrated_conc}{Concentrations in the titration series.}
 
-\item{kd}{Binding constant.}
-
-\item{n}{Not used in this equation.}
-
-\item{signal_min}{Minimal observed signal.}
-
-\item{signal_max}{Maximal observed signal.}
-
-\item{probe_conc}{Fixed concentration of probe.}
+\item{parameters}{A named list of parameters to be refined against the
+experimental data. Parameters for this equation are a binding constant
+(\code{kd}), a probe concentration (\code{probe_conc}), and values of
+minimal and maximal signal (\code{signal_min}, \code{signal_max}).}
 }
 \description{
 This function sets up the quadratic equation for use by

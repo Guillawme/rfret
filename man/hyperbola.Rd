@@ -4,24 +4,19 @@
 \alias{hyperbola}
 \title{Michaelis-Menten equation}
 \usage{
-hyperbola(titrated_conc, kd, n = 1, signal_min, signal_max, probe_conc)
+hyperbola(titrated_conc, parameters)
 }
 \arguments{
 \item{titrated_conc}{Concentrations in the titration series.}
 
-\item{kd}{Binding constant.}
-
-\item{n}{Hill coefficient. Defaults to 1.}
-
-\item{signal_min}{Minimal observed signal.}
-
-\item{signal_max}{Maximal observed signal.}
-
-\item{probe_conc}{Fixed concentration of probe.}
+\item{parameters}{A named list of parameters to be refined against the
+experimental data. Parameters for this equation are a binding constant
+(\code{kd}), a Hill coefficient (\code{n}), and values of minimal and
+maximal signal (\code{signal_min}, \code{signal_max}).}
 }
 \description{
 This function sets up the Michaelis-Menten equation for use by
     \code{\link{fit_binding_model}} or \code{\link[stats]{nls}}. If a Hill
-    coefficient different from 1 is specified, this equation describes a
-    Hill model.
+    coefficient different from 1 is specified in the set of parameters, this
+    equation will describe a Hill model.
 }
