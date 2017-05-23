@@ -1,0 +1,52 @@
+---
+title: "Setting up a FRET titration experiment"
+author: "Guillaume Gaullier"
+date: "`r Sys.Date()`"
+output: 
+    rmarkdown::html_vignette:
+        toc: yes
+        fig_width: 5
+        fig_height: 3.76
+vignette: >
+  %\VignetteIndexEntry{Setting up a FRET titration experiment}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This documentation explains how to set up a FRET titration experiment with
+appropriate controls to get data readily usable by `rfret`.
+
+# Material
+
+- Donor-labeled macromolecule "D" of interest,
+- acceptor-labeled macromolecule "A" of interest,
+- unlabeled macromolecule D,
+- unlabeled macromolecule A,
+- binding buffer,
+- 384-well black microplate.
+
+# Assay setup
+
+In the microplate, use three rows (possibly with technical replicates;
+fluorescence values from such replicates will be averaged) to set up the
+following titration series by serial dilution of the highest concentration of
+titrant:
+
+- donor correction experiment: serial dilution of unlabeled molecule A plus a
+  constant concentration of donor-labeled molecule D,
+- acceptor correction experiment: serial dilution of acceptor-labeled molecule A
+  plus a constant concentration of unlabeled molecule D,
+- interaction experiment: serial dilution of acceptor-labeled molecule A plus a
+  constant concentration of donor-labeled molecule D.
+
+# Data collection
+
+Use a plate reader instrument to measure, in this order, the FRET channel, the
+acceptor channel, and the donor channel fluorescence intensity. Excitation and
+emission wavelengths, as well as bandwidths, should be optimized beforehand on
+samples of labeled molecules.
+
+The FRET channel is collected first to avoid bleaching the acceptor fluorophore
+before the FRET measurement. The acceptor channel is collected second, because
+exciting the donor will also excite the acceptor to a certain extent if there is
+FRET happening.
