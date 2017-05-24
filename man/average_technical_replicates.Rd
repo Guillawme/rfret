@@ -8,11 +8,19 @@ average_technical_replicates(raw_data, titrations = NULL, blanks = NULL)
 }
 \arguments{
 \item{raw_data}{A dataframe containing the raw fluorescence data. It must
-contain at least five columns named \code{Content}, \code{donor_channel},
-\code{acceptor_channel}, \code{fret_channel} and \code{concentration}.
-The \code{Content} column must contain, for each row, a word describing
-which data series or replicate this row belongs to (like
-\code{blank_1}, \code{titration_1}, etc.).}
+ contain at least 8 columns named \code{Experiment}, \code{Type}, 
+ \code{Replicate}, \code{Obs}, \code{donor_channel}, 
+ \code{acceptor_channel}, \code{fret_channel} and \code{concentration}.
+ The first 4 of these uniquely identify each observation.
+ \code{Experiment} is a string that labels each run.
+ \code{Type} is either "blank" or "titration"
+ \code{Replicate} is an integer that indicates the technical replicate 
+ (ie, 1, 2, 3..) 
+ \code{Obs} is an integer that sequentially labels each row within a
+single experiment type and replicate. This is usually the well row number
+for a plate-reader based assay. The number of observations for a titration
+and a  blank must match, and a given \code{Obs} value must correspond
+to the same ligand concentration within a titration and blank pair.}
 
 \item{titrations}{A character vector containing words that identify the
 titration series (e.g. \code{titration}). These words must match the
