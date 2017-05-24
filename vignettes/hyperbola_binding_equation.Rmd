@@ -1,0 +1,84 @@
+---
+title: "Deriving the hyperbola binding equation"
+author: "Guillaume Gaullier"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This documentation explains how the hyperbola binding equation used to fit
+binding data from a FRET experiment is derived from the law of mass action.
+
+## Binding equilibrium
+
+In this document, we will call M the macromolecule, L the ligand, ML the
+macromolecule/ligand complex, and [M], [L] and [ML] their molar concentrations
+at equilibrium. Moreover, we will call $M_{tot}$ the total concentration of
+macromolecule, and $L_{tot}$ the total concentration of ligand. We have, by
+definition because of mass conservation:
+
+1: $M_{tot} = [M] + [ML]$
+2: $L_{tot} = [L] + [ML]$
+
+The binding equilibrium is represented by the following reaction:
+
+$M + L \rightleftharpoons ML$
+
+The equilibrium binding constant $K_D$ is defined by the following equation (law
+of mass action):
+
+3: $K_D = \frac{[M] \times [L]}{[ML]}$
+
+Determining $K_D$ is the goal of a binding assay, like a FRET
+titration experiment.
+
+## Deriving the hyperbola binding equation
+
+To determine $K_D$, we need to measure [ML] at equilibrium. [M] and [L] can be
+expressed as a function of [ML] from equations 1 and 2, $M_{tot}$ is a known
+parameter of the experiment. **[L] is impossible to measure in a FRET assay, but
+under conditions where $L_{tot} >>> M_{tot}$ we can safely approximate [L] by
+$L_{tot}$.**
+
+From equation 3, we can express [ML] as a function of all other parameters:
+
+$[ML] = \frac{[M] \times L_{tot}}{K_D}$
+
+And from equation 1, we can replace [M] by $M_{tot} - [ML]$, giving us:
+
+$[ML] = \frac{(M_{tot} - [ML]) \times L_{tot}}{K_D}$
+
+Solving for [ML] gives us:
+
+$K_D \times [ML] = M_{tot} \times L_{tot} - [ML] \times L_{tot}$
+$[ML] \times (K_D + L_{tot}) = M_{tot} \times L_{tot}$
+
+4: $[ML] = \frac{M_{tot} \times L_{tot}}{K_D + L_{tot}}$
+
+Equation 4 defines a hyperbola, which is the shape of the saturation curve
+showing the concentration of complex [ML] as a function of the ligand
+concentration $L_{tot}$.
+
+## Using the hyperbola binding equation to fit a binding curve
+
+If we have a detectable signal $S$ proportional to [ML] (like FRET), we can
+express it as a function of its minimal and maximal values ($S_{min}$ and
+$S_{max}$) and the fraction of ligand bound $\frac{[ML]}{M_{tot}}$:
+
+5: $S = S_{min} + (S_{max} - S_{min}) \times \frac{[ML]}{M_{tot}}$
+
+With this expression, $S = S_{min}$ when $\frac{[ML]}{M_{tot}} = 0$ and
+$S = S_{max}$ when $\frac{[ML]}{M_{tot}} = 1$.
+
+Substituting equation 4 into equation 5 gives us:
+
+6: $S = S_{min} + (S_{max} - S_{min}) \times \frac{L_{tot}}{K_D + L_{tot}} $
+
+In equation 6, $S_{min}$ and $S$ can be measured experimentally: they are,
+respectively, the signal observed without ligand, and across the titration
+series at given values of $L_{tot}$. The experimental data is, indeed,
+$S = f(L_{tot})$. $L_{tot}$ is a known experimental parameter. Therefore, $K_D$
+and $S_{max}$ can be determined by fitting equation 6 to the experimental data.

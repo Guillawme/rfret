@@ -81,7 +81,9 @@ Substituting equation 6 into equation 7 gives:
 
 8: $S = S_{min} + (S_{max} - S_{min}) \times \frac{(K_D + M_{tot} + L_{tot}) \pm \sqrt{(-(K_D + M_{tot} + L_{tot}))^2 - 4 \times M_{tot} \times L_{tot}}}{2 \times M_{tot}}$
 
-In equation 8, $S$ and $S_{min}$ can be measured experimentally: they are the
-signal observed without ligand, and across the titration series at given values of $L_{tot}$. The experimental data is, indeed, $S = f(L_{tot})$. $M_{tot}$ and
-$L_{tot}$ are known experimental parameters. Therefore, $K_D$ and $S_{max}$ can
-be determined by fitting equation 8 to the experimental data.
+In equation 8, $S$ and $S_{min}$ can be measured experimentally: $S_{min}$ and
+$S$ can be measured experimentally: they are, respectively, the signal observed
+without ligand, and across the titration series at given values of $L_{tot}$.
+The experimental data is, indeed, $S = f(L_{tot})$. $M_{tot}$ and $L_{tot}$ are
+known experimental parameters. Therefore, $K_D$ and $S_{max}$ can be determined
+by fitting equation 8 to the experimental data.
