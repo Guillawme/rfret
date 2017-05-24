@@ -4,28 +4,26 @@
 \alias{plan_experiment}
 \title{Plan a binding assay experiment}
 \usage{
-plan_experiment(kd, min_concentration = 0.1, max_concentration = 1000,
+plan_experiment(kd, min_concentration = 0.001, max_concentration = 1e+05,
   binding_model = hyperbola, probe_conc = NULL, hill = NULL)
 }
 \arguments{
-\item{kd}{A Kd value. This can also be a numerical vector of values, and in
-this case the function will plot several binding curves on the same
-graph: one for each Kd value.}
+\item{kd}{A Kd value.}
 
 \item{min_concentration}{The minimal value of the concentration range to
-simulate the binding curve over. Defaults to \code{1e-1}.}
+simulate the binding curve over. Defaults to \code{1e-3}.}
 
 \item{max_concentration}{The maximal value of the concentration range to
-simulate the binding curve over. Defaults to \code{1000}.}
+simulate the binding curve over. Defaults to \code{1e5}.}
 
 \item{binding_model}{A binding model equation. Possible values are
-\code{hyperbola}, \code{quadratic} and \code{quadratic_homodimer}.
-Defaults to \code{hyperbola}.}
+\code{hyperbola} and \code{quadratic}. Defaults to \code{hyperbola}.}
 
 \item{probe_conc}{Fixed concentration of probe molecule. If not specified,
 the hyperbola binding model equation is used by default.}
 
-\item{hill}{An optional Hill coefficient.}
+\item{hill}{An optional Hill coefficient. This is ignored by the
+\code{quadratic} binding model equation.}
 }
 \value{
 A \code{ggplot2} graph object of the simulated binding curve.
