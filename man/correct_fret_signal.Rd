@@ -4,8 +4,7 @@
 \alias{correct_fret_signal}
 \title{Correct FRET signal}
 \usage{
-correct_fret_signal(reduced_dataset, titration = "titration",
-  blank = "blank")
+correct_fret_signal(averaged_data)
 }
 \arguments{
 \item{reduced_dataset}{A dataframe containing the fluorescence data. It must

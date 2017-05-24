@@ -1,29 +1,35 @@
 #' @title Correct FRET signal
 #'
-#' @description This function subtracts the FRET background measured by the
-#'     blank experiment (without donor) from the raw FRET signal of the actual
-#'     titration, applying corrections given by
-#'     \href{https://doi.org/10.1093/nar/gkr1045}{Hieb AR \emph{et al} (2012)}.
+#' @description This function corrects the raw FRET signal by applying
+#'     corrections for donor bleedthrough and acceptor direct excitation. See
+#'     \href{https://doi.org/10.1093/nar/gkr1045}{Hieb AR \emph{et al} (2012)}
+#'     for details.
 #'
-#' @param reduced_dataset A dataframe containing the fluorescence data. It must
-#'     contain at least five columns named \code{Content}, \code{donor_channel},
-#'     \code{acceptor_channel}, \code{fret_channel} and \code{concentration}.
-#'     The \code{Content} column must contain, for each row, a word describing
-#'     which data series this row belongs to (like \code{"blank"} or
-#'     \code{"titration"}). The \code{\link{average_technical_replicates}}
+#' @param data A dataframe containing the FRET data after avergaing over
+#'     technical replicates. This dataframe must contain the following columns:
+#'     
+#'     - \code{Experiment}: A unique string identifier for each experiment
+#'     - \code{Type}: Either "blank" (no donor) or "titration" (donor present)
+#'     - \code{Observation}: An integer that identifies each observation 
+#'     within a run. For a plate-reader based assay, this is usually the row
+#'     number of a well. The number of observations for a titration and a 
+#'     blank must match, and a given \code{Observation} value must have the 
+#'     same ligand concentration for the titration and the blank.
+#'     - \code{concentration}: Ligand concentration
+#'     - \code{donor_channel}: Donor fluorescence
+#'     - \code{acceptor_channel}: Acceptor fluorescence
+#'     - \code{fret_channel}: FRET signal
+#'     
+#'     The \code{\link{average_technical_replicates}}
 #'     function produces a dataframe with this exact format.
-#' @param titration A character vector containing a word that identifies the
-#'     titration series (e.g. \code{titration}). This word must match the one in
-#'     \code{reduced_dataset$Content} (case sensitive). Defaults to
-#'     \code{"titration"}, as set by the
-#'     \code{\link{average_technical_replicates}} function.
-#' @param blank A character vector containing a word that identifies the blank
-#'     experiment series (e.g. \code{"blank"}). This word must match the one
-#'     in \code{reduced_dataset$Content} (case sensitive). Defaults to
-#'     \code{"blank"}, as set by the \code{\link{average_technical_replicates}}
-#'     function.
-#' @return A dataframe containing the corrected FRET signal. It contains two
-#'     columns named \code{concentration} and \code{fret_corrected}.
+#'
+#' @return A dataframe containing the corrected FRET signal. It contains three
+#'     columns:
+#'     
+#'     - \code{Experiment}: Experiment identifier (same as input)
+#'     - \code{concentration}: Ligand concentration (same as input)
+#'     - \code{fret}: The corrected FRET signal
+#'
 #' @seealso \code{\link{average_technical_replicates}} to prepare a dataset for
 #'     use with \code{correct_fret_signal}.
 #'
@@ -34,50 +40,35 @@
 #'     the details on the signal correction applied by
 #'     \code{correct_fret_signal}.
 #' @export
-
-correct_fret_signal <- function(reduced_dataset,
-                                titration = "titration",
-                                blank = "blank") {
-    # Calculate acceptor direct excitation (equation 5 in Hieb et al 2012)
-    acceptor_direct_exc <-
-        reduced_dataset$fret_channel[(reduced_dataset$Content == blank) &
-                                         (reduced_dataset$concentration != 0)] /
-        reduced_dataset$acceptor_channel[(reduced_dataset$Content == blank) &
-                                             (reduced_dataset$concentration != 0)]
-
-    # Calculate donor bleed through (equation 4 in Hieb et al 2012)
-    donor_bleed_through <-
-        mean(
-            reduced_dataset$fret_channel[(reduced_dataset$Content == titration) &
-                                             (reduced_dataset$concentration == 0)],
-            na.rm = TRUE
-        ) /
-        mean(
-            reduced_dataset$donor_channel[(reduced_dataset$Content == titration) &
-                                              (reduced_dataset$concentration == 0)],
-            na.rm = TRUE
-        )
-
-    # Calculate corrected FRET (equation 6 in Hieb et al 2012)
-    fret_corr <-
-        reduced_dataset$fret_channel[
-            (reduced_dataset$Content == titration) &
-                (reduced_dataset$concentration != 0)] -
-        donor_bleed_through * reduced_dataset$donor_channel[
-            (reduced_dataset$Content == titration) &
-                (reduced_dataset$concentration != 0)] -
-        acceptor_direct_exc * reduced_dataset$acceptor_channel[
-            (reduced_dataset$Content == titration) &
-                (reduced_dataset$concentration != 0)]
-    # Vertically shift all points such that the lowest (be it positive or
-    # negative) becomes 0:
-    fret_corr <- fret_corr - min(fret_corr)
-
-    # Build final dataframe
-    fret_corrected <- data.frame(
-        concentration = reduced_dataset$concentration[
-            (reduced_dataset$Content == titration) &
-                (reduced_dataset$concentration != 0)],
-        fret_corrected = fret_corr
-        )
+correct_fret_signal <- function(data){
+  data %>% 
+    group_by(Experiment) %>%
+    do(correct_one_expt(.))
 }
+
+# This function performs the corrections for each experiment
+correct_one_expt = 
+  function(one_expt){
+    # Colculate donor bleed through
+    only_donor = filter(one_expt, Type == "titration", concentration == 0)
+    donor_bleed_through = with(only_donor, mean(fret)/mean(donor))
+    
+    # Calculate acceptor direct excitation
+    only_acceptor = one_expt %>%
+      filter(Type == "blank", concentration != 0) %>%
+      mutate(acceptor_direct_excitation = fret/acceptor)
+    
+    # Apply correction factors
+    titration = filter(one_expt, Type == "titration", concentration != 0)
+    titration$donor_correction = donor_bleed_through
+    titration$acceptor_correction = only_acceptor$acceptor_direct_excitation
+    corrected_data = titration %>%
+      transmute(
+        concentration = concentration,
+        fret = fret - donor*donor_correction - acceptor*acceptor_correction)
+    
+    # Subtract baseline
+    corrected_data = corrected_data %>% mutate(fret = fret - min(fret))
+    return(corrected_data)
+  }
+
