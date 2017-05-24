@@ -4,37 +4,29 @@
 \alias{average_technical_replicates}
 \title{Average technical replicates}
 \usage{
-average_technical_replicates(raw_data, titrations = NULL, blanks = NULL)
+average_technical_replicates(raw_data)
 }
 \arguments{
 \item{raw_data}{A dataframe containing the raw fluorescence data. It must
- contain at least 8 columns named \code{Experiment}, \code{Type}, 
- \code{Replicate}, \code{Obs}, \code{donor_channel}, 
- \code{acceptor_channel}, \code{fret_channel} and \code{concentration}.
- The first 4 of these uniquely identify each observation.
- \code{Experiment} is a string that labels each run.
- \code{Type} is either "blank" or "titration"
- \code{Replicate} is an integer that indicates the technical replicate 
- (ie, 1, 2, 3..) 
- \code{Obs} is an integer that sequentially labels each row within a
-single experiment type and replicate. This is usually the well row number
-for a plate-reader based assay. The number of observations for a titration
-and a  blank must match, and a given \code{Obs} value must correspond
-to the same ligand concentration within a titration and blank pair.}
-
-\item{titrations}{A character vector containing words that identify the
-titration series (e.g. \code{titration}). These words must match the
-ones in \code{raw_data$Content} (case sensitive).}
-
-\item{blanks}{A character vector containing words that identify the blank
-experiment series (e.g. \code{blank}). These words must match the ones
-in \code{raw_data$Content} (case sensitive).}
+contain at least 8 columns named
+- \code{Experiment}: A unique string identifier for each experiment
+- \code{Type}: Either "blank" (no donor) or "titration" (donor present)
+- \code{Replicate}: An integer that indicates the technical replicate
+number (ie, 1, 2,...)
+- \code{Observation}: An integer that identifies each observation
+within a run. For a plate-reader based assay, this is usually the row
+number of a well. The number of observations for a titration and a
+blank must match, and a given \code{Observation} value must have the
+same ligand concentration for the titration and the blank.
+- \code{concentration}: Ligand concentration
+- \code{donor_channel}: Donor fluorescence
+- \code{acceptor_channel}: Acceptor fluorescence
+- \code{fret_channel}: FRET signal}
 }
 \value{
-A dataframe containing the reduced dataset. It contains five columns
-    named \code{Content}, \code{donor_channel}, \code{acceptor_channel},
-    \code{fret_channel} and \code{concentration}. The \code{Content} column
-    contains only two words: \code{"blank"} and \code{"titration"}.
+A dataframe containing the reduced dataset after averaging across
+    replicates. It contains all of the above columns *except*
+    \code{Replicate} (becuase we average over replicates)
 }
 \description{
 This function calculates averages of fluorescence values from

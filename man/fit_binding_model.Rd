@@ -4,25 +4,26 @@
 \alias{fit_binding_model}
 \title{Fit a binding model equation to the experimental FRET data}
 \usage{
-fit_binding_model(corrected_data, binding_model = NULL, parameters,
-  donor_concentration = 10)
+fit_binding_model(data_to_fit, model = NULL, donor_concentration = NULL,
+  fit_Hill_coef = FALSE)
 }
 \arguments{
-\item{corrected_data}{A dataframe containing the corrected FRET signal. It
-must contain at least two columns named \code{fret_corrected} and
-\code{concentration}. The output of the \code{\link{correct_fret_signal}}
-function can be used directly as input here.}
+\item{data_to_fit}{A dataframe containing the corrected FRET signal. It must
+contain at least two columns:
+- \code{concentration}: ligand concentration,
+- \code{fret}: the corrected FRET signal.
+The output of the \code{\link{correct_fret_signal}} function can be used
+directly as input here.}
+
+\item{donor_concentration}{The concentration of donor-labeled molecule
+(required for the quadratic binding model)}
+
+\item{fit_Hill_coef}{A Boolean value (TRUE/FALSE) that indicates whether to 
+fit for the Hill coefficient in the hyperbolic model. If FALSE, the
+Hill coefficent is fixed to 1. (default = FALSE)}
 
 \item{binding_model}{A binding model equation to fit to the experimental
-data. Possible values are \code{hyperbola}, \code{quadratic} and
-\code{quadratic_homodimer}.}
-
-\item{parameters}{A named list containing initial guesses for \code{kd},
-\code{fret_min} and \code{fret_max}. The output of
-\code{\link{guess_parameters}} can be used directly as input here.}
-
-\item{donor_concentration}{The concentration of donor-labeled molecule.
-Defaults to 10.}
+data. Possible values are \code{hyperbola} or \code{quadratic}.}
 }
 \value{
 An named list containing: \code{fit}, an \code{\link[stats]{nls}}
@@ -32,10 +33,5 @@ An named list containing: \code{fit}, an \code{\link[stats]{nls}}
     This list can be directly used as input to \code{\link{make_figure}}.
 }
 \description{
-This function uses initial guesses of \code{kd}, \code{fret_min}
-    and \code{fret_max} to fit a binding model equation to the corrected
-    experimental FRET data. This function is a wrapper around
-    \code{\link[stats]{nls}} and provides reasonnable default settings (i.e.
-    refine only \code{kd}, \code{fret_min} and \code{fret_max}, and possibly
-    the Hill coefficient \code{n}, but keep probe concentration fixed).
+This function fits corrected FRET data to a binding model.
 }
