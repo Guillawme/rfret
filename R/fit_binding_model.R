@@ -1,12 +1,6 @@
 #' @title Fit a binding model equation to the experimental FRET data
 #'
-#' @description This function uses initial guesses of \code{kd}, \code{fret_min}
-#'     and \code{fret_max} to fit a binding model equation to the corrected
-#'     experimental FRET data. This function is a wrapper around
-#'     \code{\link[minpack.lm]{nlsLM}} and provides reasonable default 
-#'     settings (ie refine only \code{kd}, \code{fret_min} and \code{fret_max},
-#'     and possibly the Hill coefficient \code{n}, but keep probe concentration 
-#'     fixed).
+#' @description This function fits corrected FRET data to a binding model.
 #'
 #' @param data_to_fit A dataframe containing the corrected FRET signal. It must
 #'     contain at least two columns:
@@ -65,11 +59,11 @@ fit.Hill = function(data){
                                         kd = kd,
                                         n = n)))
   data %>%
-    group_by(Experiment) %>%
-    do(fit = nlsLM(formula = model,
-                   data = .,
-                   start = c(guess_parameters(.), n=1),
-                   lower = c(0, 0, 0, 0)))
+    dplyr::group_by(Experiment) %>%
+    dplyr::do(fit = minpack.lm::nlsLM(formula = model,
+                                      data = .,
+                                      start = c(guess_parameters(.), n=1),
+                                      lower = c(0, 0, 0, 0)))
 }
 
 # fit to Hill function with n=1 (hyperbolic fit)
@@ -81,11 +75,11 @@ fit.Hyperbola = function(data){
                                         kd = kd,
                                         n = 1)))
   data %>%
-    group_by(Experiment) %>%
-    do(fit = nlsLM(formula = model,
-                   data = .,
-                   start = guess_parameters(.),
-                   lower =c(0, 0, 0)))
+    dplyr::group_by(Experiment) %>%
+    dplyr::do(fit = minpack.lm::nlsLM(formula = model,
+                                      data = .,
+                                      start = guess_parameters(.),
+                                      lower =c(0, 0, 0)))
 }
 
 fit.Quadratic = function(data, donor_concentration){
@@ -97,9 +91,9 @@ fit.Quadratic = function(data, donor_concentration){
                                         probe_conc = donor_concentration
                                       )))
   data %>% 
-    group_by(Experiment) %>%
-    do(fit = nlsLM(formula = model,
-                   data = .,
-                   start = guess_parameters(.),
-                   lower = c(0, 0, 0)))
+    dplyr::group_by(Experiment) %>%
+    dplyr::do(fit = minpack.lm::nlsLM(formula = model,
+                                      data = .,
+                                      start = guess_parameters(.),
+                                      lower = c(0, 0, 0)))
 }  
