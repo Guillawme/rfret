@@ -22,20 +22,20 @@
 #'
 
 cleanData <- function(fileName, numberOfLinesToSkip){
-    raw_data = read_csv(fileName, skip = numberOfLinesToSkip)
+    raw_data = readr::read_csv(fileName, skip = numberOfLinesToSkip)
     raw_data$Experiment = strsplit(fileName, "[.]")[[1]][1]
 
     raw_data =
         raw_data %>%
-        rowwise() %>%
-        mutate(intermediate = strsplit(Content, "_"),
-               Type = intermediate[1],
-               Replicate = intermediate[2]) %>%
-        select(-intermediate)
+        dplyr::rowwise() %>%
+        dplyr::mutate(intermediate = strsplit(Content, "_"),
+                      Type = intermediate[1],
+                      Replicate = intermediate[2]) %>%
+        dplyr::select(-intermediate)
 
     raw_data = raw_data %>%
-        group_by(Experiment, Type, Replicate) %>%
-        mutate(Observation = row_number())
+        dplyr::group_by(Experiment, Type, Replicate) %>%
+        dplyr::mutate(Observation = row_number())
 
     raw_data <- raw_data[c("Experiment", "Type", "Replicate", "Observation", "Well Row", "Well Col", "Content",
                            "fret_channel", "donor_channel", "acceptor_channel", "concentration")]
