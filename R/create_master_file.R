@@ -70,23 +70,14 @@ cleanData <- function(fileName, numberOfLinesToSkip){
 
 makeMasterFile <- function(listOfInputFiles, numberOfLinesToSkip){
 
-    masterFile <- cleanData(files[1], numberOfLinesToSkip)
+    masterFile <- cleanData(listOfInputFiles[1], numberOfLinesToSkip)
 
-    for(i in 2:length(files)){
+    for(i in 2:length(listOfInputFiles)){
 
-        nextData <- cleanData(files[i], numberOfLinesToSkip)
+        nextData <- cleanData(listOfInputFiles[i], numberOfLinesToSkip)
 
         masterFile = dplyr::full_join(masterFile, nextData)
     }
 
     return(masterFile)
 }
-
-
-
-
-
-
-
-
-
