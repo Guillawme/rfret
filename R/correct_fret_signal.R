@@ -42,33 +42,33 @@
 #' @export
 correct_fret_signal <- function(data){
   data %>% 
-    group_by(Experiment) %>%
-    do(correct_one_expt(.))
+    dplyr::group_by(Experiment) %>%
+    dplyr::do(correct_one_expt(.))
 }
 
 # This function performs the corrections for each experiment
 correct_one_expt = 
   function(one_expt){
     # Colculate donor bleed through
-    only_donor = filter(one_expt, Type == "titration", concentration == 0)
+    only_donor = dplyr::filter(one_expt, Type == "titration", concentration == 0)
     donor_bleed_through = with(only_donor, mean(fret)/mean(donor))
     
     # Calculate acceptor direct excitation
     only_acceptor = one_expt %>%
-      filter(Type == "blank", concentration != 0) %>%
-      mutate(acceptor_direct_excitation = fret/acceptor)
+      dplyr::filter(Type == "blank", concentration != 0) %>%
+      dplyr::mutate(acceptor_direct_excitation = fret/acceptor)
     
     # Apply correction factors
-    titration = filter(one_expt, Type == "titration", concentration != 0)
+    titration = dplyr::filter(one_expt, Type == "titration", concentration != 0)
     titration$donor_correction = donor_bleed_through
     titration$acceptor_correction = only_acceptor$acceptor_direct_excitation
     corrected_data = titration %>%
-      transmute(
+      dplyr::transmute(
         concentration = concentration,
         fret = fret - donor*donor_correction - acceptor*acceptor_correction)
     
     # Subtract baseline
-    corrected_data = corrected_data %>% mutate(fret = fret - min(fret))
+    corrected_data = corrected_data %>% dplyr::mutate(fret = fret - min(fret))
     return(corrected_data)
   }
 
