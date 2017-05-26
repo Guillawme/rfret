@@ -3,10 +3,10 @@ Title: Analyze FRET Binding Data
 Version: 0.0.0.9000
 Authors@R: c(
     person("Guillaume", "Gaullier", email = "guillaume@gaullier.org", role = c("aut", "cre")),
-    person("Tiana", "Stastny", email = "", role = "ctb"),
-    person("Ben", "Jenkins", email = "", role = "ctb"),
-    person("Andrew", "Blumenfeld", email = "", role = "ctb"),
-    person("Raibatak", "Das", email = "", role = "ctb"))
+    person("Tiana", "Stastny", role = "ctb"),
+    person("Ben", "Jenkins", role = "ctb"),
+    person("Andrew", "Blumenfeld", role = "ctb"),
+    person("Raibatak", "Das", role = "ctb"))
 Description: This package provides functions to analyze FRET binding data.
     Given raw fluorescence data from a FRET titration experiment's donor,
     acceptor and FRET channels, it allows to: (1) plot all channels to visually
