@@ -69,14 +69,18 @@ cleanData <- function(fileName, numberOfLinesToSkip){
 #' @export
 
 makeMasterFile <- function(listOfInputFiles, numberOfLinesToSkip){
-
+    # Start building the master file
     masterFile <- cleanData(listOfInputFiles[1], numberOfLinesToSkip)
 
-    for(i in 2:length(listOfInputFiles)){
+    # Handle the case where only one data file is provided
+    if (length(listOfInputFiles) == 1) {
+        return(masterFile)
+    }
 
+    # Keep concatenating data files if there is more than one
+    for (i in 2:length(listOfInputFiles)) {
         nextData <- cleanData(listOfInputFiles[i], numberOfLinesToSkip)
-
-        masterFile = dplyr::full_join(masterFile, nextData)
+        masterFile <- dplyr::full_join(masterFile, nextData)
     }
 
     return(masterFile)
