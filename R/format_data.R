@@ -77,7 +77,7 @@ format_data <- function(input = NULL, skip_lines = 0) {
     # files.
     # If no input is provided, ask for one:
     if (is.null(input)) {
-        stop("You must specify an input: a directory name, a vector of file names or a list of dataframes.")
+        stop("You must specify an input: a directory name, a vector of file names, a dataframe, or a list of dataframes.")
     }
     # If a single dataframe is provided, we put it in a named list so mapply can
     # process it:
@@ -99,11 +99,15 @@ format_data <- function(input = NULL, skip_lines = 0) {
             names(raw_data) <- sub(files,
                                    pattern = ".csv",
                                    replacement = "")
+        } else if (file.exists(input)) {
+            raw_data <- lapply(input, readr::read_csv, skip = skip_lines)
+            names(raw_data) <- sub(input,
+                                   pattern = ".csv",
+                                   replacement = "")
         } else {
-            stop(paste("Directory not found:", input))
+            stop(paste("File or directory not found:", input))
         }
-    }
-    if (is.character(input) && length(input) > 1) {
+    } else if (is.character(input) && length(input) > 1) {
         if (FALSE %in% file.exists(input)) {
             stop(paste("File not found:", input[file.exists(input) == FALSE]))
         } else {
@@ -112,6 +116,8 @@ format_data <- function(input = NULL, skip_lines = 0) {
                                    pattern = ".csv",
                                    replacement = "")
         }
+    } else {
+        stop("Please provide a valid directory name, or valid file names.")
     }
 
     # Format data and return a single large dataframe
