@@ -5,7 +5,7 @@
 \title{Plan a binding assay experiment}
 \usage{
 plan_experiment(kd, min_concentration = 0.001, max_concentration = 1e+05,
-  binding_model = hyperbola, probe_conc = NULL, hill = NULL)
+  binding_model = "hyperbola", probe_conc = NULL, hill = NULL)
 }
 \arguments{
 \item{kd}{A Kd value.}
@@ -17,7 +17,7 @@ simulate the binding curve over. Defaults to \code{1e-3}.}
 simulate the binding curve over. Defaults to \code{1e5}.}
 
 \item{binding_model}{A binding model equation. Possible values are
-\code{hyperbola} and \code{quadratic}. Defaults to \code{hyperbola}.}
+\code{"hyperbola"} and \code{"quadratic"}. Defaults to \code{"hyperbola"}.}
 
 \item{probe_conc}{Fixed concentration of probe molecule. If not specified,
 the hyperbola binding model equation is used by default.}

@@ -13,7 +13,7 @@
 #' @param max_concentration The maximal value of the concentration range to
 #'     simulate the binding curve over. Defaults to \code{1e5}.
 #' @param binding_model A binding model equation. Possible values are
-#'     \code{hyperbola} and \code{quadratic}. Defaults to \code{hyperbola}.
+#'     \code{"hyperbola"} and \code{"quadratic"}. Defaults to \code{"hyperbola"}.
 #' @param probe_conc Fixed concentration of probe molecule. If not specified,
 #'     the hyperbola binding model equation is used by default.
 #' @param hill An optional Hill coefficient. This is ignored by the
@@ -24,22 +24,35 @@
 plan_experiment <- function(kd,
                             min_concentration = 1e-3,
                             max_concentration = 1e5,
-                            binding_model = hyperbola,
+                            binding_model = "hyperbola",
                             probe_conc = NULL,
                             hill = NULL) {
-    # Sanity checks
+    # Prepare parameters, model equation and plot title
     if (is.null(hill)) { hill <- 1 }
-    if (is.null(probe_conc)) {
-        if (identical(binding_model, quadratic)) {
-            warning("No probe concentration specified. Using hyperbola equation instead.")
+    if (binding_model == "hyperbola") {
+        my_equation <- hyperbola
+        my_plot_title <- paste("Simulated curve: hyperbolic model,",
+                               "Kd =",
+                               kd,
+                               ", Hill coefficient =",
+                               hill)
+    } else if (binding_model == "quadratic") {
+        if (is.null(probe_conc)) {
+            stop("Please specify a probe concentration to use the quadratic model.")
         }
-        binding_model <- hyperbola
+        my_equation <- quadratic
+        my_plot_title <- paste("Simulated curve: quadratic model,",
+                               "Kd =",
+                               kd,
+                               ", probe concentration =",
+                               probe_conc)
+    } else {
+        stop("Unknown binding model. Available binding models: 'hyperbolic', 'quadratic'.")
     }
 
-    # Make plot
     my_plot <- ggplot2::ggplot(data = data.frame(x = min_concentration:max_concentration),
                                ggplot2::aes(x = x)) +
-        ggplot2::stat_function(fun = binding_model,
+        ggplot2::stat_function(fun = my_equation,
                                args = list(list(kd = kd,
                                                 signal_min = 0,
                                                 signal_max = 100,
@@ -49,7 +62,7 @@ plan_experiment <- function(kd,
         ggplot2::scale_x_log10() +
         ggplot2::xlab("Concentration") +
         ggplot2::ylab("Signal (% saturation)") +
-        ggplot2::ggtitle("Simulated binding curve")
+        ggplot2::ggtitle(my_plot_title)
 
     # Return plot
     my_plot
