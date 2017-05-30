@@ -7,8 +7,9 @@
 format_data(input = NULL, skip_lines = 0)
 }
 \arguments{
-\item{input}{A directory name, a vector of file names, or a list of datasets
-already loaded in memory as dataframes.}
+\item{input}{A directory name, a vector of file names, a single dataset
+already loaded in memory as a dataframe, or a list of datasets already
+loaded in memory as dataframes.}
 
 \item{skip_lines}{The number of lines to skip at the beginning of CSV files
 (usually containing header information before the actual data starts).}

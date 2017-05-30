@@ -56,8 +56,9 @@ format_one_dataset <- function(raw_data, experiment_name) {
 #'     \code{\link{average_technical_replicates}}. It will accept all data files
 #'     in a given directory, or any number of data files specified by their
 #'     names, or any number of dataframes supplied as a named list.
-#' @param input A directory name, a vector of file names, or a list of datasets
-#'     already loaded in memory as dataframes.
+#' @param input A directory name, a vector of file names, a single dataset
+#'     already loaded in memory as a dataframe, or a list of datasets already
+#'     loaded in memory as dataframes.
 #' @param skip_lines The number of lines to skip at the beginning of CSV files
 #'     (usually containing header information before the actual data starts).
 #' @return A single dataframe with the combined input data, containing 11
@@ -77,6 +78,12 @@ format_data <- function(input = NULL, skip_lines = 0) {
     # If no input is provided, ask for one:
     if (is.null(input)) {
         stop("You must specify an input: a directory name, a vector of file names or a list of dataframes.")
+    }
+    # If a single dataframe is provided, we put it in a named list so mapply can
+    # process it:
+    if (is.data.frame(input)) {
+        data_name <- deparse(substitute(input))
+        raw_data <- list(data_name = input)
     }
     # If a list if provided, we will assume it's a list of already loaded
     # datasets:
