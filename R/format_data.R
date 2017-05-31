@@ -53,11 +53,11 @@ format_data <- function(input = NULL, skip_lines = 0) {
                                    pattern = ".csv",
                                    replacement = "")
         } else {
-            stop(paste("File or directory not found:", input))
+            stop("File or directory not found: ", input)
         }
     } else if (is.character(input) && length(input) > 1) {
         if (FALSE %in% file.exists(input)) {
-            stop(paste("File not found:", input[file.exists(input) == FALSE]))
+            stop("File not found: ", input[file.exists(input) == FALSE])
         } else {
             raw_data <- lapply(input, readr::read_csv, skip = skip_lines)
             names(raw_data) <- sub(input,
