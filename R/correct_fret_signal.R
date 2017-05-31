@@ -50,10 +50,11 @@
 #'     }
 #'
 #' @export
+
 correct_fret_signal <- function(data){
   data %>%
     dplyr::group_by(Experiment) %>%
-    dplyr::do(correct_one_expt(.))
+    dplyr::do(correct_one_exp(.))
 }
 
 #' @title Correct FRET signal for one experiment
@@ -65,7 +66,7 @@ correct_fret_signal <- function(data){
 #'     and \href{https://doi.org/10.1016/B978-0-12-391940-3.00011-1}{Winkler DD
 #'     \emph{et al} (2012)} for details.
 #'
-#' @param data A dataframe containing the FRET data after avergaing over
+#' @param one_exp A dataframe containing the FRET data after avergaing over
 #'     technical replicates. This dataframe must contain the following columns:
 #'     \describe{
 #'     \item{Experiment}{A unique name identifying each experiment.}
@@ -108,26 +109,25 @@ correct_fret_signal <- function(data){
 #'     (\href{https://doi.org/10.1016/B978-0-12-391940-3.00011-1}{doi:10.1016/B978-0-12-391940-3.00011-1}).
 #'     }
 
-correct_one_expt <- function(one_expt){
+correct_one_exp <- function(one_exp){
     # Calculate donor bleed through
-    only_donor <- dplyr::filter(one_expt, Type == "titration", concentration == 0)
-    donor_bleed_through <- with(only_donor, mean(fret)/mean(donor))
+    only_donor <- dplyr::filter(one_exp, Type == "titration", concentration == 0)
+    donor_bleed_through <- with(only_donor, mean(fret) / mean(donor))
 
     # Calculate acceptor direct excitation
-    only_acceptor <- one_expt %>%
+    only_acceptor <- one_exp %>%
       dplyr::filter(Type == "blank", concentration != 0) %>%
-      dplyr::mutate(acceptor_direct_excitation = fret/acceptor)
+      dplyr::mutate(acceptor_direct_excitation = fret / acceptor)
 
     # Apply correction factors
-    titration <- dplyr::filter(one_expt, Type == "titration", concentration != 0)
+    titration <- dplyr::filter(one_exp, Type == "titration", concentration != 0)
     titration$donor_correction <- donor_bleed_through
     titration$acceptor_correction <- only_acceptor$acceptor_direct_excitation
     corrected_data <- titration %>%
       dplyr::transmute(
         concentration = concentration,
-        fret = fret - donor*donor_correction - acceptor*acceptor_correction)
+        fret = fret - donor * donor_correction - acceptor * acceptor_correction)
 
     # Subtract baseline
-    corrected_data <- corrected_data %>% dplyr::mutate(fret = fret - min(fret))
-    return(corrected_data)
+    corrected_data %<>% dplyr::mutate(fret = fret - min(fret))
   }
