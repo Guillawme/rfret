@@ -9,10 +9,10 @@
 #'     The output of the \code{\link{correct_fret_signal}} function can be used
 #'     directly as input here.
 #' @param binding_model A binding model equation to fit to the experimental
-#'     data. Possible values are \code{hyperbola} or \code{quadratic}.
+#'     data. Possible values are \code{hyperbolic} or \code{quadratic}.
 #' @param donor_concentration The concentration of donor-labeled molecule
 #'     (required for the quadratic binding model)
-#' @param fit_Hill_coef A Boolean value (TRUE/FALSE) that indicates whether to 
+#' @param fit_Hill_coef A Boolean value (TRUE/FALSE) that indicates whether to
 #'     fit for the Hill coefficient in the hyperbolic model. If FALSE, the
 #'     Hill coefficent is fixed to 1. (default = FALSE)
 #' @return An named list containing: \code{fit}, an \code{\link[stats]{nls}}
@@ -28,31 +28,31 @@ fit_binding_model <- function(data_to_fit,
                               fit_Hill_coef = FALSE) {
   # Sanity checks
   if (is.null(model)) stop("You must provide a binding model.")
-  
+
   # Select model and fit data
-  if (model == "hyperbola") {
+  if (model == "hyperbolic") {
     if (fit_Hill_coef) {
       fits = fit.Hill(data_to_fit)
     } else {
-      fits = fit.Hyperbola(data_to_fit)
+      fits = fit.hyperbolic(data_to_fit)
     }
   } else if (model == "quadratic") {
     if (fit_Hill_coef) {
-      stop("Invalid option: fit_Hill_coef = TRUE is a valid option only for model = hyperbola. To use quadratic binding model, set fit_Hill_coef to FALSE")
+      stop("Invalid option: fit_Hill_coef = TRUE is a valid option only for model = hyperbolic. To use quadratic binding model, set fit_Hill_coef to FALSE")
     } else if (is.null(donor_concentration)) {
       stop("Missing donor concentration. You must provide a donor concentration for the quadratic binding model")
     } else {
       fits = fit.Quadratic(data_to_fit, donor_concentration)
     }
   } else {
-    stop("Invalid model. Must be either hyperbola or quadratic")
+    stop("Invalid model. Must be either hyperbolic or quadratic")
   }
   return(fits)
 }
 
 # fit to Hill function with n as a free parameter
 fit.Hill = function(data){
-  model = as.formula(fret ~ hyperbola(concentration, 
+  model = as.formula(fret ~ hyperbolic(concentration,
                                       parameters = list(
                                         signal_min = fmin,
                                         signal_max = fmax,
@@ -67,8 +67,8 @@ fit.Hill = function(data){
 }
 
 # fit to Hill function with n=1 (hyperbolic fit)
-fit.Hyperbola = function(data){
-  model = as.formula(fret ~ hyperbola(concentration, 
+fit.hyperbolic = function(data){
+  model = as.formula(fret ~ hyperbolic(concentration,
                                       parameters = list(
                                         signal_min = fmin,
                                         signal_max = fmax,
@@ -90,10 +90,10 @@ fit.Quadratic = function(data, donor_concentration){
                                         kd = kd,
                                         probe_conc = donor_concentration
                                       )))
-  data %>% 
+  data %>%
     dplyr::group_by(Experiment) %>%
     dplyr::do(fit = minpack.lm::nlsLM(formula = model,
                                       data = .,
                                       start = guess_parameters(.),
                                       lower = c(0, 0, 0)))
-}  
+}

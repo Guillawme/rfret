@@ -13,7 +13,7 @@
 #' @param max_concentration The maximal value of the concentration range to
 #'     simulate the binding curve over. Defaults to \code{1e5}.
 #' @param binding_model A binding model equation. Possible values are
-#'     \code{"hyperbola"} and \code{"quadratic"}. Defaults to \code{"hyperbola"}.
+#'     \code{"hyperbola"} and \code{"quadratic"}. Defaults to \code{"hyperbolic"}.
 #' @param probe_conc Fixed concentration of probe molecule. If not specified,
 #'     the hyperbola binding model equation is used by default.
 #' @param hill An optional Hill coefficient. This is ignored by the
@@ -24,13 +24,13 @@
 plan_experiment <- function(kd,
                             min_concentration = 1e-3,
                             max_concentration = 1e5,
-                            binding_model = "hyperbola",
+                            binding_model = "hyperbolic",
                             probe_conc = NULL,
                             hill = NULL) {
     # Prepare parameters, model equation and plot title
     if (is.null(hill)) { hill <- 1 }
-    if (binding_model == "hyperbola") {
-        my_equation <- hyperbola
+    if (binding_model == "hyperbolic") {
+        my_equation <- hyperbolic
         my_plot_title <- paste("Simulated curve: hyperbolic model,",
                                "Kd =",
                                kd,

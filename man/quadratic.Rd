@@ -2,12 +2,12 @@
 % Please edit documentation in R/equations.R
 \name{quadratic}
 \alias{quadratic}
-\title{Quadratic equation}
+\title{Quadratic model equation}
 \usage{
-quadratic(titrated_conc, parameters)
+quadratic(conc, parameters)
 }
 \arguments{
-\item{titrated_conc}{Concentrations in the titration series.}
+\item{conc}{Ligand concentration.}
 
 \item{parameters}{A named list of parameters to be refined against the
 experimental data. Parameters for this equation are a binding constant
@@ -15,6 +15,6 @@ experimental data. Parameters for this equation are a binding constant
 minimal and maximal signal (\code{signal_min}, \code{signal_max}).}
 }
 \description{
-This function sets up the quadratic equation for use by
-    \code{\link{fit_binding_model}} or \code{\link[stats]{nls}}.
+This function sets up the quadratic model equation for use by
+    \code{\link{fit_binding_model}}.
 }

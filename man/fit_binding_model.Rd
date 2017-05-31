@@ -18,12 +18,12 @@ directly as input here.}
 \item{donor_concentration}{The concentration of donor-labeled molecule
 (required for the quadratic binding model)}
 
-\item{fit_Hill_coef}{A Boolean value (TRUE/FALSE) that indicates whether to 
+\item{fit_Hill_coef}{A Boolean value (TRUE/FALSE) that indicates whether to
 fit for the Hill coefficient in the hyperbolic model. If FALSE, the
 Hill coefficent is fixed to 1. (default = FALSE)}
 
 \item{binding_model}{A binding model equation to fit to the experimental
-data. Possible values are \code{hyperbola} or \code{quadratic}.}
+data. Possible values are \code{hyperbolic} or \code{quadratic}.}
 }
 \value{
 An named list containing: \code{fit}, an \code{\link[stats]{nls}}
