@@ -4,19 +4,19 @@
 \alias{guess_parameters}
 \title{Guess initial values for parameters of the binding model equations}
 \usage{
-guess_parameters(fret_corr)
+guess_parameters(input_data)
 }
 \arguments{
-\item{fret_corr}{A dataframe containing the corrected FRET signal. It must
-contain at least two columns named \code{fret_corrected} and
-\code{concentration}.}
+\item{input_data}{A dataframe containing the corrected binding signal. It must
+contain at least two columns: \code{concentration} (the ligand
+concentration) and \code{signal} (the observed binding signal).}
 }
 \value{
-A list containing initial guesses for \code{kd}, \code{signal_min}
-    and \code{signal_max}.
+A named list containing initial guesses for \code{kd},
+    \code{signal_min} and \code{signal_max}.
 }
 \description{
-This function guesses initial values for \code{kd},
-    \code{signal_min} and \code{signal_max} (the parameters of the binding
-    model equations), using the corrected FRET data.
+This function provides reasonable initial guesses for \code{kd},
+    \code{signal_min} and \code{signal_max} (parameters of the binding model
+    equations used to fit the data).
 }

@@ -31,7 +31,7 @@
 #'     the input data).}
 #'     \item{concentration}{The ligand concentration in the titration series
 #'     (same as in the input data).}
-#'     \item{fret}{The corrected FRET signal.}
+#'     \item{signal}{The corrected FRET signal.}
 #'     }
 #'
 #' @seealso \code{\link{average_technical_replicates}} to prepare a dataset for
@@ -109,25 +109,29 @@ correct_fret_signal <- function(data){
 #'     (\href{https://doi.org/10.1016/B978-0-12-391940-3.00011-1}{doi:10.1016/B978-0-12-391940-3.00011-1}).
 #'     }
 
-correct_one_exp <- function(one_exp){
+correct_one_exp <- function(one_exp) {
     # Calculate donor bleed through
-    only_donor <- dplyr::filter(one_exp, Type == "titration", concentration == 0)
-    donor_bleed_through <- with(only_donor, mean(fret) / mean(donor))
+    donor_only <- one_exp %>%
+        dplyr::filter(Type == "donor_only") %>%
+        dplyr::mutate(donor_bleed_through = fret_channel / donor_channel)
 
     # Calculate acceptor direct excitation
-    only_acceptor <- one_exp %>%
-      dplyr::filter(Type == "blank", concentration != 0) %>%
-      dplyr::mutate(acceptor_direct_excitation = fret / acceptor)
+    acceptor_only <- one_exp %>%
+        dplyr::filter(Type == "acceptor_only") %>%
+        dplyr::mutate(acceptor_direct_excitation = fret_channel / acceptor_channel)
 
     # Apply correction factors
-    titration <- dplyr::filter(one_exp, Type == "titration", concentration != 0)
-    titration$donor_correction <- donor_bleed_through
-    titration$acceptor_correction <- only_acceptor$acceptor_direct_excitation
+    titration <- dplyr::filter(one_exp, Type == "titration")
+    titration$donor_bleed_through <- donor_only$donor_bleed_through
+    titration$acceptor_direct_excitation <- acceptor_only$acceptor_direct_excitation
     corrected_data <- titration %>%
-      dplyr::transmute(
-        concentration = concentration,
-        fret = fret - donor * donor_correction - acceptor * acceptor_correction)
+        dplyr::transmute(
+            concentration = concentration,
+            signal = fret_channel -
+                donor_channel * donor_bleed_through -
+                acceptor_channel * acceptor_direct_excitation
+            )
 
     # Subtract baseline
-    corrected_data %<>% dplyr::mutate(fret = fret - min(fret))
+    corrected_data %<>% dplyr::mutate(signal = signal - min(signal))
   }

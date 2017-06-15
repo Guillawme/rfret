@@ -33,7 +33,7 @@ A dataframe containing the corrected FRET signal. It contains three
     the input data).}
     \item{concentration}{The ligand concentration in the titration series
     (same as in the input data).}
-    \item{fret}{The corrected FRET signal.}
+    \item{signal}{The corrected FRET signal.}
     }
 }
 \description{

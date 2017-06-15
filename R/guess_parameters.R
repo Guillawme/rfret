@@ -1,35 +1,33 @@
 #' @title Guess initial values for parameters of the binding model equations
 #'
 #' @description This function provides reasonable initial guesses for \code{kd},
-#'     \code{fmin} and \code{fmax} (parameters of the binding model
-#'     equations used to fit the data) 
-#'
-#' @param fret_corr A dataframe containing the corrected FRET signal. It must
-#'     contain at least two columns:
-#'     - \code{concentration}: ligand concentration,
-#'     - \code{fret}: the corrected FRET signal.
-#'     
-#' @return A list containing initial guesses for \code{kd}, \code{fmin}
-#'     and \code{fmax}.
+#'     \code{signal_min} and \code{signal_max} (parameters of the binding model
+#'     equations used to fit the data).
+#' @param input_data A dataframe containing the corrected binding signal. It must
+#'     contain at least two columns: \code{concentration} (the ligand
+#'     concentration) and \code{signal} (the observed binding signal).
+#' @return A named list containing initial guesses for \code{kd},
+#'     \code{signal_min} and \code{signal_max}.
 #' @export
 
-guess_parameters <- function(fret_corr) {
-    # Minimal value of measured FRET signal is a good approximation
-    # for signa_min
-    fmin_guess <- min(fret_corr$fret)
+guess_parameters <- function(input_data) {
+    # Minimal value of measured binding signal is a good approximation
+    # for signal_min
+    smin_guess <- min(input_data$signal)
 
-    # Maximal value of measured FRET signal is not a perfect approximation for
-    # signal_max (because experimental curves rarely saturate), but good enough
-    # for an initial guess
-    fmax_guess <- max(fret_corr$fret)
+    # Maximal value of measured binding signal is not a perfect approximation
+    # for signal_max (because experimental curves rarely saturate), but good
+    # enough for an initial guess
+    smax_guess <- max(input_data$signal)
 
     # As an initial guess of kd, we simply take the concentration value at
-    # half-maximum FRET signal
-    half_fret <- with(fret_corr, (max(fret) - min(fret)) / 2)
-    i <- which.min( abs(fret_corr$fret - half_fret) )
-    kd_guess <- fret_corr$concentration[i]
+    # half-maximum binding signal
+    half_smax_theoretical <- with(input_data, (max(signal) - min(signal)) / 2)
+    half_smax_index <- which.min(abs(input_data$signal - half_smax_theoretical))
+    kd_guess <- input_data$concentration[half_smax_index]
 
-    list(kd   = kd_guess,
-         fmin = fmin_guess,
-         fmax = fmax_guess)
+    # Return guessed initial parameters as a list
+    list(kd         = kd_guess,
+         signal_min = smin_guess,
+         signal_max = smax_guess)
 }

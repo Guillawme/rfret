@@ -4,33 +4,31 @@
 \alias{fit_binding_model}
 \title{Fit a binding model equation to the experimental FRET data}
 \usage{
-fit_binding_model(data_to_fit, model = NULL, donor_concentration = NULL,
-  fit_Hill_coef = FALSE)
+fit_binding_model(data_to_fit, binding_model = NULL,
+  donor_concentration = NULL, fit_hill_coef = FALSE)
 }
 \arguments{
-\item{data_to_fit}{A dataframe containing the corrected FRET signal. It must
-contain at least two columns:
-- \code{concentration}: ligand concentration,
-- \code{fret}: the corrected FRET signal.
-The output of the \code{\link{correct_fret_signal}} function can be used
-directly as input here.}
-
-\item{donor_concentration}{The concentration of donor-labeled molecule
-(required for the quadratic binding model)}
-
-\item{fit_Hill_coef}{A Boolean value (TRUE/FALSE) that indicates whether to
-fit for the Hill coefficient in the hyperbolic model. If FALSE, the
-Hill coefficent is fixed to 1. (default = FALSE)}
+\item{data_to_fit}{A dataframe containing the binding signal. It must contain
+at least two columns: \code{concentration} (the ligand concentration) and
+\code{signal} (the observed binding signal). The output of the
+\code{\link{correct_fret_signal}} function can be used directly as input
+here.}
 
 \item{binding_model}{A binding model equation to fit to the experimental
-data. Possible values are \code{hyperbolic} or \code{quadratic}.}
+data. Possible values are \code{"hyperbolic"} or \code{"quadratic"}.}
+
+\item{fit_hill_coef}{A Boolean value (TRUE or FALSE) that indicates whether
+to fit for the Hill coefficient in the hyperbolic model. If it is
+\code{FALSE} (the default value), the Hill coefficent is fixed to 1.}
+
+\item{probe_concentration}{The fixed concentration of probe molecule
+(required to use the quadratic binding model).}
 }
 \value{
-An named list containing: \code{fit}, an \code{\link[stats]{nls}}
-    object containing the results of the fit; \code{binding_model}, the
-    equation used in the fitting procedure; and \code{donor_concentration},
-    the donor concentration used in the fitting procedure.
-    This list can be directly used as input to \code{\link{make_figure}}.
+A named list where each element is named after the corresponding
+    experiment and holds an \code{\link[stats]{nls}}
+    object containing the results of the fit. This list can be directly used
+    as input to \code{\link{make_figure}}.
 }
 \description{
 This function fits corrected FRET data to a binding model.

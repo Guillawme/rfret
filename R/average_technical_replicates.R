@@ -33,7 +33,7 @@
 average_technical_replicates <- function(raw_data) {
   raw_data %>%
     dplyr::group_by(Experiment, Type, Observation, concentration) %>%
-    dplyr::summarise(fret = mean(fret_channel),
-                     acceptor = mean(acceptor_channel),
-                     donor = mean(donor_channel))
+    dplyr::summarise(fret_channel = mean(fret_channel),
+                     acceptor_channel = mean(acceptor_channel),
+                     donor_channel = mean(donor_channel))
 }
