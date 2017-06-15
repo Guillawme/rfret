@@ -2,7 +2,7 @@
 % Please edit documentation in R/format_data.R
 \name{format_data}
 \alias{format_data}
-\title{Format experimental data for subsequent processing}
+\title{Format raw experimental FRET binding data for subsequent processing}
 \usage{
 format_data(input = NULL, skip_lines = 0)
 }
@@ -15,17 +15,17 @@ loaded in memory as dataframes.}
 (usually containing header information before the actual data starts).}
 }
 \value{
-A single dataframe with the combined input data, containing 11
+A single dataframe with the combined input data, containing 8
     columns: \code{Experiment}, \code{Type}, \code{Replicate},
-    \code{Observation}, \code{Well Row}, \code{Well Col}, \code{Content},
-    \code{fret_channel}, \code{acceptor_channel}, \code{donor_channel} and
-    \code{concentration}.
+    \code{Observation}, \code{fret_channel}, \code{acceptor_channel},
+    \code{donor_channel} and \code{concentration}.
 }
 \description{
 This function formats data for subsequent processing by
     \code{\link{average_technical_replicates}}. It will accept all data files
     in a given directory, or any number of data files specified by their
-    names, or any number of dataframes supplied as a named list.
+    names, or any number of dataframes supplied as a named list, or even a
+    single dataframe supplied as is.
 }
 \examples{
 \dontrun{
