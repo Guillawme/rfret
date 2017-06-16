@@ -1,65 +1,87 @@
-#' @title Inspect raw fluorescence data
+#' @title Inspect raw fluorescence data from FRET binding assays
 #'
 #' @description This function plots the raw fluorescence data from the donor,
-#'     acceptor and FRET channels, as a function of the acceptor concentration
-#'     (titration series).
+#'     acceptor and FRET channels, as a function of the titration series.
 #'
 #' @param raw_data A dataframe containing the raw fluorescence data. It must
-#'     contain at least five columns named \code{Content}, \code{donor_channel},
-#'     \code{acceptor_channel}, \code{fret_channel} and \code{concentration}.
-#'     The \code{Content} column is used to plot distinct data series with
-#'     different symbols; it must contain, for each row, a word describing
-#'     which data series or replicate this row belongs to (like
-#'     \code{"blank_1"}, \code{"titration_1"}, etc.).
-#' @param titrations An optional character vector containing the names
-#'     associated to the titration series. If not specified, the donor channel
-#'     plot will not display the mean and +/- 10 \% shaded area.
+#'     be the output of \code{\link{format_data}}.
 #' @param highest_signal An optional number corresponding to the maximal signal
 #'     measurable by the plate reader instrument used. Defaults to \code{NULL},
 #'     which won't check for the presence of saturated reads. The input number
 #'     is not checked in any way: make sure it really corresponds to a saturated
 #'     read with your instrument.
-#' @return A list containing a logical value \code{saturated_reads} indicating
-#'     the presence of saturated reads in the dataset (equals to \code{TRUE} if
-#'     saturated reads are present, \code{FALSE} if there is no saturated read,
-#'     or \code{NULL} if this was not tested), and three \code{ggplot2} graph
-#'     objects (named \code{donor}, \code{acceptor} and \code{fret}). Warning
-#'     messages appear when missing values are encountered, and can be safely
-#'     ignored.
-#' @examples
-#' \dontrun{
-#' # Send all plots to the output device.
-#' inspect_raw_data(fret_good)
-#'
-#' # Donor plot will display pipetting precision.
-#' inspect_raw_data(fret_good, c("titration_1", "titration_2"))
-#'
-#' # Store plots in a variable, print all plots, print only one of them.
-#' my_plots <- inspect_raw_data(fret_good)
-#' my_plots
-#' my_plots$acceptor
-#' }
+#' @param output_directory An optional directory name where to write plots. This
+#'     directory will be created if it does not already exist.
+#' @param plot_format A character string indicating the file format to use to
+#'     save plots. Possible values are \code{"png"} (default value),
+#'     \code{"pdf"} and \code{"svg"}.
+#' @return A list in which each item is named after the corresponding experiment,
+#'     and holds a named list containing: a logical value \code{saturated_reads}
+#'     indicating the presence of saturated reads in the dataset (equals to
+#'     \code{TRUE} if saturated reads are present, \code{FALSE} if there is no
+#'     saturated read, or \code{NULL} if this was not tested), and three
+#'     \code{ggplot2} graph objects (named \code{donor}, \code{acceptor} and
+#'     \code{fret}).
 #' @export
 
 inspect_raw_data <- function(raw_data,
-                             titrations = NULL,
-                             highest_signal = NULL) {
-    # Sanity checks
-    if (!is.null(titrations) && !is.character(titrations)) {
-        stop("Invalid parameter: 'titrations' must be a vector of words.")
-    }
-    if (!is.null(highest_signal) && !is.numeric(highest_signal)) {
-        stop("Invalid parameter: 'highest_signal' must be a number.")
+                             highest_signal = NULL,
+                             output_directory = NULL,
+                             plot_format = "png") {
+    # Split input data by Experiment and make plots for each dataset
+    results <- raw_data %>%
+        split(raw_data$Experiment) %>%
+        mapply(inspect_one_raw_data,
+               .,
+               MoreArgs = list(highest_signal = highest_signal),
+               SIMPLIFY = FALSE)
+
+    # Optionally, write plots to files in the specified directory
+    if (!is.null(output_directory)) {
+        if (!(plot_format %in% c("png", "pdf", "svg"))) {
+            stop("Please use one of the following output formats: 'png', 'pdf' or 'svg'.")
+        }
+        if (!dir.exists(output_directory)) {
+            message("Creating directory: ", output_directory)
+            dir.create(output_directory)
+        }
+        mapply(save_inspection_plots,
+               results,
+               names(results),
+               MoreArgs = list(output_directory = output_directory,
+                               plot_format = plot_format))
     }
 
+    # Always return results
+    results
+}
+
+#' @title Inspect raw fluorescence data from a single FRET binding assay
+#'
+#' @description This internal function plots the raw fluorescence data from the
+#'     donor, acceptor and FRET channels, as a function of the titration series.
+#'
+#' @param dataset A dataframe containing the raw fluorescence data. It must
+#'     be the output of \code{\link{format_data}}.
+#' @param highest_signal An optional number corresponding to the maximal signal
+#'     measurable by the plate reader instrument used. Defaults to \code{NULL},
+#'     which won't check for the presence of saturated reads. The input number
+#'     is not checked in any way: make sure it really corresponds to a saturated
+#'     read with your instrument.
+#' @return A named list containing: a logical value \code{saturated_reads}
+#'     indicating the presence of saturated reads in the dataset (equals to
+#'     \code{TRUE} if saturated reads are present, \code{FALSE} if there is no
+#'     saturated read, or \code{NULL} if this was not tested), and three
+#'     \code{ggplot2} graph objects (named \code{donor}, \code{acceptor} and
+#'     \code{fret}).
+
+inspect_one_raw_data <- function(dataset,
+                                 highest_signal = NULL) {
     # Check whether the data contains saturated reads
-    if (is.null(highest_signal)) {
-        sat_reads <- NULL
-    } else {
-        sat_donor <- highest_signal %in% raw_data$donor_channel
-        sat_acceptor <- highest_signal %in% raw_data$acceptor_channel
-        sat_fret <- highest_signal %in% raw_data$fret_channel
-        sat_reads <- sat_donor | sat_acceptor | sat_fret
+    if (!is.null(highest_signal)) {
+        sat_donor <- highest_signal %in% dataset$donor_channel
+        sat_acceptor <- highest_signal %in% dataset$acceptor_channel
+        sat_fret <- highest_signal %in% dataset$fret_channel
         if (sat_donor) {
             warning("Donor channel contains saturated reads. Measure again with a lower gain for this channel.",
                     call. = FALSE)
@@ -74,53 +96,84 @@ inspect_raw_data <- function(raw_data,
         }
     }
 
+    # Get dataset name to annotate plots
+    dataset_name <- levels(as.factor(dataset$Experiment))
+
     # Build the donor channel plot
-    donor_plot <- ggplot2::ggplot(data = raw_data,
-                                  ggplot2::aes(x = concentration,
-                                               y = donor_channel,
-                                               shape = Content)) +
-        ggplot2::geom_point() +
+    donor_plot <- dataset %>%
+        ggplot2::ggplot(ggplot2::aes(x = concentration,
+                                     y = donor_channel)) +
+        ggplot2::geom_point(ggplot2::aes(color = Type,
+                                         shape = Replicate)) +
         ggplot2::theme_bw() +
         ggplot2::scale_x_log10() +
+        ggplot2::scale_color_brewer(palette = "Dark2") +
         ggplot2::xlab("Concentration") +
         ggplot2::ylab("Fluorescence Intensity") +
-        ggplot2::ggtitle("Donor channel")
-    if (!is.null(titrations)) {
-        donor_average <- mean(raw_data$donor_channel[raw_data$Content %in% titrations],
-                              na.rm = TRUE)
-        donor_plot <- donor_plot +
-            ggplot2::geom_hline(yintercept = donor_average) +
-            ggplot2::geom_ribbon(ggplot2::aes(ymin = donor_average - donor_average * 10 / 100,
-                                              ymax = donor_average + donor_average * 10 / 100),
-                                 alpha = "0.1")
-    }
+        ggplot2::ggtitle(paste("Donor channel of", dataset_name))
 
     # Build the acceptor channel plot
-    acceptor_plot <- ggplot2::ggplot(data = raw_data,
-                                     ggplot2::aes(x = concentration,
-                                                  y = acceptor_channel)) +
-        ggplot2::geom_point(ggplot2::aes(shape = Content)) +
-        ggplot2::geom_smooth(method = "lm") +
+    acceptor_plot <- dataset %>%
+        ggplot2::ggplot(ggplot2::aes(x = concentration,
+                                     y = acceptor_channel)) +
+        ggplot2::geom_point(ggplot2::aes(color = Type,
+                                         shape = Replicate)) +
         ggplot2::theme_bw() +
+        ggplot2::scale_color_brewer(palette = "Dark2") +
         ggplot2::xlab("Concentration") +
         ggplot2::ylab("Fluorescence Intensity") +
-        ggplot2::ggtitle("Acceptor channel")
+        ggplot2::ggtitle(paste("Acceptor channel of", dataset_name))
 
     # Build the fret channel plot
-    fret_plot <- ggplot2::ggplot(data = raw_data,
-                                 ggplot2::aes(x = concentration,
-                                              y = fret_channel,
-                                              shape = Content)) +
-        ggplot2::geom_point() +
+    fret_plot <- dataset %>%
+        ggplot2::ggplot(ggplot2::aes(x = concentration,
+                                     y = fret_channel)) +
+        ggplot2::geom_point(ggplot2::aes(color = Type,
+                                         shape = Replicate)) +
         ggplot2::theme_bw() +
         ggplot2::scale_x_log10() +
+        ggplot2::scale_color_brewer(palette = "Dark2") +
         ggplot2::xlab("Concentration") +
         ggplot2::ylab("Fluorescence Intensity") +
-        ggplot2::ggtitle("FRET channel")
+        ggplot2::ggtitle(paste("FRET channel of", dataset_name))
 
-    # Return saturated read check and all three plots
-    list(saturated_reads = sat_reads,
-         donor           = donor_plot,
-         acceptor        = acceptor_plot,
-         fret            = fret_plot)
+    # Return all three plots
+    list(donor    = donor_plot,
+         acceptor = acceptor_plot,
+         fret     = fret_plot)
+}
+
+#' @title Save raw data plots from a single FRET binding dataset
+#'
+#' @description This internal function saves the raw fluorescence plots from the
+#'     donor, acceptor and FRET channels to PNG, PDF or SVG files.
+#'
+#' @param input_plots The output of  \code{\link{inspect_one_raw_data}}.
+#' @param dataset_name The name of the corresponding dataset.
+#' @param output_directory The name of the output directory where plots will be
+#'     saved.
+#' @param plot_format A character string indicating the file format to use to
+#'     save plots. Possible values are \code{"png"} (default value),
+#'     \code{"pdf"} and \code{"svg"}.
+#' @return Writes plots in files on disk.
+
+save_inspection_plots <- function(input_plots,
+                                  dataset_name,
+                                  output_directory,
+                                  plot_format) {
+    # Save all plots by applying over plot types
+    mapply(ggplot2::ggsave,
+           plot = input_plots,
+           filename = paste(dataset_name,
+                            "_raw-",
+                            names(input_plots),
+                            ".",
+                            plot_format,
+                            sep = ""),
+           MoreArgs = list(path = output_directory,
+                           device = plot_format,
+                           width = 8.21,
+                           height = 4.61,
+                           units = "in",
+                           dpi = 300))
 }

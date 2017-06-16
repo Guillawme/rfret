@@ -2,54 +2,38 @@
 % Please edit documentation in R/inspect_raw_data.R
 \name{inspect_raw_data}
 \alias{inspect_raw_data}
-\title{Inspect raw fluorescence data}
+\title{Inspect raw fluorescence data from FRET binding assays}
 \usage{
-inspect_raw_data(raw_data, titrations = NULL, highest_signal = NULL)
+inspect_raw_data(raw_data, highest_signal = NULL, output_directory = NULL,
+  plot_format = "png")
 }
 \arguments{
 \item{raw_data}{A dataframe containing the raw fluorescence data. It must
-contain at least five columns named \code{Content}, \code{donor_channel},
-\code{acceptor_channel}, \code{fret_channel} and \code{concentration}.
-The \code{Content} column is used to plot distinct data series with
-different symbols; it must contain, for each row, a word describing
-which data series or replicate this row belongs to (like
-\code{"blank_1"}, \code{"titration_1"}, etc.).}
-
-\item{titrations}{An optional character vector containing the names
-associated to the titration series. If not specified, the donor channel
-plot will not display the mean and +/- 10 \% shaded area.}
+be the output of \code{\link{format_data}}.}
 
 \item{highest_signal}{An optional number corresponding to the maximal signal
 measurable by the plate reader instrument used. Defaults to \code{NULL},
 which won't check for the presence of saturated reads. The input number
 is not checked in any way: make sure it really corresponds to a saturated
 read with your instrument.}
+
+\item{output_directory}{An optional directory name where to write plots. This
+directory will be created if it does not already exist.}
+
+\item{plot_format}{A character string indicating the file format to use to
+save plots. Possible values are \code{"png"} (default value),
+\code{"pdf"} and \code{"svg"}.}
 }
 \value{
-A list containing a logical value \code{saturated_reads} indicating
-    the presence of saturated reads in the dataset (equals to \code{TRUE} if
-    saturated reads are present, \code{FALSE} if there is no saturated read,
-    or \code{NULL} if this was not tested), and three \code{ggplot2} graph
-    objects (named \code{donor}, \code{acceptor} and \code{fret}). Warning
-    messages appear when missing values are encountered, and can be safely
-    ignored.
+A list in which each item is named after the corresponding experiment,
+    and holds a named list containing: a logical value \code{saturated_reads}
+    indicating the presence of saturated reads in the dataset (equals to
+    \code{TRUE} if saturated reads are present, \code{FALSE} if there is no
+    saturated read, or \code{NULL} if this was not tested), and three
+    \code{ggplot2} graph objects (named \code{donor}, \code{acceptor} and
+    \code{fret}).
 }
 \description{
 This function plots the raw fluorescence data from the donor,
-    acceptor and FRET channels, as a function of the acceptor concentration
-    (titration series).
-}
-\examples{
-\dontrun{
-# Send all plots to the output device.
-inspect_raw_data(fret_good)
-
-# Donor plot will display pipetting precision.
-inspect_raw_data(fret_good, c("titration_1", "titration_2"))
-
-# Store plots in a variable, print all plots, print only one of them.
-my_plots <- inspect_raw_data(fret_good)
-my_plots
-my_plots$acceptor
-}
+    acceptor and FRET channels, as a function of the titration series.
 }
