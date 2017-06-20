@@ -23,6 +23,9 @@
 #'     }
 #'     The output of \code{\link{average_technical_replicates}} can be used
 #'     directly as input for this function.
+#' @param output_directory An optional output directory name where to write
+#'     corrected data in CSV files. This directory will be created if it does
+#'     not already exist.
 #'
 #' @return A dataframe containing the corrected FRET signal. It contains three
 #'     columns:
@@ -51,10 +54,39 @@
 #'
 #' @export
 
-correct_fret_signal <- function(data){
-  data %>%
-    dplyr::group_by(Experiment) %>%
-    dplyr::do(correct_one_exp(.))
+correct_fret_signal <- function(data,
+                                output_directory = NULL) {
+    # Apply correction to each experiment in the large dataframe
+    corrected_data <- data %>%
+        dplyr::group_by(Experiment) %>%
+        dplyr::do(correct_one_exp(.))
+
+    # Optionally, write output to CSV files in the specified directory
+    if (!is.null(output_directory)) {
+        # Sanity check
+        if (length(output_directory) > 1) {
+            stop("Please provide a single directory name.")
+        }
+        # Create output directory, if it does not already exist
+        if (!dir.exists(output_directory)) {
+            message("Creating directory: ", output_directory)
+            dir.create(output_directory)
+        }
+        # Split single dataframe by experiment name, then write each result to a CSV
+        # file in the output directory
+        corrected_data %>%
+            split(corrected_data$Experiment) %>%
+            mapply(readr::write_csv,
+                   .,
+                   path = paste(output_directory,
+                                "/",
+                                names(.),
+                                "_corrected.csv",
+                                sep = ""))
+    }
+
+    # Return corrected data
+    corrected_data
 }
 
 #' @title Correct FRET signal for one experiment

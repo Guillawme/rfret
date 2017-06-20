@@ -4,7 +4,7 @@
 \alias{correct_fret_signal}
 \title{Correct FRET signal}
 \usage{
-correct_fret_signal(data)
+correct_fret_signal(data, output_directory = NULL)
 }
 \arguments{
 \item{data}{A dataframe containing the FRET data after avergaing over
@@ -24,6 +24,10 @@ associate data points at the same concentration in the titration series.}
 }
 The output of \code{\link{average_technical_replicates}} can be used
 directly as input for this function.}
+
+\item{output_directory}{An optional output directory name where to write
+corrected data in CSV files. This directory will be created if it does
+not already exist.}
 }
 \value{
 A dataframe containing the corrected FRET signal. It contains three
