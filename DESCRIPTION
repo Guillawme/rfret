@@ -6,7 +6,9 @@ Authors@R: c(
     person("Tiana", "Stastny", role = "ctb"),
     person("Ben", "Jenkins", role = "ctb"),
     person("Andrew", "Blumenfeld", role = "ctb"),
-    person("Raibatak", "Das", role = "ctb"))
+    person("Raibatak", "Das", role = "ctb"),
+    person("Karolin", "Luger", role = c("ldr", "led"))
+    )
 Description: This package provides functions to analyze FRET binding data.
     Given raw fluorescence data from a FRET titration experiment's donor,
     acceptor and FRET channels, it allows to: (1) plot all channels to visually
@@ -19,13 +21,14 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-Imports: ggplot2 (>= 2.2.1),
-    broom (>= 0.4.2),
+Imports: broom (>= 0.4.2),
     cowplot (>= 0.7.0),
-    readr (>= 1.1.1),
     dplyr (>= 0.5.0),
+    ggplot2 (>= 2.2.1),
+    magrittr (>= 1.5),
     minpack.lm (>= 1.2-1),
-    magrittr (>= 1.5)
+    readr (>= 1.1.1),
+    svglite (>= 1.2.0)
 Suggests: knitr (>= 1.15.1),
     rmarkdown (>= 1.3),
     testthat (>= 1.0.2)
