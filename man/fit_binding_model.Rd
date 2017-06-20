@@ -2,34 +2,32 @@
 % Please edit documentation in R/fit_binding_model.R
 \name{fit_binding_model}
 \alias{fit_binding_model}
-\title{Fit a binding model equation to the experimental FRET data}
+\title{Fit a binding model equation to the experimental binding data}
 \usage{
-fit_binding_model(data_to_fit, binding_model = NULL,
-  donor_concentration = NULL, fit_hill_coef = FALSE)
+fit_binding_model(data, binding_model = NULL, probe_concentration = NULL,
+  output_directory = NULL)
 }
 \arguments{
-\item{data_to_fit}{A dataframe containing the binding signal. It must contain
+\item{data}{A dataframe containing the binding signal. It must contain
 at least two columns: \code{concentration} (the ligand concentration) and
 \code{signal} (the observed binding signal). The output of the
 \code{\link{correct_fret_signal}} function can be used directly as input
 here.}
 
 \item{binding_model}{A binding model equation to fit to the experimental
-data. Possible values are \code{"hyperbolic"} or \code{"quadratic"}.}
-
-\item{fit_hill_coef}{A Boolean value (TRUE or FALSE) that indicates whether
-to fit for the Hill coefficient in the hyperbolic model. If it is
-\code{FALSE} (the default value), the Hill coefficent is fixed to 1.}
+data. Possible values are \code{"hyperbolic"}, \code{"hill"} or
+\code{"quadratic"}.}
 
 \item{probe_concentration}{The fixed concentration of probe molecule
-(required to use the quadratic binding model).}
+(required to use the quadratic binding model, ignored by other models).}
 }
 \value{
 A named list where each element is named after the corresponding
-    experiment and holds an \code{\link[stats]{nls}}
-    object containing the results of the fit. This list can be directly used
+    experiment and holds an \code{\link[stats]{nls}} object containing the
+    results of the fit. This list can be directly used
     as input to \code{\link{make_figure}}.
 }
 \description{
-This function fits corrected FRET data to a binding model.
+This function fits a binding model equation (hyperbolic model,
+    Hill model, or quadratic model) to experimental binding data.
 }

@@ -1,55 +1,99 @@
-#' @title Fit a binding model equation to the experimental FRET data
+#' @title Fit a binding model equation to the experimental binding data
 #'
-#' @description This function fits corrected FRET data to a binding model.
+#' @description This function fits a binding model equation (hyperbolic model,
+#'     Hill model, or quadratic model) to experimental binding data.
 #'
-#' @param data_to_fit A dataframe containing the binding signal. It must contain
+#' @param data A dataframe containing the binding signal. It must contain
 #'     at least two columns: \code{concentration} (the ligand concentration) and
 #'     \code{signal} (the observed binding signal). The output of the
 #'     \code{\link{correct_fret_signal}} function can be used directly as input
 #'     here.
 #' @param binding_model A binding model equation to fit to the experimental
-#'     data. Possible values are \code{"hyperbolic"} or \code{"quadratic"}.
+#'     data. Possible values are \code{"hyperbolic"}, \code{"hill"} or
+#'     \code{"quadratic"}.
 #' @param probe_concentration The fixed concentration of probe molecule
-#'     (required to use the quadratic binding model).
-#' @param fit_hill_coef A Boolean value (TRUE or FALSE) that indicates whether
-#'     to fit for the Hill coefficient in the hyperbolic model. If it is
-#'     \code{FALSE} (the default value), the Hill coefficent is fixed to 1.
+#'     (required to use the quadratic binding model, ignored by other models).
 #' @return A named list where each element is named after the corresponding
-#'     experiment and holds an \code{\link[stats]{nls}}
-#'     object containing the results of the fit. This list can be directly used
+#'     experiment and holds an \code{\link[stats]{nls}} object containing the
+#'     results of the fit. This list can be directly used
 #'     as input to \code{\link{make_figure}}.
 #' @export
 
-fit_binding_model <- function(data_to_fit,
+fit_binding_model <- function(data,
                               binding_model = NULL,
-                              donor_concentration = NULL,
-                              fit_hill_coef = FALSE) {
+                              probe_concentration = NULL,
+                              output_directory = NULL) {
     # Sanity checks
-    if (is.null(binding_model)) stop("You must provide a binding model.")
+    if (is.null(binding_model)) {
+        stop("Please provide a binding model.")
+    }
 
     # Select model and fit data
     if (binding_model == "hyperbolic") {
-        if (fit_hill_coef) {
-            fits <- fit_hill(data_to_fit)
-        } else {
-            fits <- fit_hyperbolic(data_to_fit)
-        }
+        fits <- fit_hyperbolic(data)
+    } else if (binding_model == "hill") {
+        fits <- fit_hill(data)
     } else if (binding_model == "quadratic") {
-        if (fit_hill_coef) {
-            stop("Invalid option: fit_hill_coef = TRUE is a valid option only for binding_model = 'hyperbolic'. To use the quadratic binding model, set fit_Hill_coef to FALSE.")
-        } else if (is.null(donor_concentration)) {
-            stop("Missing donor concentration. You must provide a donor concentration to use the quadratic binding model.")
-        } else {
-            fits <- fit_quadratic(data_to_fit, donor_concentration)
+        # Sanity check
+        if (is.null(probe_concentration)) {
+            stop("Please provide a probe concentration to use the quadratic model.")
         }
+        # Fit
+        fits <- fit_quadratic(data, probe_concentration)
     } else {
-        stop("Invalid model. Must be either 'hyperbolic' or 'quadratic'.")
+        stop("Unknown binding model. Available models: 'hyperbolic', 'hill', 'quadratic'.")
     }
-    return(fits)
+
+    # Optionally write the results in TXT files in the specified output directory
+    if (!is.null(output_directory)) {
+        # Sanity check
+        if (length(output_directory) > 1) {
+            stop("Please provide a single directory name.")
+        }
+        if (!dir.exists(output_directory)) {
+            message("Creating directory: ", output_directory)
+            dir.create(output_directory)
+        }
+        fit_summaries <- fits %>%
+            broom::tidy(fit) %>%
+            dplyr::select(Experiment, term, estimate, std.error)
+        colnames(fit_summaries) <- c("Experiment",
+                                     "parameter",
+                                     "estimate",
+                                     "std.error")
+        # Split single dataframe by experiment name, then write each fit summary
+        # to a CSV file in the output directory
+        fit_summaries %>%
+            split(fit_summaries$Experiment) %>%
+            mapply(readr::write_csv,
+                   .,
+                   path = paste(output_directory,
+                                "/",
+                                names(.),
+                                "_fit-summary.csv",
+                                sep = ""))
+    }
+
+    # Build a named list where items are named after experiments and contain
+    # the corresponding fit object
+    results <- fits$fit
+    names(results) <- fits$Experiment
+
+    # Return results
+    results
 }
 
-# fit to Hill function with n as a free parameter
-fit_hill = function(data){
+#' @title Fit the Hill model equation to the experimental binding data
+#'
+#' @description This internal function fits a the Hill model equation to the
+#'     experimental binding data.
+#'
+#' @param data A dataframe containing the binding signal. It must contain
+#'     at least two columns: \code{concentration} (the ligand concentration) and
+#'     \code{signal} (the observed binding signal).
+#' @return An \code{\link[stats]{nls}} object containing the results of the fit.
+
+fit_hill <- function(data) {
     model <- as.formula(signal ~ hyperbolic(concentration,
                                             parameters = list(
                                                 signal_min = signal_min,
@@ -64,8 +108,17 @@ fit_hill = function(data){
                                           lower = c(0, 0, 0, 0)))
 }
 
-# fit to Hill function with n = 1 (hyperbolic fit)
-fit_hyperbolic = function(data){
+#' @title Fit the hyperbolic model equation to the experimental binding data
+#'
+#' @description This internal function fits a the hyperbolic model equation to
+#'     the experimental binding data.
+#'
+#' @param data A dataframe containing the binding signal. It must contain
+#'     at least two columns: \code{concentration} (the ligand concentration) and
+#'     \code{signal} (the observed binding signal).
+#' @return An \code{\link[stats]{nls}} object containing the results of the fit.
+
+fit_hyperbolic <- function(data) {
     model = as.formula(signal ~ hyperbolic(concentration,
                                            parameters = list(
                                                signal_min = signal_min,
@@ -80,13 +133,25 @@ fit_hyperbolic = function(data){
                                           lower =c(0, 0, 0)))
 }
 
-fit_quadratic = function(data, donor_concentration){
+#' @title Fit the quadratic model equation to the experimental binding data
+#'
+#' @description This internal function fits a the quadratic model equation to
+#'     the experimental binding data.
+#'
+#' @param data A dataframe containing the binding signal. It must contain
+#'     at least two columns: \code{concentration} (the ligand concentration) and
+#'     \code{signal} (the observed binding signal).
+#' @param probe_concentration The fixed concentration of probe molecule in the
+#'     experiment.
+#' @return An \code{\link[stats]{nls}} object containing the results of the fit.
+
+fit_quadratic <- function(data, probe_concentration) {
     model = as.formula(signal ~ quadratic(concentration,
                                           parameters = list(
                                               signal_min = signal_min,
                                               signal_max = signal_max,
                                               kd = kd,
-                                              probe_conc = donor_concentration)))
+                                              probe_conc = probe_concentration)))
     data %>%
         dplyr::group_by(Experiment) %>%
         dplyr::do(fit = minpack.lm::nlsLM(formula = model,
