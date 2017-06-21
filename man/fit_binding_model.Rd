@@ -20,6 +20,9 @@ data. Possible values are \code{"hyperbolic"}, \code{"hill"} or
 
 \item{probe_concentration}{The fixed concentration of probe molecule
 (required to use the quadratic binding model, ignored by other models).}
+
+\item{output_directory}{An optional directory name where to write fit results.
+This directory will be created if it does not already exist.}
 }
 \value{
 A named list where each element is named after the corresponding

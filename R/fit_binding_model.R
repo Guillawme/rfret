@@ -13,6 +13,8 @@
 #'     \code{"quadratic"}.
 #' @param probe_concentration The fixed concentration of probe molecule
 #'     (required to use the quadratic binding model, ignored by other models).
+#' @param output_directory An optional directory name where to write fit results.
+#'     This directory will be created if it does not already exist.
 #' @return A named list where each element is named after the corresponding
 #'     experiment and holds an \code{\link[stats]{nls}} object containing the
 #'     results of the fit. This list can be directly used
