@@ -70,7 +70,9 @@ fit_binding_model <- function(data,
                    path = paste(output_directory,
                                 "/",
                                 names(.),
-                                "_fit-summary.csv",
+                                "_",
+                                binding_model,
+                                "-fit-summary.csv",
                                 sep = ""))
     }
 
