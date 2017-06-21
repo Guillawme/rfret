@@ -2,7 +2,6 @@
 
 export(average_technical_replicates)
 export(correct_fret_signal)
-export(extract_fit_parameters)
 export(fit_binding_model)
 export(format_data)
 export(guess_parameters)
