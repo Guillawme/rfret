@@ -4,33 +4,33 @@
 \alias{make_figure}
 \title{Make a figure with experimental data and fitted binding curve}
 \usage{
-make_figure(corrected_data, fit)
+make_figure(fits, probe_concentration = NULL, output_directory = NULL,
+  plot_format = "png")
 }
 \arguments{
-\item{corrected_data}{A dataframe containing the corrected FRET signal. It
-must contain at least two columns named \code{fret_corrected} and
-\code{concentration}. The output of the \code{\link{correct_fret_signal}}
-function can be used directly as input here.}
+\item{fits}{A named list where items are named after the corresponding
+experiment and contain a model object from \code{\link[stats]{nls}}. The
+output of \code{\link{fit_binding_model}} can be used directly as input
+here.}
 
-\item{fit}{A named list containing a model object from
-\code{\link[stats]{nls}} (named \code{fit}), a binding model equation
-(named \code{binding_model}), and a donor concentration used for the
-fitting procedure (named \code{donor_concentration}). The output of
-\code{\link{fit_binding_model}} can be used directly as input here.}
+\item{probe_concentration}{The fixed concentration of probe molecule. This is
+ignored for models obtained with the hyperbolic and hill equations, but
+required for models obtained with the quadratic equation.}
+
+\item{output_directory}{An optional directory name where to write plots. This
+directory will be created if it does not already exist.}
+
+\item{plot_format}{A character string indicating the file format to use to
+save plots. Possible values are \code{"png"} (default value),
+\code{"pdf"} and \code{"svg"}.}
 }
 \value{
-A named list containing estimates and standard errors of the model
-    parameters from \code{\link[stats]{nls}}, stored in a
-    data frame (list item named \code{results}), and three \code{ggplot2}
-    graph objects of the data points and fit curve (list item named
-    \code{binding_curve}), residual plot (list item named
-    \code{residual_plot}) and final figure with both plots (list item named
-    \code{final_figure}).
+A named list where items are named after the corresponding experiment
+    and contain a \code{\link[ggplot2]{ggplot}} graph object of a binding
+    curve figure.
 }
 \description{
-This function takes a model object from
-    \code{\link{fit_binding_model}} or \code{\link[stats]{nls}} and returns
-    a result table with with parameters and their standard errors, and
-    three plots for the binding curve, the residual plot and the final
-    figure.
+This function takes a list containing any number of model
+    objects from \code{\link{fit_binding_model}} or \code{\link[stats]{nls}}
+    and returns a binding curve plot figure for each model.
 }

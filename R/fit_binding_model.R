@@ -98,12 +98,12 @@ fit_binding_model <- function(data,
 #' @return An \code{\link[stats]{nls}} object containing the results of the fit.
 
 fit_hill <- function(data) {
-    model <- as.formula(signal ~ hyperbolic(concentration,
-                                            parameters = list(
-                                                signal_min = signal_min,
-                                                signal_max = signal_max,
-                                                kd = kd,
-                                                n = n)))
+    model <- as.formula(signal ~ hill(concentration,
+                                      parameters = list(
+                                          signal_min = signal_min,
+                                          signal_max = signal_max,
+                                          kd = kd,
+                                          n = n)))
     data %>%
         dplyr::group_by(Experiment) %>%
         dplyr::do(fit = minpack.lm::nlsLM(formula = model,
@@ -127,8 +127,7 @@ fit_hyperbolic <- function(data) {
                                            parameters = list(
                                                signal_min = signal_min,
                                                signal_max = signal_max,
-                                               kd = kd,
-                                               n = 1)))
+                                               kd = kd)))
     data %>%
         dplyr::group_by(Experiment) %>%
         dplyr::do(fit = minpack.lm::nlsLM(formula = model,

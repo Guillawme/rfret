@@ -1,9 +1,29 @@
 #' @title Hyperbolic model equation
 #'
 #' @description This function sets up the hyperbolic model equation for use by
-#'     \code{\link{fit_binding_model}}. If a Hill coefficient different from 1
-#'     is specified in the set of parameters, this equation will describe a Hill
-#'     model.
+#'     \code{\link{fit_binding_model}}.
+#'
+#' @param conc Ligand concentration.
+#' @param parameters A named list of parameters to be refined against the
+#'     experimental data. Parameters for this equation are a binding constant
+#'     (\code{kd}), and values of minimal and maximal signal (\code{signal_min},
+#'     \code{signal_max}).
+#' @export
+
+hyperbolic <- function(conc, parameters) {
+    # Give shorter names to parameters, to make the equation easier to read
+    s_min <- parameters$signal_min
+    s_max <- parameters$signal_max
+    kd <- parameters$kd
+
+    # Equation definition
+    s_min + (s_max - s_min) * conc / (kd + conc)
+}
+
+#' @title Hill model equation
+#'
+#' @description This function sets up the Hill model equation for use by
+#'     \code{\link{fit_binding_model}}.
 #'
 #' @param conc Ligand concentration.
 #' @param parameters A named list of parameters to be refined against the
@@ -12,7 +32,7 @@
 #'     maximal signal (\code{signal_min}, \code{signal_max}).
 #' @export
 
-hyperbolic <- function(conc, parameters) {
+hill <- function(conc, parameters) {
     # Give shorter names to parameters, to make the equation easier to read
     s_min <- parameters$signal_min
     s_max <- parameters$signal_max
