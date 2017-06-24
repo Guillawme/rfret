@@ -26,4 +26,4 @@
 #'   series.}
 #' }
 #' @source Guillaume Gaullier
-"fret_data"
+"fret_binding_data"
