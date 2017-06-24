@@ -1,4 +1,4 @@
-#' @title Average technical replicates
+#' @title Average technical replicates from a FRET experiment
 #'
 #' @description This function calculates averages of fluorescence values from
 #'     an arbitrary number of technical replicates.
@@ -25,15 +25,15 @@
 #'     replicates. It contains all of the above columns \emph{except}
 #'     \code{Replicate}, because it returns the average values over replicates.
 #'
-#' @seealso \code{\link{format_data}} to prepare datasets for use with
-#'     \code{average_technical_replicates}.
+#' @seealso \code{\link{fret_format_data}} to prepare datasets for use with
+#'     \code{fret_average_replicates}.
 #'
 #' @export
 
-average_technical_replicates <- function(raw_data) {
-  raw_data %>%
-    dplyr::group_by(Experiment, Type, Observation, concentration) %>%
-    dplyr::summarise(fret_channel = mean(fret_channel),
-                     acceptor_channel = mean(acceptor_channel),
-                     donor_channel = mean(donor_channel))
+fret_average_replicates <- function(raw_data) {
+    raw_data %>%
+        dplyr::group_by(Experiment, Type, Observation, concentration) %>%
+        dplyr::summarise(fret_channel     = mean(fret_channel),
+                         acceptor_channel = mean(acceptor_channel),
+                         donor_channel    = mean(donor_channel))
 }

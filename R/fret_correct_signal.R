@@ -37,10 +37,10 @@
 #'     \item{signal}{The corrected FRET signal.}
 #'     }
 #'
-#' @seealso \code{\link{average_technical_replicates}} to prepare a dataset for
-#'     use with \code{correct_fret_signal}.
+#' @seealso \code{\link{fret_average_replicates}} to prepare a dataset for
+#'     use with \code{fret_correct_signal}.
 #'
-#'     For details on the signal correction applied by \code{correct_fret_signal},
+#'     For details on the signal correction applied by \code{fret_correct_signal},
 #'     see:
 #'     \itemize{
 #'     \item Hieb AR \emph{et al} (2012) Fluorescence Strategies for High-Throughput
@@ -54,12 +54,12 @@
 #'
 #' @export
 
-correct_fret_signal <- function(data,
+fret_correct_signal <- function(data,
                                 output_directory = NULL) {
     # Apply correction to each experiment in the large dataframe
     corrected_data <- data %>%
         dplyr::group_by(Experiment) %>%
-        dplyr::do(correct_one_exp(.))
+        dplyr::do(fret_correct_one_exp(.))
 
     # Optionally, write output to CSV files in the specified directory
     if (!is.null(output_directory)) {
@@ -113,8 +113,8 @@ correct_fret_signal <- function(data,
 #'     \item{acceptor_channel}{Fluorescence intensity in the acceptor channel.}
 #'     \item{donor_channel}{Fluorescence intensity in the donor channel.}
 #'     }
-#'     The output of \code{\link{average_technical_replicates}} can be used
-#'     directly as input for this function.
+#'     The output of \code{\link{fret_average_replicates}} can be used directly
+#'     as input for this function.
 #'
 #' @return A dataframe containing the corrected FRET signal. It contains three
 #'     columns:
@@ -126,10 +126,10 @@ correct_fret_signal <- function(data,
 #'     \item{fret}{The corrected FRET signal.}
 #'     }
 #'
-#' @seealso \code{\link{average_technical_replicates}} to prepare a dataset for
-#'     use with \code{correct_fret_signal}.
+#' @seealso \code{\link{fret_average_replicates}} to prepare a dataset for
+#'     use with \code{fret_correct_signal}.
 #'
-#'     For details on the signal correction applied by \code{correct_fret_signal},
+#'     For details on the signal correction applied by \code{fret_correct_signal},
 #'     see:
 #'     \itemize{
 #'     \item Hieb AR \emph{et al} (2012) Fluorescence Strategies for High-Throughput
@@ -141,7 +141,7 @@ correct_fret_signal <- function(data,
 #'     (\href{https://doi.org/10.1016/B978-0-12-391940-3.00011-1}{doi:10.1016/B978-0-12-391940-3.00011-1}).
 #'     }
 
-correct_one_exp <- function(one_exp) {
+fret_correct_one_exp <- function(one_exp) {
     # Calculate donor bleed through
     donor_only <- one_exp %>%
         dplyr::filter(Type == "donor_only") %>%

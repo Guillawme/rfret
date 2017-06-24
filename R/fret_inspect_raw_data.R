@@ -4,7 +4,7 @@
 #'     acceptor and FRET channels, as a function of the titration series.
 #'
 #' @param raw_data A dataframe containing the raw fluorescence data. It must
-#'     be the output of \code{\link{format_data}}.
+#'     be the output of \code{\link{fret_format_data}}.
 #' @param highest_signal An optional number corresponding to the maximal signal
 #'     measurable by the plate reader instrument used. Defaults to \code{NULL},
 #'     which won't check for the presence of saturated reads. The input number
@@ -16,22 +16,18 @@
 #'     save plots. Possible values are \code{"png"} (default value),
 #'     \code{"pdf"} and \code{"svg"}.
 #' @return A list in which each item is named after the corresponding experiment,
-#'     and holds a named list containing: a logical value \code{saturated_reads}
-#'     indicating the presence of saturated reads in the dataset (equals to
-#'     \code{TRUE} if saturated reads are present, \code{FALSE} if there is no
-#'     saturated read, or \code{NULL} if this was not tested), and three
-#'     \code{ggplot2} graph objects (named \code{donor}, \code{acceptor} and
-#'     \code{fret}).
+#'     and holds a named list containing three \code{ggplot2} graph objects
+#'     named \code{donor}, \code{acceptor} and \code{fret}.
 #' @export
 
-inspect_raw_data <- function(raw_data,
-                             highest_signal = NULL,
-                             output_directory = NULL,
-                             plot_format = "png") {
+fret_inspect_raw_data <- function(raw_data,
+                                  highest_signal = NULL,
+                                  output_directory = NULL,
+                                  plot_format = "png") {
     # Split input data by Experiment and make plots for each dataset
     results <- raw_data %>%
         split(raw_data$Experiment) %>%
-        mapply(inspect_one_raw_data,
+        mapply(fret_inspect_one_dataset,
                .,
                MoreArgs = list(highest_signal = highest_signal),
                SIMPLIFY = FALSE)
@@ -45,7 +41,7 @@ inspect_raw_data <- function(raw_data,
             message("Creating directory: ", output_directory)
             dir.create(output_directory)
         }
-        mapply(save_inspection_plots,
+        mapply(fret_save_inspection_plots,
                results,
                names(results),
                MoreArgs = list(output_directory = output_directory,
@@ -62,26 +58,26 @@ inspect_raw_data <- function(raw_data,
 #'     donor, acceptor and FRET channels, as a function of the titration series.
 #'
 #' @param dataset A dataframe containing the raw fluorescence data. It must
-#'     be the output of \code{\link{format_data}}.
+#'     be the output of \code{\link{fret_format_data}}.
 #' @param highest_signal An optional number corresponding to the maximal signal
 #'     measurable by the plate reader instrument used. Defaults to \code{NULL},
 #'     which won't check for the presence of saturated reads. The input number
 #'     is not checked in any way: make sure it really corresponds to a saturated
 #'     read with your instrument.
-#' @return A named list containing: a logical value \code{saturated_reads}
-#'     indicating the presence of saturated reads in the dataset (equals to
-#'     \code{TRUE} if saturated reads are present, \code{FALSE} if there is no
-#'     saturated read, or \code{NULL} if this was not tested), and three
-#'     \code{ggplot2} graph objects (named \code{donor}, \code{acceptor} and
-#'     \code{fret}).
+#' @return A named list containing three \code{ggplot2} graph objects named
+#'     \code{donor}, \code{acceptor} and \code{fret}.
 
-inspect_one_raw_data <- function(dataset,
-                                 highest_signal = NULL) {
+fret_inspect_one_dataset <- function(dataset,
+                                     highest_signal = NULL) {
     # Check whether the data contains saturated reads
     if (!is.null(highest_signal)) {
         sat_donor <- highest_signal %in% dataset$donor_channel
         sat_acceptor <- highest_signal %in% dataset$acceptor_channel
         sat_fret <- highest_signal %in% dataset$fret_channel
+        sat_reads <- sat_donor | sat_acceptor | sat_fret
+        if (!sat_reads) {
+            message("No saturated fluorescence counts detected.")
+        }
         if (sat_donor) {
             warning("Donor channel contains saturated reads. Measure again with a lower gain for this channel.",
                     call. = FALSE)
@@ -148,7 +144,7 @@ inspect_one_raw_data <- function(dataset,
 #' @description This internal function saves the raw fluorescence plots from the
 #'     donor, acceptor and FRET channels to PNG, PDF or SVG files.
 #'
-#' @param input_plots The output of  \code{\link{inspect_one_raw_data}}.
+#' @param input_plots The output of  \code{\link{fret_inspect_raw_data}}.
 #' @param dataset_name The name of the corresponding dataset.
 #' @param output_directory The name of the output directory where plots will be
 #'     saved.
@@ -157,10 +153,10 @@ inspect_one_raw_data <- function(dataset,
 #'     \code{"pdf"} and \code{"svg"}.
 #' @return Writes plots in files on disk.
 
-save_inspection_plots <- function(input_plots,
-                                  dataset_name,
-                                  output_directory,
-                                  plot_format) {
+fret_save_inspection_plots <- function(input_plots,
+                                       dataset_name,
+                                       output_directory,
+                                       plot_format) {
     # Save all plots by applying over plot types
     mapply(ggplot2::ggsave,
            plot = input_plots,

@@ -1,7 +1,7 @@
 #' @title Format raw experimental FRET binding data for subsequent processing
 #'
 #' @description This function formats data for subsequent processing by
-#'     \code{\link{average_technical_replicates}}. It will accept all data files
+#'     \code{\link{fret_average_replicates}}. It will accept all data files
 #'     in a given directory, or any number of data files specified by their
 #'     names, or any number of dataframes supplied as a named list, or even a
 #'     single dataframe supplied as is.
@@ -20,7 +20,7 @@
 #' }
 #' @export
 
-format_data <- function(input = NULL, skip_lines = 0) {
+fret_format_data <- function(input = NULL, skip_lines = 0) {
     # Check the input type to determine how to access the data
     if (is.null(input)) {
         # If no input is provided, ask for one
@@ -69,7 +69,10 @@ format_data <- function(input = NULL, skip_lines = 0) {
 
     # Format data and return a single large dataframe
     raw_data %>%
-        mapply(format_one_dataset, ., names(raw_data), SIMPLIFY = FALSE) %>%
+        mapply(fret_format_one_dataset,
+               .,
+               names(raw_data),
+               SIMPLIFY = FALSE) %>%
         dplyr::bind_rows()
 }
 
@@ -90,7 +93,7 @@ format_data <- function(input = NULL, skip_lines = 0) {
 #' format_one_dataset(my_data, "my_experiment")
 #' }
 
-format_one_dataset <- function(raw_data, experiment_name) {
+fret_format_one_dataset <- function(raw_data, experiment_name) {
     # Generate an Experiment column, where the experiment name is its
     # corresponding file name without the .csv extension
     raw_data$Experiment <- experiment_name
