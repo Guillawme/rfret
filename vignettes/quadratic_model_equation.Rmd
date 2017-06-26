@@ -1,17 +1,17 @@
 ---
-title: "Deriving the quadratic binding equation"
+title: "Deriving the quadratic model equation"
 author: "Guillaume Gaullier"
 date: "`r Sys.Date()`"
 output: 
     rmarkdown::html_vignette:
         toc: yes
 vignette: >
-  %\VignetteIndexEntry{Deriving the quadratic binding equation}
+  %\VignetteIndexEntry{Deriving the quadratic model equation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-This documentation explains how the quadratic binding equation used to fit
+This documentation explains how the quadratic model equation used to fit
 binding data from a FRET experiment is derived from the law of mass action.
 
 ## Binding equilibrium

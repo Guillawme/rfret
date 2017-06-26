@@ -14,8 +14,8 @@ vignette: >
 ---
 
 This documentation explains how to use the functions provided by the `rfret`
-package to analyze FRET titration experiments and determine a macromolecular
-interaction's binding constant (Kd). Examples using real-life datasets are
+package to analyze FRET titration experiments and determine the binding constant
+(Kd) of a macromolecular interaction. An example using a real-life dataset is
 presented and discussed.
 
 # Overview
@@ -24,46 +24,52 @@ presented and discussed.
 Analysis of FRET data can be broken down into the following steps, each of
 which `rfret` provides functions for:
 
-1. inspect raw data to detect possible outliers (function `inspect_raw_data`);
+1. inspect raw data to detect possible outliers (function
+   `fret_inspect_raw_data`);
 2. average fluorescence intensities across technical replicates, if such
-   replicates were measured (function `average_technical_replicates`);
+   replicates were measured (function `fret_average_replicates`);
 3. correct FRET signal of the titration experiment, using signal from blank
-   experiments which contain no donor and no acceptor (function
-   `correct_fret_signal`);
-4. guess initial values for the parameters of the quadratic binding equation
-   (`kd`, `fret_min` and `fret_max`; function `guess_quadratic_parameters`);
-5. fit the quadratic binding equation to the experimental data, to determine the
+   experiments which contain no donor or no acceptor fluorophores (function
+   `fret_correct_signal`);
+5. fit a binding model equation to the experimental data, to determine the
    binding constant Kd (function `fit_binding_model`).
 
-All these functions are designed to work independently, therefore you can skip
-some of these steps (for example, you might not have technical replicates to
-average, or you might perform your own signal correction using a different
-method and software). However, they are also designed to produce outputs that
-can be directly used as input for the next function, making the whole analysis
-free of any need for more data reformatting.
+The `fit_binding_model` function is independent of the others. It can accept any
+data from other types of experiments, as long as this data comes as two columns
+called `concentration` and `signal`.
+
+On the other hand, all the FRET data processing functions (named with a common
+`fret_` prefix) are designed to work together: each function produces an output
+that can be directly used as input for the next one, making the whole analysis
+free of any need for more data reformatting as long as input files are properly
+formatted in the first place. These functions work ideally with the pipe
+operator (`%>%`) from [the `magrittr` package][magrittr].
 
 ## Raw data format
 
 `rfret` is designed such that the user doesn't have to manually do any
-calculation or any edit to the numbers: such manipulations in spreadsheet
-programs are not only time-consuming, they are also error-prone and encourage
-the bad habit of doing calculations in the same file that contains the raw data
-(which should remain unaltered, to ensure reproducibility of the analysis).
+calculation or any edit to the numbers obtained from a plate reader instrument:
+such manipulations in spreadsheet programs are time-consuming and error-prone,
+and doing calculations in a spreadsheet can accidentally alter the raw data.
 
-The raw data must be formatted like the following example (first 6 rows of a
-real-life dataset):
-```{r Raw data format, echo=FALSE}
-knitr::kable(head(rfret::fret_good))
+The raw data must be formatted like the following example (first and last 6 rows
+of a real-life dataset):
+```{r Raw data format (head), echo=FALSE, message=FALSE, warning=FALSE}
+knitr::kable(head(rfret::fret_binding_data))
 ```
 
-Most (if not all) plate readers have an "export to CSV" feature, which is best
-suited to save raw data in a format usable by `rfret`. If offered a choice
-between "plate layout" and "table view", choose "table view": this will export
-the data in a format similar to the previous table.
+```{r Raw data format (tail), echo=FALSE, message=FALSE, warning=FALSE}
+knitr::kable(tail(rfret::fret_binding_data))
+```
 
-The `Well.Row` and `Well.Col` columns present in this example dataset were
+Most (if not all) plate reader instruments have an "export to CSV" feature,
+which is best suited to save raw data in a format usable by `rfret`. If offered
+a choice between "plate layout" and "table view", choose "table view": this will
+export the data in a format similar to the previous table.
+
+The `Well Row` and `Well Col` columns present in this example dataset were
 created by the plate reader software used to produce this dataset, but `rfret`
-will simply ignore them and any other columns except the following ones (these
+will simply ignore them and any other column except the following ones (these
 can come in any order, but must have the exact following case sensitive names):
 
 - `Content`
@@ -77,102 +83,108 @@ save your data, or set up your plate reader software to write these column
 names automatically for you. You might need to add the `concentration` column
 manually, if your plate reader software is not aware of your titration series.
 
+The `Content` column should contain, for each row, a name indicating what part
+of the experiment and what replicate this row belongs to, with the format
+`type.replicate` where `type` can be any word, and `replicate` is a number. They
+must be separated by a dot, and there can be only one dot in the entire resulting
+character string. The example dataset contains the following contents:
+```{r Content column levels, echo=FALSE, message=FALSE, warning=FALSE}
+levels(as.factor(rfret::fret_binding_data$Content))
+```
+
 This data preparation step is the only one for which you will need to use a
 spreadsheet program (you can also edit the CSV file in a simple text editor,
 but a spreadsheet displays this sort of data in a way that is much easier to
-navigate).
+navigate). This step can be automated in the plate reader software as well.
 
 # Analyzing a dataset
-## Inspect raw data
 
-By its very nature, a FRET experiment provides built-in controls for the correct
-preparation of the titration samples. In a typical experiment, the donor-labeled
-molecule is kept constant at a low concentration, and the acceptor-labeled
-molecule is titrated across a wide concentration series prepared by serial
-dilutions. In these conditions, inspecting the fluorescence intensities in the
-donor and acceptor channels provides an easy way to check that these
-concentrations meet the expected ones.
-
-To use `rfret`, we first need to load the package:
-```{r Load rfret}
+We first need to load the `rfret` and `magrittr` packages:
+```{r Load packages}
+library(magrittr)
 library(rfret)
 ```
 
-The function `inspect_raw_data` takes a raw dataset and outputs, for each one of
-the donor, acceptor and FRET channels, a plot of the fluorescence intensity
-across the titration series. Warnings will appear, because two of these plots
-have a logarithmic scale on the `x` axis, and some datapoints have zero as `x`
-coordinate (samples with no acceptor-labeled molecule).
+## Data preparation for processing
+
+All `fret_` functions in this package work by first agregating together any
+number of datasets, to perform all subsequent data processing and analysis steps
+on a single, large internal data table. Any analysis must start by using the
+`fret_format_data` function to prepare the raw data.
+
+The function `fret_format_data` takes either:
+
+- the name of a single directory from which it will read all CSV files,
+- a single file name or a set of file names,
+- a single dataset already loaded in memory as a dataframe,
+- or a list of datasets already loaded in memory as dataframes.
+
+It will format the data properly for subsequent processing by the other
+functions.
+
+## Raw data inspection
+
+A FRET experiment provides built-in controls for the correct preparation of the
+titration samples. In a typical experiment, the donor-labeled molecule is kept
+constant at a low concentration, and the acceptor-labeled molecule is titrated
+across a wide concentration series prepared by serial dilutions. Fluorescence
+detection is sensitive enough to detect very small pipetting errors, therefore,
+inspecting the fluorescence intensities in the donor and acceptor channels 
+provides an easy way to check for outliers in the series.
+
+The function `fret_inspect_raw_data` takes the output of `fret_format_data` and
+outputs, for each experiment, plots of the fluorescence intensity across the
+titration series for the donor, acceptor and FRET channels.
 
 Let's look at an example:
-```{r Inspect raw data}
-ttn <- c("titration_1", "titration_2")
-plots_1 <- inspect_raw_data(raw_data = fret_good, titrations = ttn)
-plots_1$donor
+```{r Inspect raw data, message=FALSE, warning=FALSE}
+fret_binding_data %>%
+    fret_format_data() %>%
+    fret_inspect_raw_data()
 ```
 
 In the donor channel plot, all fluorescence intensities should be equal, since
 the donor-labeled molecule is present at the same concentration in all samples.
-Fluorescence detection is sensitive enough to detect very small pipetting errors,
-therefore this plot is a good way to detect such errors. The line represents the
-mean of all fluorescence intensities in the donor channel, and the shaded area
-represents +/- 10 % of the mean. If all data points fall into this shaded area,
-as in this example (except one slightly outside), then the pipetting of the
-donor-labeled molecule achieved a good precision.
+In the titration experiment, it is expected that the fluorescence intensity of
+the donor channel will decrease at high concentration of acceptor if FRET happens
+(because part of the donor fluorescence is transferred to the acceptor instead of
+being emitted).
 
-The blank experiment doesn't contain the donor-labeled molecule, and has
-near-zero fluorescence intensities across the entire titration series, as
-expected.
-
-Let's look at the acceptor channel plot:
-```{r Acceptor plot}
-plots_1$acceptor
-```
-
+In the acceptor channel plot, the fluorescence intensity should increase linearly
+with the acceptor-labeled molecule concentration across the titrations series.
 If the serial dilution was performed with good precision, all data points should
 cluster around a straight line, as in this example.
 
-The FRET channel plot quickly tells if the data contains useful signal, and if
-it is worth completing the analysis:
-```{r FRET plot}
-plots_1$fret
-```
-
-The titration and blank experiments should have visible differences in
+The FRET channel plot quickly tells if the data contains useful signal: the
+titration and acceptor_only experiments should have visible differences in
 fluorescence intensity at some point in the titration series. If their data
-points perfectly overlap, it means the data doesn't contain any useful signal
-(as we will see in a later example).
+points perfectly overlap, it means the data doesn't contain any useful signal.
 
-## Average technical replicates
+## Data processing
 
-The function `average_technical_replicates` takes a raw dataset, and the names
-of the replicates associated to the titration and blank experiments (column
-`Content` in the raw dataset). These names are chosen by the user at the data
-saving stage right after the experiment. In our example dataset, these names are
-`blank_1`, `blank_2`, `titration_1` and `titration_2`, and each one has 24 data
-points:
-```{r Technical replicates}
-summary(fret_good$Content)
+Automatic processing of raw data can be achieved using the pipe operator `%>%`
+from [the `magrittr` package][magrittr], and the three functions
+`fret_format_data`, `fret_average_replicates` and `fret_correct_signal`:
+```
+library(magrittr)
+fret_binding_data %>%
+    fret_format_data() %>%
+    fret_average_replicates() %>%
+    fret_correct_signal(output_directory = "./my_results")
 ```
 
-We already set the names of the titration experiments above, so we can reuse
-them and only need to define the blank names. We will store the resulting
-reduced dataset in a variable to use it in subsequent steps of the analysis.
-```{r Average replicates}
-blk <- c("blank_1", "blank_2")
-reduced_dataset <- average_technical_replicates(raw_data = fret_good,
-                                                titrations = ttn,
-                                                blanks = blk)
-```
+The pipe operator allows to write this code in a natural way, one step after the
+other in the order of execution.
 
-The reduced datasets now have only two names, with 24 data points each:
-```{r Merged replicates}
-summary(reduced_dataset$Content)
-```
+### Average technical replicates
 
-## Correct FRET signal
+The function `fret_average_replicates` takes a raw dataset from
+`fret_format_data` and returns a dataset where the fluorescence intensity values
+have been averaged over the technical replicates.
 
-The function `correct_fret_signal` applies the correction described in the
+### Correct FRET signal
+
+The function `fret_correct_signal` applies the correction described in the
 following references:
 
 - Hieb AR *et al* (2012) Fluorescence Strategies for High-Throughput
@@ -182,200 +194,92 @@ following references:
   HI-FI System. In *Methods in Enzymology* pp 243–274. Elsevier.
   <https://doi.org/10.1016/B978-0-12-391940-3.00011-1>
 
-It takes a reduced dataset from `average_technical_replicates` (or any similarly
-formatted dataset) and outputs the corrected FRET signal.
-```{r Correct FRET signal}
-final_dataset <- correct_fret_signal(reduced_dataset)
-final_dataset
-```
-
-## Batch processing
-
-The two previous functions, `average_technical_replicates` and
-`correct_fret_signal`, can not only be used independently on individual
-datasets: they can also be applied in a batch processing mode on all raw data
-files present in one folder. This involves a wrapper function called
-`batch_process`. Here is an example of the use of this function:
-```r
-setwd("/path/to/raw/data/files")
-batch_process(input = ".",
-              titrations = c("titration_1", "titration_2"),
-              blanks = c("blank_1", "blank_2"),
-              skip_lines = 4,
-              output = "/save/processed/data/here")
-```
-If no output directory is specified, the function returns all corrected datasets
-as a list of dataframes, which can then be accessd and manipulated
-programmatically.
-
-## Guess initial values of the binding model equation parameters
-
-The function `guess_parameters` takes a corrected dataset from
-`correct_fret_signal` (or any similarly formatted dataset) and outputs initial
-values for `kd`, `fret_min` and `fret_max`.
-
-These values are based on very naive guesses: `fret_min` and `fret_max` are
-simply the minimum and maximum fluorescence intensities present in the final
-corrected dataset, and `kd` is the value of `concentration` of the datapoint
-that has the closest FRET value to `(fret_max - fret_min) / 2` (fluorescence
-intensity at half-maximum).
-
-These naive guesses are most of the time close enough to the actual value to
-make the fit converge properly. If the fitting procedure fails using these
-initial values, one can visually find a better approximation of `kd` by plotting
-the corrected FRET data as a function of the titration series. Alternatively,
-failure to fit the data can reveal data quality problems.
-
-Let's try that on our example dataset:
-```{r Guess parameters}
-guessed_params <- guess_parameters(final_dataset)
-guessed_params
-```
+It takes a reduced dataset from `fret_average_replicates` and outputs the
+corrected FRET signal. Given a directory name, it will write out the corrected
+datasets to CSV files. These output files will have the same names as the input
+files, appended with `_corrected`. These files can be used to plot the
+corrected data using a different software, for example.
 
 ## Curve fitting
 
-The last step involves the function `fit_binding_model`, which is simply a
-wrapper around R's `stats::nls` function. It takes a corrected dataset (output
-of `correct_fret_signal`), a binding model (currently available models are:
-`hyperbola`, `quadratic` and `quadratic_homodimer`), a list of initial values
-for `kd`, `fret_min` and `fret_max` (either provided by the user, or directly
-the output of `guess_parameters`), and  the fixed concentration of donor-labeled
-molecule. It returns an `nls` object that can be further examined with standard
-functions (like `summary`) or used as input for `make_figure`.
+The last step involves the function `fit_binding_model`. It takes a corrected
+dataset (output of `fret_correct_signal`) and a binding model. Currently available
+binding models are: `hyperbolic`, `hill` and `quadratic`. To use the quadratic,
+model the function also need the fixed concentration of probe molecule. It
+returns an `nls` object that can be further examined with standard functions
+(like `summary`) or used as input for `make_figure`.
 
-The function `make_figure` takes an `nls` object and the associated corrected
-fret data, and returns a result table, a plot of the binding curve, a residual
-plot, and a figure with those two plots combined.
-
-Let's finish analyzing our example dataset, display the result table and the
-final figure:
-```{r Fit binding model}
-my_fit <- fit_binding_model(corrected_data = final_dataset,
-                            binding_model = quadratic,
-                            parameters = guessed_params,
-                            donor_concentration = 10)
-my_results <- make_figure(final_dataset, my_fit)
-my_results$results
-my_results$final_figure
+Fitting the example dataset with the quadratic model can be achieved as follows:
+```{r Curve fitting, message=FALSE, warning=FALSE}
+fret_binding_data %>%
+    fret_format_data() %>%
+    fret_average_replicates() %>%
+    fret_correct_signal() %>%
+    fit_binding_model(binding_model = "quadratic",
+                      probe_concentration = 5)
 ```
 
-# Detecting outliers
+Given a directory name, `fit_binding_model` will write its results to CSV files.
 
-The previous example featured a good dataset, making the analysis
-straightforward. The following examples show how the function `inspect_raw_data`
-can be used to detect outliers.
+## Final figure
 
-## Saturated fluorescence reads
-
-All fluorescence detection instruments have a defined dynamic range, and will
-not report any fluorescence intensity higher than a certain arbitrary number
-when reading an intensity that exceeds this threshold. In these situations, the
-instrument should warn the user right away, but the resulting dataset can still
-be saved and meaningless results can be obtained if these outliers go unnoticed.
-
-The function `inspect_raw_data` can optionnaly detect the presence of such reads
-in a raw dataset and report it to the user. For this, it needs the value of a
-saturated fluorescence read. All datasets discussed in this document were
-collected using an instrument that saturates at a fluorescence intensity value
-of 260000. Let's inspect another dataset that contains such values:
-```{r Saturated reads}
-inspection <- inspect_raw_data(fret_saturated_reads,
-                               highest_signal = 260000)
+The function `make_figure` takes the output of `fit_binding_model` and returns
+a figure with a plot of the binding curve and a residual plot. Given a directory
+name, it will write the figure in a file named like the original input file.
+The figure is written as a PNG file by default, but the function can also write
+PDF and SVG files.
+```{r Figure making, message=FALSE, warning=FALSE}
+fret_binding_data %>%
+    fret_format_data() %>%
+    fret_average_replicates() %>%
+    fret_correct_signal() %>%
+    fit_binding_model(binding_model = "quadratic",
+                      probe_concentration = 5) %>%
+    make_figure(probe_concentration = 5)
 ```
 
-The function gives a warning indicating which channel contains saturated reads.
-The user then has the opportunity to inspect the numbers and possibly exclude
-outliers from the subsequent analysis, or even repeat the measurement with a
-lower gain. Collecting new data avoiding saturation of the fluorescence detector
-is indeed necessary to get meaningful results.
+# Automated processing and analysis
 
-The function also returns `saturated_reads = TRUE`, which can be used to
-programmatically test for the presence of saturated reads in a raw dataset:
-```{r}
-inspection$saturated_reads
+The entire data inspection, processing and analysis can be performed by a single
+script run from the directory containing raw data files in CSV format. Here is
+an example script:
+```
+# Load required packages
+library(magrittr)
+library(rfret)
+
+# List data files
+my_files <- list.files(path = ".", pattern = ".csv")
+
+# Generate raw data plots and save them in a directory called 'data_inspection'
+my_files %>%
+    fret_format_data(skip_lines = 4) %>%
+    fret_inspect_raw_data(output_directory = "./data_inspection",
+                          plot_format = "png")
+
+# The following commands will:
+# 1. process raw data and save corrected data in CSV files in a
+# directory 'corrected_data'
+# 2. fit each dataset with a quadratic model equation, and save fit results
+# in CSV files in a directory 'fit_results'
+# 3. generate binding curve figures and save them as PNG files in a
+# directory 'final_figures'
+my_files %>%
+    fret_format_data(skip_lines = 4) %>%
+    fret_average_replicates() %>%
+    fret_correct_signal(output_directory = "./corrected_data") %>%
+    fit_binding_model(binding_model = "quadratic",
+                      probe_concentration = 5,
+                      output_directory = "./fit_results") %>%
+    make_figure(probe_concentration = 5,
+                output_directory = "./final_figures",
+                plot_format = "png")
 ```
 
-No further checks are performed on the number provided for `highest_signal`, and
-the function will return meaningless information if this number does not match
-the actual saturation value of the instrument. As every instrument will have a
-different arbitrary saturation value, the user is responsible for finding and
-using the correct number.
+# Automated report generation
 
-## Donor outliers
+Used in combination with [R Markdown][rmarkdown], `rfret` can make the process of
+data analysis fully integrated with lab notebook record keeping.
 
-Let's inspect another different dataset:
-```{r Donor outliers}
-plots_2 <- inspect_raw_data(fret_donor_outliers, ttn)
-plots_2$donor
-```
-
-The donor channel plot clearly shows four obvious outliers in the `titration_1`
-series. They are at the 5^th^, 13^th^, 21^st^ and 24^th^ positions in the
-titration series. We can easily find them in the raw data:
-```{r}
-fret_donor_outliers$donor_channel[fret_donor_outliers$Content == "titration_1"][c(5, 13, 21, 24)]
-```
-
-These outliers come from pipetting errors: the three wells that have a higher
-fluorescence intensity received too much donor-labeled molecule, whereas the
-one that has a lower fluorescence intensity did not receive enough donor-labeled
-molecule. Knowing that, one can decide on a rationale basis to exclude these
-data points from the subsequent analysis.
-
-## Acceptor outliers
-
-Let's inspect a third dataset:
-```{r Acceptor outliers}
-plots_3 <- inspect_raw_data(fret_acceptor_outliers)
-plots_3$acceptor
-```
-
-This acceptor channel plot shows that the highest acceptor-labeled molecule
-concentration is very different between the titration and blank experiments, and
-between technical replicates. Again, one can decide to exclude data points from
-the analysis based on this observation.
-
-# Detecting usable FRET signal
-
-The previous two datasets are not ideal, because they contain outliers in either
-the donor channel or the acceptor channel. Yet, they contain useful FRET signal
-and can yield binding curves and binding constants. You now know how to analyze
-them to find out what these binding curves look like, and what the associated
-binding constants are.
-
-In this last example, we will see how the function `inspect_raw_data` can help
-quickly detecting usable signal in a FRET dataset. Let's inspect a last dataset:
-```{r No FRET signal}
-plots_4 <- inspect_raw_data(fret_bad)
-plots_4$fret
-```
-
-Something looks wrong here: there is very little visible difference in
-fluorescence intensity in the FRET channel between the titration and blank
-experiments.
-
-For comparison, this is how this same plot looked for the first dataset we
-inspected:
-```{r Detectable FRET signal}
-plots_1$fret
-```
-
-The last example dataset doesn't look like it contains any signal. We can verify
-that by plotting the corrected data and see if we get anything that looks like a
-binding curve:
-```{r Flat binding curve}
-bad_data <- average_technical_replicates(fret_bad, ttn, blk)
-bad_data_corr <- correct_fret_signal(bad_data)
-library(ggplot2)
-qplot(concentration, fret_corrected, data = bad_data_corr, log = "x") + theme_bw()
-```
-
-This dataset doesn't yield any binding curve, and trying to fit this data would
-either fail or give a completely meaningless value for Kd.
-
-# Automatic report generation
-
-Used in combination with [R Markdown][rmarkdown], `rfret` makes the process of
-data analysis fully integrated with the lab notebook record keeping process.
-
+[magrittr]: http://magrittr.tidyverse.org
 [rmarkdown]: http://rmarkdown.rstudio.com

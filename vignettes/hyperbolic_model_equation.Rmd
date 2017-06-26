@@ -1,15 +1,15 @@
 ---
-title: "Deriving the hyperbola binding equation"
+title: "Deriving the hyperbolic model equation"
 author: "Guillaume Gaullier"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Deriving the hyperbolic model equation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-This documentation explains how the hyperbola binding equation used to fit
+This documentation explains how the hyperbolic model equation used to fit
 binding data from a FRET experiment is derived from the law of mass action.
 
 ## Binding equilibrium
