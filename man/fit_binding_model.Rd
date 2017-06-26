@@ -11,7 +11,7 @@ fit_binding_model(data, binding_model = NULL, probe_concentration = NULL,
 \item{data}{A dataframe containing the binding signal. It must contain
 at least two columns: \code{concentration} (the ligand concentration) and
 \code{signal} (the observed binding signal). The output of the
-\code{\link{correct_fret_signal}} function can be used directly as input
+\code{\link{fret_correct_signal}} function can be used directly as input
 here.}
 
 \item{binding_model}{A binding model equation to fit to the experimental

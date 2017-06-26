@@ -18,6 +18,9 @@
 #' \dontrun{
 #' format_data("my_data_directory", 4)
 #' }
+#'
+#' @importFrom magrittr %>%
+#'
 #' @export
 
 fret_format_data <- function(input = NULL, skip_lines = 0) {
@@ -81,8 +84,8 @@ fret_format_data <- function(input = NULL, skip_lines = 0) {
 #' @description This internal function processes a single dataframe to generate
 #'     the \code{Experiment}, \code{Type}, \code{Replicate}, and
 #'     \code{Observation} columns required for subsequent processing by
-#'     \code{\link{average_technical_replicates}} and
-#'     \code{\link{correct_fret_signal}}.
+#'     \code{\link{fret_average_replicates}} and
+#'     \code{\link{fret_correct_signal}}.
 #' @param raw_data A single dataframe to process.
 #' @param experiment_name The name of the corresponding experiment.
 #' @return A dataframe containing 8 columns: \code{Experiment}, \code{Type},
@@ -92,6 +95,8 @@ fret_format_data <- function(input = NULL, skip_lines = 0) {
 #' \dontrun{
 #' format_one_dataset(my_data, "my_experiment")
 #' }
+#'
+#' @importFrom magrittr %>% %<>%
 
 fret_format_one_dataset <- function(raw_data, experiment_name) {
     # Generate an Experiment column, where the experiment name is its

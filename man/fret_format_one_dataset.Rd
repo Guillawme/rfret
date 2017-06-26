@@ -20,11 +20,12 @@ A dataframe containing 8 columns: \code{Experiment}, \code{Type},
 This internal function processes a single dataframe to generate
     the \code{Experiment}, \code{Type}, \code{Replicate}, and
     \code{Observation} columns required for subsequent processing by
-    \code{\link{average_technical_replicates}} and
-    \code{\link{correct_fret_signal}}.
+    \code{\link{fret_average_replicates}} and
+    \code{\link{fret_correct_signal}}.
 }
 \examples{
 \dontrun{
 format_one_dataset(my_data, "my_experiment")
 }
+
 }

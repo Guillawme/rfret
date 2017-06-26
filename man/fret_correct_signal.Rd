@@ -22,7 +22,7 @@ associate data points at the same concentration in the titration series.}
 \item{acceptor_channel}{Fluorescence intensity in the acceptor channel.}
 \item{donor_channel}{Fluorescence intensity in the donor channel.}
 }
-The output of \code{\link{average_technical_replicates}} can be used
+The output of \code{\link{fret_average_replicates}} can be used
 directly as input for this function.}
 
 \item{output_directory}{An optional output directory name where to write

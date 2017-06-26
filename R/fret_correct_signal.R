@@ -21,7 +21,7 @@
 #'     \item{acceptor_channel}{Fluorescence intensity in the acceptor channel.}
 #'     \item{donor_channel}{Fluorescence intensity in the donor channel.}
 #'     }
-#'     The output of \code{\link{average_technical_replicates}} can be used
+#'     The output of \code{\link{fret_average_replicates}} can be used
 #'     directly as input for this function.
 #' @param output_directory An optional output directory name where to write
 #'     corrected data in CSV files. This directory will be created if it does
@@ -52,6 +52,8 @@
 #'     (\href{https://doi.org/10.1016/B978-0-12-391940-3.00011-1}{doi:10.1016/B978-0-12-391940-3.00011-1}).
 #'     }
 #'
+#' @importFrom magrittr %>%
+#'
 #' @export
 
 fret_correct_signal <- function(data,
@@ -59,7 +61,7 @@ fret_correct_signal <- function(data,
     # Apply correction to each experiment in the large dataframe
     corrected_data <- data %>%
         dplyr::group_by(Experiment) %>%
-        dplyr::do(fret_correct_one_exp(.))
+        dplyr::do(fret_correct_one_dataset(.))
 
     # Optionally, write output to CSV files in the specified directory
     if (!is.null(output_directory)) {
@@ -98,7 +100,7 @@ fret_correct_signal <- function(data,
 #'     and \href{https://doi.org/10.1016/B978-0-12-391940-3.00011-1}{Winkler DD
 #'     \emph{et al} (2012)} for details.
 #'
-#' @param one_exp A dataframe containing the FRET data after avergaing over
+#' @param one_dataset A dataframe containing the FRET data after avergaing over
 #'     technical replicates. This dataframe must contain the following columns:
 #'     \describe{
 #'     \item{Experiment}{A unique name identifying each experiment.}
@@ -140,20 +142,22 @@ fret_correct_signal <- function(data,
 #'     243–274. Elsevier
 #'     (\href{https://doi.org/10.1016/B978-0-12-391940-3.00011-1}{doi:10.1016/B978-0-12-391940-3.00011-1}).
 #'     }
+#'
+#' @importFrom magrittr %>%
 
-fret_correct_one_exp <- function(one_exp) {
+fret_correct_one_dataset <- function(one_dataset) {
     # Calculate donor bleed through
-    donor_only <- one_exp %>%
+    donor_only <- one_dataset %>%
         dplyr::filter(Type == "donor_only") %>%
         dplyr::mutate(donor_bleed_through = fret_channel / donor_channel)
 
     # Calculate acceptor direct excitation
-    acceptor_only <- one_exp %>%
+    acceptor_only <- one_dataset %>%
         dplyr::filter(Type == "acceptor_only") %>%
         dplyr::mutate(acceptor_direct_excitation = fret_channel / acceptor_channel)
 
     # Apply correction factors
-    titration <- dplyr::filter(one_exp, Type == "titration")
+    titration <- dplyr::filter(one_dataset, Type == "titration")
     titration$donor_bleed_through <- donor_only$donor_bleed_through
     titration$acceptor_direct_excitation <- acceptor_only$acceptor_direct_excitation
     corrected_data <- titration %>%

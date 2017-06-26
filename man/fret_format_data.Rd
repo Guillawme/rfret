@@ -31,4 +31,5 @@ This function formats data for subsequent processing by
 \dontrun{
 format_data("my_data_directory", 4)
 }
+
 }

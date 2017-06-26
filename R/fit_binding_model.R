@@ -6,7 +6,7 @@
 #' @param data A dataframe containing the binding signal. It must contain
 #'     at least two columns: \code{concentration} (the ligand concentration) and
 #'     \code{signal} (the observed binding signal). The output of the
-#'     \code{\link{correct_fret_signal}} function can be used directly as input
+#'     \code{\link{fret_correct_signal}} function can be used directly as input
 #'     here.
 #' @param binding_model A binding model equation to fit to the experimental
 #'     data. Possible values are \code{"hyperbolic"}, \code{"hill"} or
@@ -19,6 +19,7 @@
 #'     experiment and holds an \code{\link[stats]{nls}} object containing the
 #'     results of the fit. This list can be directly used
 #'     as input to \code{\link{make_figure}}.
+#' @importFrom magrittr %>%
 #' @export
 
 fit_binding_model <- function(data,
@@ -96,14 +97,15 @@ fit_binding_model <- function(data,
 #'     at least two columns: \code{concentration} (the ligand concentration) and
 #'     \code{signal} (the observed binding signal).
 #' @return An \code{\link[stats]{nls}} object containing the results of the fit.
+#' @importFrom magrittr %>%
 
 fit_hill <- function(data) {
-    model <- as.formula(signal ~ hill(concentration,
-                                      parameters = list(
-                                          signal_min = signal_min,
-                                          signal_max = signal_max,
-                                          kd = kd,
-                                          n = n)))
+    model <- stats::as.formula(signal ~ hill(concentration,
+                                             parameters = list(
+                                                 signal_min = signal_min,
+                                                 signal_max = signal_max,
+                                                 kd = kd,
+                                                 n = n)))
     data %>%
         dplyr::group_by(Experiment) %>%
         dplyr::do(fit = minpack.lm::nlsLM(formula = model,
@@ -121,13 +123,14 @@ fit_hill <- function(data) {
 #'     at least two columns: \code{concentration} (the ligand concentration) and
 #'     \code{signal} (the observed binding signal).
 #' @return An \code{\link[stats]{nls}} object containing the results of the fit.
+#' @importFrom magrittr %>%
 
 fit_hyperbolic <- function(data) {
-    model = as.formula(signal ~ hyperbolic(concentration,
-                                           parameters = list(
-                                               signal_min = signal_min,
-                                               signal_max = signal_max,
-                                               kd = kd)))
+    model = stats::as.formula(signal ~ hyperbolic(concentration,
+                                                  parameters = list(
+                                                      signal_min = signal_min,
+                                                      signal_max = signal_max,
+                                                      kd = kd)))
     data %>%
         dplyr::group_by(Experiment) %>%
         dplyr::do(fit = minpack.lm::nlsLM(formula = model,
@@ -147,14 +150,15 @@ fit_hyperbolic <- function(data) {
 #' @param probe_concentration The fixed concentration of probe molecule in the
 #'     experiment.
 #' @return An \code{\link[stats]{nls}} object containing the results of the fit.
+#' @importFrom magrittr %>%
 
 fit_quadratic <- function(data, probe_concentration) {
-    model = as.formula(signal ~ quadratic(concentration,
-                                          parameters = list(
-                                              signal_min = signal_min,
-                                              signal_max = signal_max,
-                                              kd = kd,
-                                              probe_conc = probe_concentration)))
+    model = stats::as.formula(signal ~ quadratic(concentration,
+                                                 parameters = list(
+                                                     signal_min = signal_min,
+                                                     signal_max = signal_max,
+                                                     kd = kd,
+                                                     probe_conc = probe_concentration)))
     data %>%
         dplyr::group_by(Experiment) %>%
         dplyr::do(fit = minpack.lm::nlsLM(formula = model,

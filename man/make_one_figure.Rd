@@ -10,6 +10,10 @@ make_one_figure(fit, experiment_name, binding_model, probe_conc = NULL)
 \item{fit}{An \code{\link[stats]{nls}} object. The output of
 \code{\link{fit_binding_model}} can be used directly as input here.}
 
+\item{experiment_name}{The name of the corresponding experiment.}
+
+\item{binding_model}{The binding model used to fit the data.}
+
 \item{probe_conc}{The fixed concentration of probe molecule. This is ignored
 for models obtained with the hyperbolic and hill equations, but required
 for models obtained with the quadratic equation.}

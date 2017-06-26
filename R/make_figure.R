@@ -73,6 +73,8 @@ make_figure <- function(fits,
 #'
 #' @param fit An \code{\link[stats]{nls}} object. The output of
 #'     \code{\link{fit_binding_model}} can be used directly as input here.
+#' @param experiment_name The name of the corresponding experiment.
+#' @param binding_model The binding model used to fit the data.
 #' @param probe_conc The fixed concentration of probe molecule. This is ignored
 #'     for models obtained with the hyperbolic and hill equations, but required
 #'     for models obtained with the quadratic equation.
@@ -158,6 +160,8 @@ make_one_figure <- function(fit,
 #'     \code{\link{fit_binding_model}} can be used directly as input here.
 #' @return A character vector corresponding to the name of the binding model
 #'     equation used to fit the dataset corresponding to the model object.
+#'
+#' @importFrom magrittr %>%
 
 detect_binding_model <- function(fit) {
     # Get binding model name from an nls object

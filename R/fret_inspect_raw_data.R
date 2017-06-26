@@ -18,6 +18,9 @@
 #' @return A list in which each item is named after the corresponding experiment,
 #'     and holds a named list containing three \code{ggplot2} graph objects
 #'     named \code{donor}, \code{acceptor} and \code{fret}.
+#'
+#' @importFrom magrittr %>%
+#'
 #' @export
 
 fret_inspect_raw_data <- function(raw_data,
@@ -66,6 +69,8 @@ fret_inspect_raw_data <- function(raw_data,
 #'     read with your instrument.
 #' @return A named list containing three \code{ggplot2} graph objects named
 #'     \code{donor}, \code{acceptor} and \code{fret}.
+#'
+#' @importFrom magrittr %>%
 
 fret_inspect_one_dataset <- function(dataset,
                                      highest_signal = NULL) {
