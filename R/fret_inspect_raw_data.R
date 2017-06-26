@@ -97,6 +97,7 @@ fret_inspect_one_dataset <- function(dataset,
 
     # Build the donor channel plot
     donor_plot <- dataset %>%
+        dplyr::mutate(Replicate = as.factor(Replicate)) %>%
         ggplot2::ggplot(ggplot2::aes(x = concentration,
                                      y = donor_channel)) +
         ggplot2::geom_point(ggplot2::aes(color = Type,
@@ -110,6 +111,7 @@ fret_inspect_one_dataset <- function(dataset,
 
     # Build the acceptor channel plot
     acceptor_plot <- dataset %>%
+        dplyr::mutate(Replicate = as.factor(Replicate)) %>%
         ggplot2::ggplot(ggplot2::aes(x = concentration,
                                      y = acceptor_channel)) +
         ggplot2::geom_point(ggplot2::aes(color = Type,
@@ -122,6 +124,7 @@ fret_inspect_one_dataset <- function(dataset,
 
     # Build the fret channel plot
     fret_plot <- dataset %>%
+        dplyr::mutate(Replicate = as.factor(Replicate)) %>%
         ggplot2::ggplot(ggplot2::aes(x = concentration,
                                      y = fret_channel)) +
         ggplot2::geom_point(ggplot2::aes(color = Type,
