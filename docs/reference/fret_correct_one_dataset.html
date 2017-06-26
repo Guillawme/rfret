@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make a figure with experimental data and fitted binding curve — make_figure • rfret</title>
+<title>Correct FRET signal for one experiment — fret_correct_one_dataset • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -71,52 +71,69 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make a figure with experimental data and fitted binding curve</h1>
+    <h1>Correct FRET signal for one experiment</h1>
     </div>
 
     
-    <p>This function takes a list containing any number of model
-    objects from <code><a href='fit_binding_model.html'>fit_binding_model</a></code> or <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code>
-    and returns a binding curve plot figure for each model.</p>
+    <p>This internal function corrects the raw FRET signal of a single
+    experiment by applying corrections for donor bleedthrough and acceptor
+    direct excitation. See
+    <a href = 'https://doi.org/10.1093/nar/gkr1045'>Hieb AR <em>et al</em> (2012)</a>
+    and <a href = 'https://doi.org/10.1016/B978-0-12-391940-3.00011-1'>Winkler DD
+    <em>et al</em> (2012)</a> for details.</p>
     
 
-    <pre class="usage"><span class='fu'>make_figure</span>(<span class='no'>fits</span>, <span class='kw'>probe_concentration</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output_directory</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>plot_format</span> <span class='kw'>=</span> <span class='st'>"png"</span>)</pre>
+    <pre class="usage"><span class='fu'>fret_correct_one_dataset</span>(<span class='no'>one_dataset</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fits</th>
-      <td><p>A named list where items are named after the corresponding
-experiment and contain a model object from <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code>. The
-output of <code><a href='fit_binding_model.html'>fit_binding_model</a></code> can be used directly as input
-here.</p></td>
-    </tr>
-    <tr>
-      <th>probe_concentration</th>
-      <td><p>The fixed concentration of probe molecule. This is
-ignored for models obtained with the hyperbolic and hill equations, but
-required for models obtained with the quadratic equation.</p></td>
-    </tr>
-    <tr>
-      <th>output_directory</th>
-      <td><p>An optional directory name where to write plots. This
-directory will be created if it does not already exist.</p></td>
-    </tr>
-    <tr>
-      <th>plot_format</th>
-      <td><p>A character string indicating the file format to use to
-save plots. Possible values are <code>"png"</code> (default value),
-<code>"pdf"</code> and <code>"svg"</code>.</p></td>
+      <th>one_dataset</th>
+      <td><p>A dataframe containing the FRET data after avergaing over
+technical replicates. This dataframe must contain the following columns:</p><dl class='dl-horizontal'>
+<dt>Experiment</dt><dd><p>A unique name identifying each experiment.</p></dd>
+<dt>Type</dt><dd><p>Either "blank" (no donor) or "titration" (donor present).</p></dd>
+<dt>Observation</dt><dd><p>A number identifying each observation in a titration
+series (corresponds to the plate column numbers, if experiments are set
+up as rows in a 384-well plate). The number of observations for an
+experiment and its blanks must match, and a given observation number must
+associate data points at the same concentration in the titration series.</p></dd>
+<dt>concentration</dt><dd><p>The ligand concentration in the titration series.</p></dd>
+<dt>fret_channel</dt><dd><p>Fluorescence intensity in the FRET channel.</p></dd>
+<dt>acceptor_channel</dt><dd><p>Fluorescence intensity in the acceptor channel.</p></dd>
+<dt>donor_channel</dt><dd><p>Fluorescence intensity in the donor channel.</p></dd>
+</dl><p>The output of <code><a href='fret_average_replicates.html'>fret_average_replicates</a></code> can be used directly
+as input for this function.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list where items are named after the corresponding experiment
-    and contain a <code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></code> graph object of a binding
-    curve figure.</p>
+    <p>A dataframe containing the corrected FRET signal. It contains three
+    columns:</p><dl class='dl-horizontal'>
+    <dt>Experiment</dt><dd><p>A unique name identifying each experiment (same as in
+    the input data).</p></dd>
+    <dt>concentration</dt><dd><p>The ligand concentration in the titration series
+    (same as in the input data).</p></dd>
+    <dt>fret</dt><dd><p>The corrected FRET signal.</p></dd>
+    </dl>
+
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><code><a href='fret_average_replicates.html'>fret_average_replicates</a></code> to prepare a dataset for
+    use with <code>fret_correct_signal</code>.</p>
+<p>For details on the signal correction applied by <code>fret_correct_signal</code>,
+    see:</p><ul>
+<li><p>Hieb AR <em>et al</em> (2012) Fluorescence Strategies for High-Throughput
+    Quantification of Protein Interactions. <em>Nucleic Acids Research</em>
+    40 (5): e33 (<a href = 'https://doi.org/10.1093/nar/gkr1045'>doi:10.1093/nar/gkr1045</a>) and</p></li>
+<li><p>Winkler DD <em>et al</em> (2012) Quantifying Chromatin-Associated
+    Interactions: The HI-FI System. In <em>Methods in Enzymology</em> pp
+    243–274. Elsevier
+    (<a href = 'https://doi.org/10.1016/B978-0-12-391940-3.00011-1'>doi:10.1016/B978-0-12-391940-3.00011-1</a>).</p></li>
+</ul>
     
 
   </div>
@@ -126,6 +143,8 @@ save plots. Possible values are <code>"png"</code> (default value),
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>

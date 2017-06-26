@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quadratic equation — quadratic • rfret</title>
+<title>Quadratic model equation — quadratic • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -71,42 +71,29 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Quadratic equation</h1>
+    <h1>Quadratic model equation</h1>
     </div>
 
     
-    <p>This function sets up the quadratic equation for use by
-    <code><a href='fit_binding_model.html'>fit_binding_model</a></code> or <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code>.</p>
+    <p>This function sets up the quadratic model equation for use by
+    <code><a href='fit_binding_model.html'>fit_binding_model</a></code>.</p>
     
 
-    <pre class="usage"><span class='fu'>quadratic</span>(<span class='no'>titrated_conc</span>, <span class='no'>kd</span>, <span class='no'>n</span>, <span class='no'>signal_min</span>, <span class='no'>signal_max</span>, <span class='no'>probe_conc</span>)</pre>
+    <pre class="usage"><span class='fu'>quadratic</span>(<span class='no'>conc</span>, <span class='no'>parameters</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>titrated_conc</th>
-      <td><p>Concentrations in the titration series.</p></td>
+      <th>conc</th>
+      <td><p>Ligand concentration.</p></td>
     </tr>
     <tr>
-      <th>kd</th>
-      <td><p>Binding constant.</p></td>
-    </tr>
-    <tr>
-      <th>n</th>
-      <td><p>Hill coefficient.</p></td>
-    </tr>
-    <tr>
-      <th>signal_min</th>
-      <td><p>Minimal observed signal.</p></td>
-    </tr>
-    <tr>
-      <th>signal_max</th>
-      <td><p>Maximal observed signal.</p></td>
-    </tr>
-    <tr>
-      <th>probe_conc</th>
-      <td><p>Fixed concentration of probe.</p></td>
+      <th>parameters</th>
+      <td><p>A named list of parameters to be refined against the
+experimental data. Parameters for this equation are a binding constant
+(<code>kd</code>), a probe concentration (<code>probe_conc</code>), and values of
+minimal and maximal signal (<code>signal_min</code>, <code>signal_max</code>).</p></td>
     </tr>
     </table>
     

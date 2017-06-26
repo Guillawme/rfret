@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Correct FRET signal — correct_fret_signal • rfret</title>
+<title>Inspect raw fluorescence data from a single FRET binding assay — fret_inspect_one_dataset • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -71,65 +71,38 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Correct FRET signal</h1>
+    <h1>Inspect raw fluorescence data from a single FRET binding assay</h1>
     </div>
 
     
-    <p>This function subtracts the FRET background measured by the
-    blank experiment (without donor) from the raw FRET signal of the actual
-    titration, applying corrections given by
-    <a href = 'https://doi.org/10.1093/nar/gkr1045'>Hieb AR <em>et al</em> (2012)</a>.</p>
+    <p>This internal function plots the raw fluorescence data from the
+    donor, acceptor and FRET channels, as a function of the titration series.</p>
     
 
-    <pre class="usage"><span class='fu'>correct_fret_signal</span>(<span class='no'>reduced_dataset</span>, <span class='kw'>titration</span> <span class='kw'>=</span> <span class='st'>"titration"</span>,
-  <span class='kw'>blank</span> <span class='kw'>=</span> <span class='st'>"blank"</span>)</pre>
+    <pre class="usage"><span class='fu'>fret_inspect_one_dataset</span>(<span class='no'>dataset</span>, <span class='kw'>highest_signal</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>reduced_dataset</th>
-      <td><p>A dataframe containing the fluorescence data. It must
-contain at least five columns named <code>Content</code>, <code>donor_channel</code>,
-<code>acceptor_channel</code>, <code>fret_channel</code> and <code>concentration</code>.
-The <code>Content</code> column must contain, for each row, a word describing
-which data series this row belongs to (like <code>"blank"</code> or
-<code>"titration"</code>). The <code><a href='average_technical_replicates.html'>average_technical_replicates</a></code>
-function produces a dataframe with this exact format.</p></td>
+      <th>dataset</th>
+      <td><p>A dataframe containing the raw fluorescence data. It must
+be the output of <code><a href='fret_format_data.html'>fret_format_data</a></code>.</p></td>
     </tr>
     <tr>
-      <th>titration</th>
-      <td><p>A character vector containing a word that identifies the
-titration series (e.g. <code>titration</code>). This word must match the one in
-<code>reduced_dataset$Content</code> (case sensitive). Defaults to
-<code>"titration"</code>, as set by the
-<code><a href='average_technical_replicates.html'>average_technical_replicates</a></code> function.</p></td>
-    </tr>
-    <tr>
-      <th>blank</th>
-      <td><p>A character vector containing a word that identifies the blank
-experiment series (e.g. <code>"blank"</code>). This word must match the one
-in <code>reduced_dataset$Content</code> (case sensitive). Defaults to
-<code>"blank"</code>, as set by the <code><a href='average_technical_replicates.html'>average_technical_replicates</a></code>
-function.</p></td>
+      <th>highest_signal</th>
+      <td><p>An optional number corresponding to the maximal signal
+measurable by the plate reader instrument used. Defaults to <code>NULL</code>,
+which won't check for the presence of saturated reads. The input number
+is not checked in any way: make sure it really corresponds to a saturated
+read with your instrument.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe containing the corrected FRET signal. It contains two
-    columns named <code>concentration</code> and <code>fret_corrected</code>.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <p><code><a href='average_technical_replicates.html'>average_technical_replicates</a></code> to prepare a dataset for
-    use with <code>correct_fret_signal</code>.</p>
-<p>Hieb AR <em>et al</em> (2012) Fluorescence Strategies for High-Throughput
-    Quantification of Protein Interactions. <em>Nucleic Acids Research</em>
-    40 (5): e33
-    (<a href = 'https://doi.org/10.1093/nar/gkr1045'>doi:10.1093/nar/gkr1045</a>) for
-    the details on the signal correction applied by
-    <code>correct_fret_signal</code>.</p>
+    <p>A named list containing three <code>ggplot2</code> graph objects named
+    <code>donor</code>, <code>acceptor</code> and <code>fret</code>.</p>
     
 
   </div>
@@ -139,8 +112,6 @@ function.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>

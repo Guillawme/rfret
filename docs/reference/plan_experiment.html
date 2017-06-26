@@ -83,33 +83,30 @@
     experimental binding curve will display both the lower and upper plateaus.</p>
     
 
-    <pre class="usage"><span class='fu'>plan_experiment</span>(<span class='no'>kd</span>, <span class='kw'>min_concentration</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>max_concentration</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>binding_model</span> <span class='kw'>=</span> <span class='no'>hyperbola</span>, <span class='kw'>probe_conc</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hill</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>plan_experiment</span>(<span class='no'>kd</span>, <span class='kw'>min_concentration</span> <span class='kw'>=</span> <span class='fl'>0.001</span>, <span class='kw'>max_concentration</span> <span class='kw'>=</span> <span class='fl'>1e+05</span>,
+  <span class='kw'>binding_model</span> <span class='kw'>=</span> <span class='st'>"hyperbolic"</span>, <span class='kw'>probe_conc</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hill</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>kd</th>
-      <td><p>A Kd value. This can also be a numerical vector of values, and in
-this case the function will plot several binding curves on the same
-graph: one for each Kd value.</p></td>
+      <td><p>A Kd value.</p></td>
     </tr>
     <tr>
       <th>min_concentration</th>
       <td><p>The minimal value of the concentration range to
-simulate the binding curve over. Defaults to <code>1e-1</code>.</p></td>
+simulate the binding curve over. Defaults to <code>1e-3</code>.</p></td>
     </tr>
     <tr>
       <th>max_concentration</th>
       <td><p>The maximal value of the concentration range to
-simulate the binding curve over. Defaults to <code>1000</code>.</p></td>
+simulate the binding curve over. Defaults to <code>1e5</code>.</p></td>
     </tr>
     <tr>
       <th>binding_model</th>
       <td><p>A binding model equation. Possible values are
-<code>hyperbola</code>, <code>quadratic</code> and <code>quadratic_homodimer</code>.
-Defaults to <code>hyperbola</code>.</p></td>
+<code>"hyperbola"</code> and <code>"quadratic"</code>. Defaults to <code>"hyperbolic"</code>.</p></td>
     </tr>
     <tr>
       <th>probe_conc</th>
@@ -118,7 +115,8 @@ the hyperbola binding model equation is used by default.</p></td>
     </tr>
     <tr>
       <th>hill</th>
-      <td><p>An optional Hill coefficient.</p></td>
+      <td><p>An optional Hill coefficient. This is ignored by the
+<code>quadratic</code> binding model equation.</p></td>
     </tr>
     </table>
     

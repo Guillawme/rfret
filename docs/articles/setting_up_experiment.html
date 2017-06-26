@@ -50,17 +50,53 @@
       <h1>Setting up a FRET titration experiment</h1>
                         <h4 class="author">Guillaume Gaullier</h4>
             
-            <h4 class="date">2017-05-23</h4>
+            <h4 class="date">2017-06-26</h4>
           </div>
 
     
     
 <div class="contents">
 <p>This documentation explains how to set up a FRET titration experiment with appropriate controls to get data readily usable by <code>rfret</code>.</p>
+<div id="material" class="section level1">
+<h1 class="hasAnchor">
+<a href="#material" class="anchor"></a>Material</h1>
+<ul>
+<li>Donor-labeled macromolecule “D” of interest,</li>
+<li>acceptor-labeled macromolecule “A” of interest,</li>
+<li>unlabeled macromolecule D,</li>
+<li>unlabeled macromolecule A,</li>
+<li>binding buffer,</li>
+<li>384-well black microplate.</li>
+</ul>
+</div>
+<div id="assay-setup" class="section level1">
+<h1 class="hasAnchor">
+<a href="#assay-setup" class="anchor"></a>Assay setup</h1>
+<p>In the microplate, use three rows (possibly with technical replicates; fluorescence values from such replicates will be averaged) to set up the following titration series by serial dilution of the highest concentration of titrant:</p>
+<ul>
+<li>donor correction experiment: serial dilution of unlabeled molecule A plus a constant concentration of donor-labeled molecule D,</li>
+<li>acceptor correction experiment: serial dilution of acceptor-labeled molecule A plus a constant concentration of unlabeled molecule D,</li>
+<li>interaction experiment: serial dilution of acceptor-labeled molecule A plus a constant concentration of donor-labeled molecule D.</li>
+</ul>
+</div>
+<div id="data-collection" class="section level1">
+<h1 class="hasAnchor">
+<a href="#data-collection" class="anchor"></a>Data collection</h1>
+<p>Use a plate reader instrument to measure, in this order, the FRET channel, the acceptor channel, and the donor channel fluorescence intensity. Excitation and emission wavelengths, as well as bandwidths, should be optimized beforehand on samples of labeled molecules.</p>
+<p>The FRET channel is collected first to avoid bleaching the acceptor fluorophore before the FRET measurement. The acceptor channel is collected second, because exciting the donor will also excite the acceptor to a certain extent if there is FRET happening.</p>
+</div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+        <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#material">Material</a></li>
+      <li><a href="#assay-setup">Assay setup</a></li>
+      <li><a href="#data-collection">Data collection</a></li>
+      </ul>
+</div>
       </div>
 
 </div>

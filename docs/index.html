@@ -57,7 +57,7 @@
 <li>plot all channels (donor, acceptor, FRET) to visually inspect raw data and find possible outliers;</li>
 <li>average fluorescence values of technical replicates of a same experiment (currently limited to two replicates);</li>
 <li>correct FRET signal by subtracting signal from a blank experiment;</li>
-<li>guess initial values for the parameters of the binding model equation (<code>kd</code>, <code>fret_min</code>, <code>fret_max</code>);</li>
+<li>guess initial values for the parameters of the binding model equation (<code>kd</code>, <code>signal_min</code>, <code>signal_max</code>);</li>
 <li>fit a binding model equation to the data;</li>
 <li>report the value of Kd;</li>
 <li>plot the corrected FRET signal and the binding curve obtained by fitting the data.</li>
@@ -76,7 +76,7 @@
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>You can access a detailed tutorial using the following commands:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rfret)
-<span class="kw">vignette</span>(<span class="st">"using-rfret"</span>)</code></pre></div>
+<span class="kw">vignette</span>(<span class="st">"using_rfret"</span>)</code></pre></div>
 </div>
 </div>
   </div>
@@ -87,6 +87,7 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Guillaume Gaullier <br><small class="roles"> Author, maintainer </small> </li>
+<li><a href="authors.html">All authors...</a></li>
 </ul>
 <h2>Dev status</h2>
 <ul class="list-unstyled">

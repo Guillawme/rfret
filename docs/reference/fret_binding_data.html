@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A FRET binding assay dataset with outliers in the donor channel — fret_donor_outliers • rfret</title>
+<title>A FRET binding assay dataset — fret_binding_data • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -71,38 +71,38 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A FRET binding assay dataset with outliers in the donor channel</h1>
+    <h1>A FRET binding assay dataset</h1>
     </div>
 
     
-    <p>This dataset was collected on February 24th, 2017. It is a protein-protein
-interaction assay, where one of the two proteins is labeled with Alexa 488
-(donor fluorophore) and the other with Atto 647 (acceptor fluorophore). This
-dataset has outliers in the donor channel, but can still yield a binding
-curve and a binding constant of 147 +/- 41.</p>
+    <p>This dataset was collected on June 2nd, 2017. It is a protein-DNA interaction
+assay, where the protein is labeled with a donor fluorophore and the DNA with
+an acceptor fluorophore. This dataset yields a binding constant of 4.3 +/-
+0.5 (using the hyperbolic model).</p>
     
 
-    <pre class="usage"><span class='no'>fret_donor_outliers</span></pre>
+    <pre class="usage"><span class='no'>fret_binding_data</span></pre>
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 96 rows and 7 columns. Rows contain two replicates
-of two experiments each containing 24 data points. Columns are:</p><dl class='dl-horizontal'>
-  <dt>Well.Row</dt><dd><p>The row where the sample corresponding to this record was
+    <p>A data frame with 144 rows and 7 columns. Rows contain two replicates
+of three titrations series, each containing 24 data points. Columns are:</p><dl class='dl-horizontal'>
+  <dt>Well Row</dt><dd><p>The row where the sample corresponding to this record was
   located into the 384-well microplate.</p></dd>
-  <dt>Well.Col</dt><dd><p>The column where the sample corresponding to this record
+  <dt>Well Col</dt><dd><p>The column where the sample corresponding to this record
   was located into the 384-well microplate.</p></dd>
   <dt>Content</dt><dd><p>A word describing the experiment and replicate this
-  particular data point belongs to (<code>blank_1</code>, <code>blank_2</code>,
-  <code>titration_1</code>, <code>titration_2</code>).</p></dd>
+  particular data point belongs to (<code>acceptor_only.1</code>,
+  <code>acceptor_only.2</code>, <code>donor_only.1</code>, <code>donor_only.2</code>
+  <code>titration.1</code>, <code>titration.2</code>).</p></dd>
   <dt>fret_channel</dt><dd><p>The fluorescence intensities measured in the FRET
   channel.</p></dd>
   <dt>acceptor_channel</dt><dd><p>The fluorescence intensities measured in the
   acceptor channel.</p></dd>
   <dt>donor_channel</dt><dd><p>The fluorescence intensities measured in the donor
   channel.</p></dd>
-  <dt>concentration</dt><dd><p>The concentrations of acceptor-labeled protein in the
-  titration series.</p></dd>
+  <dt>concentration</dt><dd><p>The concentrations of macromolecule in the titration
+  series.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>

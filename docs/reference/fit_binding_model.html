@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fit a binding model equation to the experimental FRET data — fit_binding_model • rfret</title>
+<title>Fit a binding model equation to the experimental binding data — fit_binding_model • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -71,57 +71,52 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fit a binding model equation to the experimental FRET data</h1>
+    <h1>Fit a binding model equation to the experimental binding data</h1>
     </div>
 
     
-    <p>This function uses initial guesses of <code>kd</code>, <code>fret_min</code>
-    and <code>fret_max</code> to fit a binding model equation to the corrected
-    experimental FRET data. This function is a wrapper around
-    <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code> and provides reasonnable default settings (i.e.
-    refine only <code>kd</code>, <code>fret_min</code> and <code>fret_max</code>, and possibly
-    the Hill coefficient <code>n</code>, but keep probe concentration fixed).</p>
+    <p>This function fits a binding model equation (hyperbolic model,
+    Hill model, or quadratic model) to experimental binding data.</p>
     
 
-    <pre class="usage"><span class='fu'>fit_binding_model</span>(<span class='no'>corrected_data</span>, <span class='kw'>binding_model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>parameters</span>,
-  <span class='kw'>donor_concentration</span> <span class='kw'>=</span> <span class='fl'>10</span>)</pre>
+    <pre class="usage"><span class='fu'>fit_binding_model</span>(<span class='no'>data</span>, <span class='kw'>binding_model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>probe_concentration</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>output_directory</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>corrected_data</th>
-      <td><p>A dataframe containing the corrected FRET signal. It
-must contain at least two columns named <code>fret_corrected</code> and
-<code>concentration</code>. The output of the <code><a href='correct_fret_signal.html'>correct_fret_signal</a></code>
-function can be used directly as input here.</p></td>
+      <th>data</th>
+      <td><p>A dataframe containing the binding signal. It must contain
+at least two columns: <code>concentration</code> (the ligand concentration) and
+<code>signal</code> (the observed binding signal). The output of the
+<code><a href='fret_correct_signal.html'>fret_correct_signal</a></code> function can be used directly as input
+here.</p></td>
     </tr>
     <tr>
       <th>binding_model</th>
       <td><p>A binding model equation to fit to the experimental
-data. Possible values are <code>hyperbola</code>, <code>quadratic</code> and
-<code>quadratic_homodimer</code>.</p></td>
+data. Possible values are <code>"hyperbolic"</code>, <code>"hill"</code> or
+<code>"quadratic"</code>.</p></td>
     </tr>
     <tr>
-      <th>parameters</th>
-      <td><p>A named list containing initial guesses for <code>kd</code>,
-<code>fret_min</code> and <code>fret_max</code>. The output of
-<code><a href='guess_parameters.html'>guess_parameters</a></code> can be used directly as input here.</p></td>
+      <th>probe_concentration</th>
+      <td><p>The fixed concentration of probe molecule
+(required to use the quadratic binding model, ignored by other models).</p></td>
     </tr>
     <tr>
-      <th>donor_concentration</th>
-      <td><p>The concentration of donor-labeled molecule.
-Defaults to 10.</p></td>
+      <th>output_directory</th>
+      <td><p>An optional directory name where to write fit results.
+This directory will be created if it does not already exist.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An named list containing: <code>fit</code>, an <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code>
-    object containing the results of the fit; <code>binding_model</code>, the
-    equation used in the fitting procedure; and <code>donor_concentration</code>,
-    the donor concentration used in the fitting procedure.
-    This list can be directly used as input to <code><a href='make_figure.html'>make_figure</a></code>.</p>
+    <p>A named list where each element is named after the corresponding
+    experiment and holds an <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code> object containing the
+    results of the fit. This list can be directly used
+    as input to <code><a href='make_figure.html'>make_figure</a></code>.</p>
     
 
   </div>

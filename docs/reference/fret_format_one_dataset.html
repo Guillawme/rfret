@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>rfret: Analyze FRET binding data — rfret • rfret</title>
+<title>Format a single dataframe for subsequent processing — fret_format_one_dataset • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -71,25 +71,53 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>rfret: Analyze FRET binding data</h1>
+    <h1>Format a single dataframe for subsequent processing</h1>
     </div>
 
     
-    <p>The rfret package provides functions to perform all steps of the analysis of
-FRET binding data: inspection of raw data, averaging of technical replicates,
-correction of the FRET signal using signal from a blank experiment, fitting
-of a binding model equation to the experimental data to determine the binding
-constant, making a final figure, and performing analysis in batch processing
-mode.</p>
+    <p>This internal function processes a single dataframe to generate
+    the <code>Experiment</code>, <code>Type</code>, <code>Replicate</code>, and
+    <code>Observation</code> columns required for subsequent processing by
+    <code><a href='fret_average_replicates.html'>fret_average_replicates</a></code> and
+    <code><a href='fret_correct_signal.html'>fret_correct_signal</a></code>.</p>
     
 
-        
+    <pre class="usage"><span class='fu'>fret_format_one_dataset</span>(<span class='no'>raw_data</span>, <span class='no'>experiment_name</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>raw_data</th>
+      <td><p>A single dataframe to process.</p></td>
+    </tr>
+    <tr>
+      <th>experiment_name</th>
+      <td><p>The name of the corresponding experiment.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A dataframe containing 8 columns: <code>Experiment</code>, <code>Type</code>,
+    <code>Replicate</code>, <code>Observation</code>, <code>fret_channel</code>,
+    <code>acceptor_channel</code>, <code>donor_channel</code> and <code>concentration</code>.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
+  <span class='fu'>format_one_dataset</span>(<span class='no'>my_data</span>, <span class='st'>"my_experiment"</span>)
+})</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

@@ -15,7 +15,7 @@ Given raw fluorescence data from a FRET binding experiment, you can:
    (currently limited to two replicates);
 3. correct FRET signal by subtracting signal from a blank experiment;
 4. guess initial values for the parameters of the binding model equation (`kd`,
-   `fret_min`, `fret_max`);
+   `signal_min`, `signal_max`);
 5. fit a binding model equation to the data;
 6. report the value of Kd;
 7. plot the corrected FRET signal and the binding curve obtained by fitting
@@ -44,5 +44,5 @@ You can access a detailed tutorial using the following commands:
 
 ```R
 library(rfret)
-vignette("using-rfret")
+vignette("using_rfret")
 ```

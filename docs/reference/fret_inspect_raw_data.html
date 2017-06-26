@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Inspect raw fluorescence data — inspect_raw_data • rfret</title>
+<title>Inspect raw fluorescence data from FRET binding assays — fret_inspect_raw_data • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -71,16 +71,16 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Inspect raw fluorescence data</h1>
+    <h1>Inspect raw fluorescence data from FRET binding assays</h1>
     </div>
 
     
     <p>This function plots the raw fluorescence data from the donor,
-    acceptor and FRET channels, as a function of the acceptor concentration
-    (titration series).</p>
+    acceptor and FRET channels, as a function of the titration series.</p>
     
 
-    <pre class="usage"><span class='fu'>inspect_raw_data</span>(<span class='no'>raw_data</span>, <span class='kw'>titrations</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>highest_signal</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>fret_inspect_raw_data</span>(<span class='no'>raw_data</span>, <span class='kw'>highest_signal</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>output_directory</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>plot_format</span> <span class='kw'>=</span> <span class='st'>"png"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -88,18 +88,7 @@
     <tr>
       <th>raw_data</th>
       <td><p>A dataframe containing the raw fluorescence data. It must
-contain at least five columns named <code>Content</code>, <code>donor_channel</code>,
-<code>acceptor_channel</code>, <code>fret_channel</code> and <code>concentration</code>.
-The <code>Content</code> column is used to plot distinct data series with
-different symbols; it must contain, for each row, a word describing
-which data series or replicate this row belongs to (like
-<code>"blank_1"</code>, <code>"titration_1"</code>, etc.).</p></td>
-    </tr>
-    <tr>
-      <th>titrations</th>
-      <td><p>An optional character vector containing the names
-associated to the titration series. If not specified, the donor channel
-plot will not display the mean and +/- 10 % shaded area.</p></td>
+be the output of <code><a href='fret_format_data.html'>fret_format_data</a></code>.</p></td>
     </tr>
     <tr>
       <th>highest_signal</th>
@@ -109,35 +98,26 @@ which won't check for the presence of saturated reads. The input number
 is not checked in any way: make sure it really corresponds to a saturated
 read with your instrument.</p></td>
     </tr>
+    <tr>
+      <th>output_directory</th>
+      <td><p>An optional directory name where to write plots. This
+directory will be created if it does not already exist.</p></td>
+    </tr>
+    <tr>
+      <th>plot_format</th>
+      <td><p>A character string indicating the file format to use to
+save plots. Possible values are <code>"png"</code> (default value),
+<code>"pdf"</code> and <code>"svg"</code>.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list containing a logical value `saturated_reads` indicating the
-    presence of saturated reads in the dataset (equals to `TRUE` if saturated
-    reads are present, `FALSE` if there is no saturated read, or `NULL` if
-    this was not tested), and three <code>ggplot2</code> graph objects (named
-    <code>donor</code>, <code>acceptor</code> and <code>fret</code>). Warning messages appear
-    when missing values are encountered, and can be safely ignored.</p>
+    <p>A list in which each item is named after the corresponding experiment,
+    and holds a named list containing three <code>ggplot2</code> graph objects
+    named <code>donor</code>, <code>acceptor</code> and <code>fret</code>.</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>not_run({
-  # Send all plots to the output device.
-  inspect_raw_data(fret_good)
-  
-  # Donor plot will display pipetting precision.
-  inspect_raw_data(fret_good, c("titration_1", "titration_2")
-  
-  # Store plots in a variable, print all plots, print only one of them.
-  my_plots <- inspect_raw_data(fret_good)
-  my_plots
-  my_plots$acceptor
-})
-</div><div class='output co'>#&gt; <span class='error'>Error: &lt;text&gt;:9:3: unexpected symbol</span>
-#&gt; <span class='error'>8:   # Store plots in a variable, print all plots, print only one of them.</span>
-#&gt; <span class='error'>9:   my_plots</span>
-#&gt; <span class='error'>     ^</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -145,9 +125,7 @@ read with your instrument.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

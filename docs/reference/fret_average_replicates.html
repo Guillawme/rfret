@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A bad FRET binding assay dataset — fret_bad • rfret</title>
+<title>Average technical replicates from a FRET experiment — fret_average_replicates • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -71,56 +71,61 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A bad FRET binding assay dataset</h1>
+    <h1>Average technical replicates from a FRET experiment</h1>
     </div>
 
     
-    <p>This dataset was collected on March 16th, 2017. It is a protein-protein
-interaction assay, where one of the two proteins is labeled with Alexa 488
-(donor fluorophore) and the other with Atto 647 (acceptor fluorophore). This
-dataset doesn't yield any binding curve nor binding constant. The reasons for
-that are because the concentrations of donor- and acceptor-labeled proteins
-are not what they should be (possibly due to protein agregation, or proteins
-sticking to the microplate plastic), and the microplate used has an
-unusually high auto-fluorescence background in the donor and FRET channels.</p>
+    <p>This function calculates averages of fluorescence values from
+    an arbitrary number of technical replicates.</p>
     
 
-    <pre class="usage"><span class='no'>fret_bad</span></pre>
-        
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>A data frame with 96 rows and 7 columns. Rows contain two replicates
-of two experiments each containing 24 data points. Columns are:</p><dl class='dl-horizontal'>
-  <dt>Well.Row</dt><dd><p>The row where the sample corresponding to this record was
-  located into the 384-well microplate.</p></dd>
-  <dt>Well.Col</dt><dd><p>The column where the sample corresponding to this record
-  was located into the 384-well microplate.</p></dd>
-  <dt>Content</dt><dd><p>A word describing the experiment and replicate this
-  particular data point belongs to (<code>blank_1</code>, <code>blank_2</code>,
-  <code>titration_1</code>, <code>titration_2</code>).</p></dd>
-  <dt>fret_channel</dt><dd><p>The fluorescence intensities measured in the FRET
-  channel.</p></dd>
-  <dt>acceptor_channel</dt><dd><p>The fluorescence intensities measured in the
-  acceptor channel.</p></dd>
-  <dt>donor_channel</dt><dd><p>The fluorescence intensities measured in the donor
-  channel.</p></dd>
-  <dt>concentration</dt><dd><p>The concentrations of acceptor-labeled protein in the
-  titration series.</p></dd>
-</dl>
+    <pre class="usage"><span class='fu'>fret_average_replicates</span>(<span class='no'>raw_data</span>)</pre>
     
-    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>raw_data</th>
+      <td><p>A dataframe containing the raw fluorescence data. It must
+contain at least 8 columns named:</p><dl class='dl-horizontal'>
+<dt>Experiment</dt><dd><p>A unique name identifying each experiment.</p></dd>
+<dt>Type</dt><dd><p>Either "blank" (no donor) or "titration" (donor present).</p></dd>
+<dt>Replicate</dt><dd><p>A number identifying the technical replicate (1, 2, etc.).</p></dd>
+<dt>Observation</dt><dd><p>A number identifying each observation in a titration
+series (corresponds to the plate column numbers, if experiments are set
+up as rows in a 384-well plate). The number of observations for an
+experiment and its blanks must match, and a given observation number must
+associate data points at the same concentration in the titration series.</p></dd>
+<dt>concentration</dt><dd><p>The ligand concentration in the titration series.</p></dd>
+<dt>fret_channel</dt><dd><p>Fluorescence intensity in the FRET channel.</p></dd>
+<dt>acceptor_channel</dt><dd><p>Fluorescence intensity in the acceptor channel.</p></dd>
+<dt>donor_channel</dt><dd><p>Fluorescence intensity in the donor channel.</p></dd>
+</dl><p>The output of <code><a href='fret_format_data.html'>fret_format_data</a></code> can be used directly as input
+for this function.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Guillaume Gaullier</p>
+    <p>A dataframe containing the reduced dataset after averaging across
+    replicates. It contains all of the above columns <em>except</em>
+    <code>Replicate</code>, because it returns the average values over replicates.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><code><a href='fret_format_data.html'>fret_format_data</a></code> to prepare datasets for use with
+    <code>fret_average_replicates</code>.</p>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#format">Format</a></li>
+      <li><a href="#value">Value</a></li>
 
-      <li><a href="#source">Source</a></li>
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>

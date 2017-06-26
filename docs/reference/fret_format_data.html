@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Average technical replicates — average_technical_replicates • rfret</title>
+<title>Format raw experimental FRET binding data for subsequent processing — fret_format_data • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -71,50 +71,47 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Average technical replicates</h1>
+    <h1>Format raw experimental FRET binding data for subsequent processing</h1>
     </div>
 
     
-    <p>This function calculates averages of fluorescence values from
-    an arbitrary number of technical replicates.</p>
+    <p>This function formats data for subsequent processing by
+    <code><a href='fret_average_replicates.html'>fret_average_replicates</a></code>. It will accept all data files
+    in a given directory, or any number of data files specified by their
+    names, or any number of dataframes supplied as a named list, or even a
+    single dataframe supplied as is.</p>
     
 
-    <pre class="usage"><span class='fu'>average_technical_replicates</span>(<span class='no'>raw_data</span>, <span class='kw'>titrations</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>blanks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>fret_format_data</span>(<span class='kw'>input</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>skip_lines</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>raw_data</th>
-      <td><p>A dataframe containing the raw fluorescence data. It must
-contain at least five columns named <code>Content</code>, <code>donor_channel</code>,
-<code>acceptor_channel</code>, <code>fret_channel</code> and <code>concentration</code>.
-The <code>Content</code> column must contain, for each row, a word describing
-which data series or replicate this row belongs to (like
-<code>blank_1</code>, <code>titration_1</code>, etc.).</p></td>
+      <th>input</th>
+      <td><p>A directory name, a vector of file names, a single dataset
+already loaded in memory as a dataframe, or a list of datasets already
+loaded in memory as dataframes.</p></td>
     </tr>
     <tr>
-      <th>titrations</th>
-      <td><p>A character vector containing words that identify the
-titration series (e.g. <code>titration</code>). These words must match the
-ones in <code>raw_data$Content</code> (case sensitive).</p></td>
-    </tr>
-    <tr>
-      <th>blanks</th>
-      <td><p>A character vector containing words that identify the blank
-experiment series (e.g. <code>blank</code>). These words must match the ones
-in <code>raw_data$Content</code> (case sensitive).</p></td>
+      <th>skip_lines</th>
+      <td><p>The number of lines to skip at the beginning of CSV files
+(usually containing header information before the actual data starts).</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe containing the reduced dataset. It contains five columns
-    named <code>Content</code>, <code>donor_channel</code>, <code>acceptor_channel</code>,
-    <code>fret_channel</code> and <code>concentration</code>. The <code>Content</code> column
-    contains only two words: <code>"blank"</code> and <code>"titration"</code>.</p>
+    <p>A single dataframe with the combined input data, containing 8
+    columns: <code>Experiment</code>, <code>Type</code>, <code>Replicate</code>,
+    <code>Observation</code>, <code>fret_channel</code>, <code>acceptor_channel</code>,
+    <code>donor_channel</code> and <code>concentration</code>.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
+  <span class='fu'>format_data</span>(<span class='st'>"my_data_directory"</span>, <span class='fl'>4</span>)
+})</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -122,7 +119,9 @@ in <code>raw_data$Content</code> (case sensitive).</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

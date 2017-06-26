@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Michaelis-Menten equation — hyperbola • rfret</title>
+<title>Fit the hyperbolic model equation to the experimental binding data — fit_hyperbolic • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -71,44 +71,30 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Michaelis-Menten equation</h1>
+    <h1>Fit the hyperbolic model equation to the experimental binding data</h1>
     </div>
 
     
-    <p>This function sets up the Michaelis-Menten equation for use by
-    <code><a href='fit_binding_model.html'>fit_binding_model</a></code> or <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code>.</p>
+    <p>This internal function fits a the hyperbolic model equation to
+    the experimental binding data.</p>
     
 
-    <pre class="usage"><span class='fu'>hyperbola</span>(<span class='no'>titrated_conc</span>, <span class='no'>kd</span>, <span class='no'>n</span>, <span class='no'>signal_min</span>, <span class='no'>signal_max</span>, <span class='no'>probe_conc</span>)</pre>
+    <pre class="usage"><span class='fu'>fit_hyperbolic</span>(<span class='no'>data</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>titrated_conc</th>
-      <td><p>Concentrations in the titration series.</p></td>
-    </tr>
-    <tr>
-      <th>kd</th>
-      <td><p>Binding constant.</p></td>
-    </tr>
-    <tr>
-      <th>n</th>
-      <td><p>Hill coefficient.</p></td>
-    </tr>
-    <tr>
-      <th>signal_min</th>
-      <td><p>Minimal observed signal.</p></td>
-    </tr>
-    <tr>
-      <th>signal_max</th>
-      <td><p>Maximal observed signal.</p></td>
-    </tr>
-    <tr>
-      <th>probe_conc</th>
-      <td><p>Fixed concentration of probe.</p></td>
+      <th>data</th>
+      <td><p>A dataframe containing the binding signal. It must contain
+at least two columns: <code>concentration</code> (the ligand concentration) and
+<code>signal</code> (the observed binding signal).</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code> object containing the results of the fit.</p>
     
 
   </div>
@@ -116,7 +102,9 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>

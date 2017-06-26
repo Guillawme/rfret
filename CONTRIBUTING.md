@@ -25,6 +25,7 @@ Also please follow these additional guidelines:
 - Before submitting a pull request, make sure that:
     * you updated the documentation (use `devtools::document()`);
     * vignettes build without errors (use `devtools::build_vignettes()`);
+    * you rebuilt the documentation website (use `pkgdown::build_site()`);
     * all unit tests pass (use `devtools::test()`);
     * in case you modified an interface, you updated the corresponding unit test
       or added an appropriate unit test to cover this new case;

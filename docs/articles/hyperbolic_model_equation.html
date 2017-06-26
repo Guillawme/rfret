@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deriving the quadratic binding equation • rfret</title>
+<title>Deriving the hyperbolic model equation • rfret</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
@@ -47,16 +47,16 @@
       </header><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
-      <h1>Deriving the quadratic binding equation</h1>
+      <h1>Deriving the hyperbolic model equation</h1>
                         <h4 class="author">Guillaume Gaullier</h4>
             
-            <h4 class="date">2017-05-23</h4>
+            <h4 class="date">2017-06-26</h4>
           </div>
 
     
     
 <div class="contents">
-<p>This documentation explains how the quadratic binding equation used to fit binding data from a FRET experiment is derived from the law of mass action.</p>
+<p>This documentation explains how the hyperbolic model equation used to fit binding data from a FRET experiment is derived from the law of mass action.</p>
 <div id="binding-equilibrium" class="section level2">
 <h2 class="hasAnchor">
 <a href="#binding-equilibrium" class="anchor"></a>Binding equilibrium</h2>
@@ -68,31 +68,28 @@
 <p>3: <span class="math inline">\(K_D = \frac{[M] \times [L]}{[ML]}\)</span></p>
 <p>Determining <span class="math inline">\(K_D\)</span> is the goal of a binding assay, like a FRET titration experiment.</p>
 </div>
-<div id="deriving-the-quadratic-binding-equation" class="section level2">
+<div id="deriving-the-hyperbola-binding-equation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#deriving-the-quadratic-binding-equation" class="anchor"></a>Deriving the quadratic binding equation</h2>
-<p>To determine <span class="math inline">\(K_D\)</span>, we need to measure [ML] at equilibrium. [M] and [L] can be expressed as a function of [ML] from equations 1 and 2, and <span class="math inline">\(M_{tot}\)</span> and <span class="math inline">\(L_{tot}\)</span> are known parameters of the experiment.</p>
-<p>Rewriting equation 3 gives us:</p>
-<p>4: <span class="math inline">\(K_D \times [ML] - [M] \times [L] = 0\)</span></p>
-<p>By substituting into equation 4 [M] and [L] using equations 1 and 2, we have:</p>
-<p><span class="math inline">\(K_D \times [ML] - (M_{tot} - [ML]) \times (L_{tot} - [ML]) = 0\)</span></p>
-<p>We can now solve this equation for [ML]:</p>
-<p><span class="math inline">\(K_D \times [ML] - (M_{tot} \times L_{tot} - M_{tot} \times [ML] - L_{tot} \times [ML] + [ML]^2) = 0\)</span></p>
-<p><span class="math inline">\(K_D \times [ML] - M_{tot} \times L_{tot} + M_{tot} \times [ML] + L_{tot} \times [ML] - [ML]^2 = 0\)</span></p>
-<p>5: <span class="math inline">\([ML]^2 - (K_D + M_{tot} + L_{tot}) \times [ML] + M_{tot} \times L_{tot} = 0\)</span></p>
-<p>Equation 5 is of the form <span class="math inline">\(ax^2 + bx + c = 0\)</span>, of solutions <span class="math inline">\(x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}\)</span>.</p>
-<p>This gives us [ML] expressed as a function of <span class="math inline">\(K_D\)</span> and the known parameters <span class="math inline">\(M_{tot}\)</span> and <span class="math inline">\(L_{tot}\)</span>:</p>
-<p>6: <span class="math inline">\([ML] = \frac{(K_D + M_{tot} + L_{tot}) \pm \sqrt{(-(K_D + M_{tot} + L_{tot}))^2 - 4 \times M_{tot} \times L_{tot}}}{2}\)</span></p>
+<a href="#deriving-the-hyperbola-binding-equation" class="anchor"></a>Deriving the hyperbola binding equation</h2>
+<p>To determine <span class="math inline">\(K_D\)</span>, we need to measure [ML] at equilibrium. [M] and [L] can be expressed as a function of [ML] from equations 1 and 2, <span class="math inline">\(M_{tot}\)</span> is a known parameter of the experiment. <strong>[L] is impossible to measure in a FRET assay, but under conditions where <span class="math inline">\(L_{tot} &gt;&gt;&gt; M_{tot}\)</span> we can safely approximate [L] by <span class="math inline">\(L_{tot}\)</span>.</strong></p>
+<p>From equation 3, we can express [ML] as a function of all other parameters:</p>
+<p><span class="math inline">\([ML] = \frac{[M] \times L_{tot}}{K_D}\)</span></p>
+<p>And from equation 1, we can replace [M] by <span class="math inline">\(M_{tot} - [ML]\)</span>, giving us:</p>
+<p><span class="math inline">\([ML] = \frac{(M_{tot} - [ML]) \times L_{tot}}{K_D}\)</span></p>
+<p>Solving for [ML] gives us:</p>
+<p><span class="math inline">\(K_D \times [ML] = M_{tot} \times L_{tot} - [ML] \times L_{tot}\)</span> <span class="math inline">\([ML] \times (K_D + L_{tot}) = M_{tot} \times L_{tot}\)</span></p>
+<p>4: <span class="math inline">\([ML] = \frac{M_{tot} \times L_{tot}}{K_D + L_{tot}}\)</span></p>
+<p>Equation 4 defines a hyperbola, which is the shape of the saturation curve showing the concentration of complex [ML] as a function of the ligand concentration <span class="math inline">\(L_{tot}\)</span>.</p>
 </div>
-<div id="using-the-quadratic-binding-equation-to-fit-a-binding-curve" class="section level2">
+<div id="using-the-hyperbola-binding-equation-to-fit-a-binding-curve" class="section level2">
 <h2 class="hasAnchor">
-<a href="#using-the-quadratic-binding-equation-to-fit-a-binding-curve" class="anchor"></a>Using the quadratic binding equation to fit a binding curve</h2>
+<a href="#using-the-hyperbola-binding-equation-to-fit-a-binding-curve" class="anchor"></a>Using the hyperbola binding equation to fit a binding curve</h2>
 <p>If we have a detectable signal <span class="math inline">\(S\)</span> proportional to [ML] (like FRET), we can express it as a function of its minimal and maximal values (<span class="math inline">\(S_{min}\)</span> and <span class="math inline">\(S_{max}\)</span>) and the fraction of ligand bound <span class="math inline">\(\frac{[ML]}{M_{tot}}\)</span>:</p>
-<p>7: <span class="math inline">\(S = S_{min} + (S_{max} - S_{min}) \times \frac{[ML]}{M_{tot}}\)</span></p>
+<p>5: <span class="math inline">\(S = S_{min} + (S_{max} - S_{min}) \times \frac{[ML]}{M_{tot}}\)</span></p>
 <p>With this expression, <span class="math inline">\(S = S_{min}\)</span> when <span class="math inline">\(\frac{[ML]}{M_{tot}} = 0\)</span> and <span class="math inline">\(S = S_{max}\)</span> when <span class="math inline">\(\frac{[ML]}{M_{tot}} = 1\)</span>.</p>
-<p>Substituting equation 6 into equation 7 gives:</p>
-<p>8: <span class="math inline">\(S = S_{min} + (S_{max} - S_{min}) \times \frac{(K_D + M_{tot} + L_{tot}) \pm \sqrt{(-(K_D + M_{tot} + L_{tot}))^2 - 4 \times M_{tot} \times L_{tot}}}{2 \times M_{tot}}\)</span></p>
-<p>In equation 8, <span class="math inline">\(S\)</span> and <span class="math inline">\(S_{min}\)</span> can be measured experimentally: they are the signal observed without ligand, and across the titration series at given values of <span class="math inline">\(L_{tot}\)</span>. The experimental data is, indeed, <span class="math inline">\(S = f(L_{tot})\)</span>. <span class="math inline">\(M_{tot}\)</span> and <span class="math inline">\(L_{tot}\)</span> are known experimental parameters. Therefore, <span class="math inline">\(K_D\)</span> and <span class="math inline">\(S_{max}\)</span> can be determined by fitting equation 8 to the experimental data.</p>
+<p>Substituting equation 4 into equation 5 gives us:</p>
+<p>6: $S = S_{min} + (S_{max} - S_{min})  $</p>
+<p>In equation 6, <span class="math inline">\(S_{min}\)</span> and <span class="math inline">\(S\)</span> can be measured experimentally: they are, respectively, the signal observed without ligand, and across the titration series at given values of <span class="math inline">\(L_{tot}\)</span>. The experimental data is, indeed, <span class="math inline">\(S = f(L_{tot})\)</span>. <span class="math inline">\(L_{tot}\)</span> is a known experimental parameter. Therefore, <span class="math inline">\(K_D\)</span> and <span class="math inline">\(S_{max}\)</span> can be determined by fitting equation 6 to the experimental data.</p>
 </div>
 </div>
   </div>
@@ -102,8 +99,8 @@
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#binding-equilibrium">Binding equilibrium</a></li>
-      <li><a href="#deriving-the-quadratic-binding-equation">Deriving the quadratic binding equation</a></li>
-      <li><a href="#using-the-quadratic-binding-equation-to-fit-a-binding-curve">Using the quadratic binding equation to fit a binding curve</a></li>
+      <li><a href="#deriving-the-hyperbola-binding-equation">Deriving the hyperbola binding equation</a></li>
+      <li><a href="#using-the-hyperbola-binding-equation-to-fit-a-binding-curve">Using the hyperbola binding equation to fit a binding curve</a></li>
       </ul>
 </div>
       </div>

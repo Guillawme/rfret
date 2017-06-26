@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make a figure with experimental data and fitted binding curve — make_figure • rfret</title>
+<title>Make a figure with data and binding curve from a single experiment — make_one_figure • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -71,52 +71,45 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make a figure with experimental data and fitted binding curve</h1>
+    <h1>Make a figure with data and binding curve from a single experiment</h1>
     </div>
 
     
-    <p>This function takes a list containing any number of model
-    objects from <code><a href='fit_binding_model.html'>fit_binding_model</a></code> or <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code>
-    and returns a binding curve plot figure for each model.</p>
+    <p>This internal function takes a model object from
+    <code><a href='fit_binding_model.html'>fit_binding_model</a></code> or <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code> and returns
+    a <code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></code> graph object of a binding curve figure.</p>
     
 
-    <pre class="usage"><span class='fu'>make_figure</span>(<span class='no'>fits</span>, <span class='kw'>probe_concentration</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output_directory</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>plot_format</span> <span class='kw'>=</span> <span class='st'>"png"</span>)</pre>
+    <pre class="usage"><span class='fu'>make_one_figure</span>(<span class='no'>fit</span>, <span class='no'>experiment_name</span>, <span class='no'>binding_model</span>, <span class='kw'>probe_conc</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fits</th>
-      <td><p>A named list where items are named after the corresponding
-experiment and contain a model object from <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code>. The
-output of <code><a href='fit_binding_model.html'>fit_binding_model</a></code> can be used directly as input
-here.</p></td>
+      <th>fit</th>
+      <td><p>An <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code> object. The output of
+<code><a href='fit_binding_model.html'>fit_binding_model</a></code> can be used directly as input here.</p></td>
     </tr>
     <tr>
-      <th>probe_concentration</th>
-      <td><p>The fixed concentration of probe molecule. This is
-ignored for models obtained with the hyperbolic and hill equations, but
-required for models obtained with the quadratic equation.</p></td>
+      <th>experiment_name</th>
+      <td><p>The name of the corresponding experiment.</p></td>
     </tr>
     <tr>
-      <th>output_directory</th>
-      <td><p>An optional directory name where to write plots. This
-directory will be created if it does not already exist.</p></td>
+      <th>binding_model</th>
+      <td><p>The binding model used to fit the data.</p></td>
     </tr>
     <tr>
-      <th>plot_format</th>
-      <td><p>A character string indicating the file format to use to
-save plots. Possible values are <code>"png"</code> (default value),
-<code>"pdf"</code> and <code>"svg"</code>.</p></td>
+      <th>probe_conc</th>
+      <td><p>The fixed concentration of probe molecule. This is ignored
+for models obtained with the hyperbolic and hill equations, but required
+for models obtained with the quadratic equation.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list where items are named after the corresponding experiment
-    and contain a <code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></code> graph object of a binding
-    curve figure.</p>
+    <p>A <code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></code> graph object of a binding curve
+    figure.</p>
     
 
   </div>

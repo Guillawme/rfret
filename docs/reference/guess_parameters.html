@@ -75,28 +75,28 @@
     </div>
 
     
-    <p>This function guesses initial values for <code>kd</code>,
-    <code>fret_min</code> and <code>fret_max</code> (the parameters of the binding model
-    equations), using the corrected FRET data.</p>
+    <p>This function provides reasonable initial guesses for <code>kd</code>,
+    <code>signal_min</code> and <code>signal_max</code> (parameters of the binding model
+    equations used to fit the data).</p>
     
 
-    <pre class="usage"><span class='fu'>guess_parameters</span>(<span class='no'>fret_corr</span>)</pre>
+    <pre class="usage"><span class='fu'>guess_parameters</span>(<span class='no'>input_data</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fret_corr</th>
-      <td><p>A dataframe containing the corrected FRET signal. It must
-contain at least two columns named <code>fret_corrected</code> and
-<code>concentration</code>.</p></td>
+      <th>input_data</th>
+      <td><p>A dataframe containing the corrected binding signal. It must
+contain at least two columns: <code>concentration</code> (the ligand
+concentration) and <code>signal</code> (the observed binding signal).</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list containing initial guesses for <code>kd</code>, <code>fret_min</code>
-    and <code>fret_max</code>.</p>
+    <p>A named list containing initial guesses for <code>kd</code>,
+    <code>signal_min</code> and <code>signal_max</code>.</p>
     
 
   </div>
