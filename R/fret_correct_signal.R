@@ -165,5 +165,5 @@ fret_correct_one_exp <- function(one_exp) {
             )
 
     # Subtract baseline
-    corrected_data %<>% dplyr::mutate(signal = signal - min(signal))
+    corrected_data %>% dplyr::mutate(signal = signal - min(signal))
   }

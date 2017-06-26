@@ -113,7 +113,8 @@ fret_format_one_dataset <- function(raw_data, experiment_name) {
     raw_data %<>%
         dplyr::group_by(Experiment, Type, Replicate) %>%
         dplyr::mutate(Observation =
-                          dplyr::row_number(dplyr::desc(concentration)))
+                          dplyr::row_number(dplyr::desc(concentration))) %>%
+        dplyr::ungroup()
 
     # Reorder columns and return dataset
     raw_data[c("Experiment",
@@ -123,5 +124,6 @@ fret_format_one_dataset <- function(raw_data, experiment_name) {
                "fret_channel",
                "acceptor_channel",
                "donor_channel",
-               "concentration")]
+               "concentration")] %>%
+        dplyr::mutate(Replicate = as.integer(Replicate))
 }
