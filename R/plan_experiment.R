@@ -13,11 +13,12 @@
 #' @param max_concentration The maximal value of the concentration range to
 #'     simulate the binding curve over. Defaults to \code{1e5}.
 #' @param binding_model A binding model equation. Possible values are
-#'     \code{"hyperbola"} and \code{"quadratic"}. Defaults to \code{"hyperbolic"}.
+#'     \code{"hyperbolic"}, \code{"hill"} and \code{"quadratic"}. Defaults to
+#'     \code{"hyperbolic"}.
 #' @param probe_conc Fixed concentration of probe molecule. If not specified,
-#'     the hyperbola binding model equation is used by default.
-#' @param hill An optional Hill coefficient. This is ignored by the
-#'     \code{quadratic} binding model equation.
+#'     the hyperbolic binding model equation is used by default.
+#' @param hill_coef An optional Hill coefficient. This is ignored by the
+#'     quadratic binding model equation. Defaults to 1.
 #' @return A \code{ggplot2} graph object of the simulated binding curve.
 #' @export
 
@@ -26,16 +27,22 @@ plan_experiment <- function(kd,
                             max_concentration = 1e5,
                             binding_model = "hyperbolic",
                             probe_conc = NULL,
-                            hill = NULL) {
+                            hill_coef = 1) {
     # Prepare parameters, model equation and plot title
-    if (is.null(hill)) { hill <- 1 }
+    my_equation <- NULL
+    my_plot_title <- NULL
     if (binding_model == "hyperbolic") {
         my_equation <- hyperbolic
         my_plot_title <- paste("Simulated curve: hyperbolic model,",
                                "Kd =",
+                               kd)
+    } else if (binding_model == "hill") {
+        my_equation <- hill
+        my_plot_title <- paste("Simulated curve: hill model,",
+                               "Kd =",
                                kd,
                                ", Hill coefficient =",
-                               hill)
+                               hill_coef)
     } else if (binding_model == "quadratic") {
         if (is.null(probe_conc)) {
             stop("Please specify a probe concentration to use the quadratic model.")
@@ -47,7 +54,7 @@ plan_experiment <- function(kd,
                                ", probe concentration =",
                                probe_conc)
     } else {
-        stop("Unknown binding model. Available binding models: 'hyperbolic', 'quadratic'.")
+        stop("Unknown binding model. Available binding models: 'hyperbolic', 'hill, 'quadratic'.")
     }
 
     my_plot <- ggplot2::ggplot(data = data.frame(x = min_concentration:max_concentration),
@@ -57,7 +64,7 @@ plan_experiment <- function(kd,
                                                 signal_min = 0,
                                                 signal_max = 100,
                                                 probe_conc = probe_conc,
-                                                n = hill))) +
+                                                n = hill_coef))) +
         ggplot2::theme_bw() +
         ggplot2::scale_x_log10() +
         ggplot2::xlab("Concentration") +

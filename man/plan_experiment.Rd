@@ -5,7 +5,7 @@
 \title{Plan a binding assay experiment}
 \usage{
 plan_experiment(kd, min_concentration = 0.001, max_concentration = 1e+05,
-  binding_model = "hyperbolic", probe_conc = NULL, hill = NULL)
+  binding_model = "hyperbolic", probe_conc = NULL, hill_coef = 1)
 }
 \arguments{
 \item{kd}{A Kd value.}
@@ -17,13 +17,14 @@ simulate the binding curve over. Defaults to \code{1e-3}.}
 simulate the binding curve over. Defaults to \code{1e5}.}
 
 \item{binding_model}{A binding model equation. Possible values are
-\code{"hyperbola"} and \code{"quadratic"}. Defaults to \code{"hyperbolic"}.}
+\code{"hyperbolic"}, \code{"hill"} and \code{"quadratic"}. Defaults to
+\code{"hyperbolic"}.}
 
 \item{probe_conc}{Fixed concentration of probe molecule. If not specified,
-the hyperbola binding model equation is used by default.}
+the hyperbolic binding model equation is used by default.}
 
-\item{hill}{An optional Hill coefficient. This is ignored by the
-\code{quadratic} binding model equation.}
+\item{hill_coef}{An optional Hill coefficient. This is ignored by the
+quadratic binding model equation. Defaults to 1.}
 }
 \value{
 A \code{ggplot2} graph object of the simulated binding curve.
