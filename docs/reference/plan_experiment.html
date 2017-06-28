@@ -84,7 +84,7 @@
     
 
     <pre class="usage"><span class='fu'>plan_experiment</span>(<span class='no'>kd</span>, <span class='kw'>min_concentration</span> <span class='kw'>=</span> <span class='fl'>0.001</span>, <span class='kw'>max_concentration</span> <span class='kw'>=</span> <span class='fl'>1e+05</span>,
-  <span class='kw'>binding_model</span> <span class='kw'>=</span> <span class='st'>"hyperbolic"</span>, <span class='kw'>probe_conc</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hill</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>binding_model</span> <span class='kw'>=</span> <span class='st'>"hyperbolic"</span>, <span class='kw'>probe_conc</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hill_coef</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -106,17 +106,18 @@ simulate the binding curve over. Defaults to <code>1e5</code>.</p></td>
     <tr>
       <th>binding_model</th>
       <td><p>A binding model equation. Possible values are
-<code>"hyperbola"</code> and <code>"quadratic"</code>. Defaults to <code>"hyperbolic"</code>.</p></td>
+<code>"hyperbolic"</code>, <code>"hill"</code> and <code>"quadratic"</code>. Defaults to
+<code>"hyperbolic"</code>.</p></td>
     </tr>
     <tr>
       <th>probe_conc</th>
       <td><p>Fixed concentration of probe molecule. If not specified,
-the hyperbola binding model equation is used by default.</p></td>
+the hyperbolic binding model equation is used by default.</p></td>
     </tr>
     <tr>
-      <th>hill</th>
+      <th>hill_coef</th>
       <td><p>An optional Hill coefficient. This is ignored by the
-<code>quadratic</code> binding model equation.</p></td>
+quadratic binding model equation. Defaults to 1.</p></td>
     </tr>
     </table>
     
