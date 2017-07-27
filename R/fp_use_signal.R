@@ -21,10 +21,14 @@
 #'     }
 #'     The output of \code{\link{fp_average_replicates}} can be used directly as
 #'     input for this function.
+#' @param sig A character string to identify the signal to use for curve fitting.
+#'     Possible values are \code{"polarization"} or \code{"p"} to use fluorescence
+#'     polarization signal, and \code{"anisotropy"} or \code{"a"} to use
+#'     fluorescence anisotropy signal.
 #' @return A dataframe containing the same dataset with columns appropriately
 #'     named for \code{\link{fit_binding_model}}.
 #'
-#' @seealso \code{\link{fp_format_data}} and \code{fp_average_replicates}.
+#' @seealso \code{\link{fp_format_data}} and \code{\link{fp_average_replicates}}.
 #'
 #' @export
 
