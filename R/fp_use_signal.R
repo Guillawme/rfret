@@ -1,4 +1,4 @@
-#' @title Choose wich signal to fit between fluorescence polarization and anisotropy
+#' @title Choose which signal to fit between fluorescence polarization and anisotropy
 #'
 #' @description This function renames the appropriate column in a fluorescence
 #'     polarization and anisotropy dataset for subsequent fitting by

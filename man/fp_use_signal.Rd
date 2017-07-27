@@ -2,7 +2,7 @@
 % Please edit documentation in R/fp_use_signal.R
 \name{fp_use_signal}
 \alias{fp_use_signal}
-\title{Choose wich signal to fit between fluorescence polarization and anisotropy}
+\title{Choose which signal to fit between fluorescence polarization and anisotropy}
 \usage{
 fp_use_signal(data, sig = NULL)
 }
