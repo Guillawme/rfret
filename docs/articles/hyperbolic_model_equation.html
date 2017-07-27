@@ -45,6 +45,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/analyzing_fret_data.html">Analyzing FRET binding data</a>
+    </li>
+    <li>
       <a href="../articles/hyperbolic_model_equation.html">Deriving the hyperbolic model equation</a>
     </li>
     <li>
@@ -52,9 +55,6 @@
     </li>
     <li>
       <a href="../articles/setting_up_experiment.html">Setting up a FRET titration experiment</a>
-    </li>
-    <li>
-      <a href="../articles/using_rfret.html">Using rfret</a>
     </li>
   </ul>
 </li>
@@ -92,9 +92,9 @@
 <p>3: <span class="math inline">\(K_D = \frac{[M] \times [L]}{[ML]}\)</span></p>
 <p>Determining <span class="math inline">\(K_D\)</span> is the goal of a binding assay, like a FRET titration experiment.</p>
 </div>
-<div id="deriving-the-hyperbola-binding-equation" class="section level2">
+<div id="deriving-the-hyperbolic-model-equation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#deriving-the-hyperbola-binding-equation" class="anchor"></a>Deriving the hyperbola binding equation</h2>
+<a href="#deriving-the-hyperbolic-model-equation" class="anchor"></a>Deriving the hyperbolic model equation</h2>
 <p>To determine <span class="math inline">\(K_D\)</span>, we need to measure [ML] at equilibrium. [M] and [L] can be expressed as a function of [ML] from equations 1 and 2, <span class="math inline">\(M_{tot}\)</span> is a known parameter of the experiment. <strong>[L] is impossible to measure in a FRET assay, but under conditions where <span class="math inline">\(L_{tot} &gt;&gt;&gt; M_{tot}\)</span> we can safely approximate [L] by <span class="math inline">\(L_{tot}\)</span>.</strong></p>
 <p>From equation 3, we can express [ML] as a function of all other parameters:</p>
 <p><span class="math inline">\([ML] = \frac{[M] \times L_{tot}}{K_D}\)</span></p>
@@ -105,9 +105,9 @@
 <p>4: <span class="math inline">\([ML] = \frac{M_{tot} \times L_{tot}}{K_D + L_{tot}}\)</span></p>
 <p>Equation 4 defines a hyperbola, which is the shape of the saturation curve showing the concentration of complex [ML] as a function of the ligand concentration <span class="math inline">\(L_{tot}\)</span>.</p>
 </div>
-<div id="using-the-hyperbola-binding-equation-to-fit-a-binding-curve" class="section level2">
+<div id="using-the-hyperbolic-model-equation-to-fit-a-binding-curve" class="section level2">
 <h2 class="hasAnchor">
-<a href="#using-the-hyperbola-binding-equation-to-fit-a-binding-curve" class="anchor"></a>Using the hyperbola binding equation to fit a binding curve</h2>
+<a href="#using-the-hyperbolic-model-equation-to-fit-a-binding-curve" class="anchor"></a>Using the hyperbolic model equation to fit a binding curve</h2>
 <p>If we have a detectable signal <span class="math inline">\(S\)</span> proportional to [ML] (like FRET), we can express it as a function of its minimal and maximal values (<span class="math inline">\(S_{min}\)</span> and <span class="math inline">\(S_{max}\)</span>) and the fraction of ligand bound <span class="math inline">\(\frac{[ML]}{M_{tot}}\)</span>:</p>
 <p>5: <span class="math inline">\(S = S_{min} + (S_{max} - S_{min}) \times \frac{[ML]}{M_{tot}}\)</span></p>
 <p>With this expression, <span class="math inline">\(S = S_{min}\)</span> when <span class="math inline">\(\frac{[ML]}{M_{tot}} = 0\)</span> and <span class="math inline">\(S = S_{max}\)</span> when <span class="math inline">\(\frac{[ML]}{M_{tot}} = 1\)</span>.</p>
@@ -124,8 +124,8 @@
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#binding-equilibrium">Binding equilibrium</a></li>
-      <li><a href="#deriving-the-hyperbola-binding-equation">Deriving the hyperbola binding equation</a></li>
-      <li><a href="#using-the-hyperbola-binding-equation-to-fit-a-binding-curve">Using the hyperbola binding equation to fit a binding curve</a></li>
+      <li><a href="#deriving-the-hyperbolic-model-equation">Deriving the hyperbolic model equation</a></li>
+      <li><a href="#using-the-hyperbolic-model-equation-to-fit-a-binding-curve">Using the hyperbolic model equation to fit a binding curve</a></li>
       </ul>
 </div>
       </div>
