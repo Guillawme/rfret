@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Correct FRET signal for one experiment — fret_correct_one_dataset • rfret</title>
+<title>Format raw experimental fluorescence polarization or anisotropy binding data for subsequent processing — fp_format_data • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,71 +96,48 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Correct FRET signal for one experiment</h1>
+    <h1>Format raw experimental fluorescence polarization or anisotropy binding data for subsequent processing</h1>
     </div>
 
     
-    <p>This internal function corrects the raw FRET signal of a single
-    experiment by applying corrections for donor bleedthrough and acceptor
-    direct excitation. See
-    <a href='https://doi.org/10.1093/nar/gkr1045'>Hieb AR <em>et al</em> (2012)</a>
-    and <a href='https://doi.org/10.1016/B978-0-12-391940-3.00011-1'>Winkler DD
-    <em>et al</em> (2012)</a> for details.</p>
+    <p>This function formats data for subsequent processing by
+    <code><a href='fp_average_replicates.html'>fp_average_replicates</a></code>. It will accept all data files
+    in a given directory, or any number of data files specified by their
+    names, or any number of dataframes supplied as a named list, or even a
+    single dataframe supplied as is.</p>
     
 
-    <pre class="usage"><span class='fu'>fret_correct_one_dataset</span>(<span class='no'>one_dataset</span>)</pre>
+    <pre class="usage"><span class='fu'>fp_format_data</span>(<span class='kw'>input</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>skip_lines</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>one_dataset</th>
-      <td><p>A dataframe containing the FRET data after avergaing over
-technical replicates. This dataframe must contain the following columns:</p><dl class='dl-horizontal'>
-<dt>Experiment</dt><dd><p>A unique name identifying each experiment.</p></dd>
-<dt>Type</dt><dd><p>Either "blank" (no donor) or "titration" (donor present).</p></dd>
-<dt>Observation</dt><dd><p>A number identifying each observation in a titration
-series (corresponds to the plate column numbers, if experiments are set
-up as rows in a 384-well plate). The number of observations for an
-experiment and its blanks must match, and a given observation number must
-associate data points at the same concentration in the titration series.</p></dd>
-<dt>concentration</dt><dd><p>The ligand concentration in the titration series.</p></dd>
-<dt>fret_channel</dt><dd><p>Fluorescence intensity in the FRET channel.</p></dd>
-<dt>acceptor_channel</dt><dd><p>Fluorescence intensity in the acceptor channel.</p></dd>
-<dt>donor_channel</dt><dd><p>Fluorescence intensity in the donor channel.</p></dd>
-</dl><p>The output of <code><a href='fret_average_replicates.html'>fret_average_replicates</a></code> can be used directly
-as input for this function.</p></td>
+      <th>input</th>
+      <td><p>A directory name, a vector of file names, a single dataset
+already loaded in memory as a dataframe, or a list of datasets already
+loaded in memory as dataframes.</p></td>
+    </tr>
+    <tr>
+      <th>skip_lines</th>
+      <td><p>The number of lines to skip at the beginning of CSV files
+(usually containing header information before the actual data starts).</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe containing the corrected FRET signal. It contains three
-    columns:</p><dl class='dl-horizontal'>
-    <dt>Experiment</dt><dd><p>A unique name identifying each experiment (same as in
-    the input data).</p></dd>
-    <dt>concentration</dt><dd><p>The ligand concentration in the titration series
-    (same as in the input data).</p></dd>
-    <dt>fret</dt><dd><p>The corrected FRET signal.</p></dd>
-    </dl>
-
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <p><code><a href='fret_average_replicates.html'>fret_average_replicates</a></code> to prepare a dataset for
-    use with <code>fret_correct_signal</code>.</p>
-<p>For details on the signal correction applied by <code>fret_correct_signal</code>,
-    see:</p><ul>
-<li><p>Hieb AR <em>et al</em> (2012) Fluorescence Strategies for High-Throughput
-    Quantification of Protein Interactions. <em>Nucleic Acids Research</em>
-    40 (5): e33 (<a href='https://doi.org/10.1093/nar/gkr1045'>doi:10.1093/nar/gkr1045</a>) and</p></li>
-<li><p>Winkler DD <em>et al</em> (2012) Quantifying Chromatin-Associated
-    Interactions: The HI-FI System. In <em>Methods in Enzymology</em> pp
-    243–274. Elsevier
-    (<a href='https://doi.org/10.1016/B978-0-12-391940-3.00011-1'>doi:10.1016/B978-0-12-391940-3.00011-1</a>).</p></li>
-</ul>
+    <p>A single dataframe with the combined input data, containing 8
+    columns: <code>Experiment</code>, <code>Type</code>, <code>Replicate</code>,
+    <code>Observation</code>, <code>Polarization</code>, <code>Anisotropy</code>,
+    <code>Intensity</code> and <code>concentration</code>.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'>fp_format_data</span>(<span class='st'>"my_data_directory"</span>, <span class='fl'>4</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -168,9 +145,9 @@ as input for this function.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
