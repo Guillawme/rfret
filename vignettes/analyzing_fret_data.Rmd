@@ -1,5 +1,5 @@
 ---
-title: "Using rfret"
+title: "Analyzing FRET binding data"
 author: "Guillaume Gaullier"
 date: "`r Sys.Date()`"
 output: 
@@ -14,9 +14,9 @@ vignette: >
 ---
 
 This documentation explains how to use the functions provided by the `rfret`
-package to analyze FRET titration experiments and determine the binding constant
-(Kd) of a macromolecular interaction. An example using a real-life dataset is
-presented and discussed.
+package to analyze FRET binding data from titration experiments, and determine
+the binding constant (Kd) of a macromolecular interaction. An example using a
+real-life dataset is presented and discussed.
 
 # Overview
 ## FRET data analysis workflow
