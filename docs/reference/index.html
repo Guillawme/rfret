@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,34 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/analyzing_fret_data.html">Analyzing FRET binding data</a>
+    </li>
+    <li>
+      <a href="../articles/hyperbolic_model_equation.html">Deriving the hyperbolic model equation</a>
+    </li>
+    <li>
+      <a href="../articles/quadratic_model_equation.html">Deriving the quadratic model equation</a>
+    </li>
+    <li>
+      <a href="../articles/setting_up_experiment.html">Setting up a FRET titration experiment</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -102,8 +127,8 @@
       </tbody><tbody>
         <tr>
           <th colspan="2">
-            <h2 id="section-inspection-of-raw-data" class="hasAnchor"><a href="#section-inspection-of-raw-data" class="anchor"></a>Inspection of raw data</h2>
-            <p class="section-desc"><p>Function for inspecting raw data, finding outliers</p></p>
+            <h2 id="section-fret-analysis" class="hasAnchor"><a href="#section-fret-analysis" class="anchor"></a>FRET analysis</h2>
+            <p class="section-desc"><p>Function for inspecting and processing FRET data</p></p>
           </th>
         </tr>
         <tr>
@@ -124,15 +149,7 @@
             <p><code><a href="fret_save_inspection_plots.html">fret_save_inspection_plots</a></code> </p>
           </td>
           <td><p>Save raw data plots from a single FRET binding dataset</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-data-processing" class="hasAnchor"><a href="#section-data-processing" class="anchor"></a>Data processing</h2>
-            <p class="section-desc"><p>Functions for processing raw data</p></p>
-          </th>
-        </tr>
-        <tr>
+        </tr><tr>
           <!--  -->
           <td>
             <p><code><a href="fret_format_data.html">fret_format_data</a></code> </p>
@@ -162,6 +179,38 @@
             <p><code><a href="fret_correct_one_dataset.html">fret_correct_one_dataset</a></code> </p>
           </td>
           <td><p>Correct FRET signal for one experiment</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-fluorescence-polarization-and-anisotropy-analysis" class="hasAnchor"><a href="#section-fluorescence-polarization-and-anisotropy-analysis" class="anchor"></a>Fluorescence polarization and anisotropy analysis</h2>
+            <p class="section-desc"><p>Function for inspecting and processing FP and FA data</p></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="fp_format_data.html">fp_format_data</a></code> </p>
+          </td>
+          <td><p>Format raw experimental fluorescence polarization or anisotropy binding data for subsequent processing</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="fp_format_one_dataset.html">fp_format_one_dataset</a></code> </p>
+          </td>
+          <td><p>Format a single fluorescence polarization or anisotropy dataset for subsequent processing</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="fp_average_replicates.html">fp_average_replicates</a></code> </p>
+          </td>
+          <td><p>Average technical replicates from a fluorescence polarization or anisotropy experiment</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="fp_use_signal.html">fp_use_signal</a></code> </p>
+          </td>
+          <td><p>Choose which signal to fit between fluorescence polarization and anisotropy</p></td>
         </tr>
       </tbody><tbody>
         <tr>
@@ -236,8 +285,8 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#section-experiment-planning">Experiment planning</a></li>
-      <li><a href="#section-inspection-of-raw-data">Inspection of raw data</a></li>
-      <li><a href="#section-data-processing">Data processing</a></li>
+      <li><a href="#section-fret-analysis">FRET analysis</a></li>
+      <li><a href="#section-fluorescence-polarization-and-anisotropy-analysis">Fluorescence polarization and anisotropy analysis</a></li>
       <li><a href="#section-curve-fitting">Curve fitting</a></li>
       <li><a href="#section-equations">Equations</a></li>
     </ul>
@@ -246,7 +295,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Guillaume Gaullier.</p>
+  <p>Developed by Guillaume Gaullier, Karolin Luger.</p>
 </div>
 
 <div class="pkgdown">

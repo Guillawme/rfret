@@ -4,22 +4,26 @@ reference:
       Function for simulating a binding curve while planning an experiment
     contents:
       - plan_experiment
-  - title: "Inspection of raw data"
+  - title: "FRET analysis"
     desc: >
-      Function for inspecting raw data, finding outliers
+      Function for inspecting and processing FRET data
     contents:
       - fret_inspect_raw_data
       - fret_inspect_one_dataset
       - fret_save_inspection_plots
-  - title: "Data processing"
-    desc: >
-      Functions for processing raw data
-    contents:
       - fret_format_data
       - fret_format_one_dataset
       - fret_average_replicates
       - fret_correct_signal
       - fret_correct_one_dataset
+  - title: "Fluorescence polarization and anisotropy analysis"
+    desc: >
+      Function for inspecting and processing FP and FA data
+    contents:
+      - fp_format_data
+      - fp_format_one_dataset
+      - fp_average_replicates
+      - fp_use_signal
   - title: "Curve fitting"
     desc: >
       Functions for fitting experimental data and making a final figure
@@ -41,3 +45,4 @@ reference:
       Example datasets
   - contents:
       - fret_binding_data
+      - fp_binding_data

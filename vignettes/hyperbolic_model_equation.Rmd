@@ -35,7 +35,7 @@ of mass action):
 Determining $K_D$ is the goal of a binding assay, like a FRET
 titration experiment.
 
-## Deriving the hyperbola binding equation
+## Deriving the hyperbolic model equation
 
 To determine $K_D$, we need to measure [ML] at equilibrium. [M] and [L] can be
 expressed as a function of [ML] from equations 1 and 2, $M_{tot}$ is a known
@@ -62,7 +62,7 @@ Equation 4 defines a hyperbola, which is the shape of the saturation curve
 showing the concentration of complex [ML] as a function of the ligand
 concentration $L_{tot}$.
 
-## Using the hyperbola binding equation to fit a binding curve
+## Using the hyperbolic model equation to fit a binding curve
 
 If we have a detectable signal $S$ proportional to [ML] (like FRET), we can
 express it as a function of its minimal and maximal values ($S_{min}$ and

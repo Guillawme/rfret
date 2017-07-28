@@ -47,7 +47,7 @@ fit_binding_model <- function(data,
         stop("Unknown binding model. Available models: 'hyperbolic', 'hill', 'quadratic'.")
     }
 
-    # Optionally write the results in TXT files in the specified output directory
+    # Optionally write the results in CSV files in the specified output directory
     if (!is.null(output_directory)) {
         # Sanity check
         if (length(output_directory) > 1) {
@@ -126,11 +126,11 @@ fit_hill <- function(data) {
 #' @importFrom magrittr %>%
 
 fit_hyperbolic <- function(data) {
-    model = stats::as.formula(signal ~ hyperbolic(concentration,
-                                                  parameters = list(
-                                                      signal_min = signal_min,
-                                                      signal_max = signal_max,
-                                                      kd = kd)))
+    model <- stats::as.formula(signal ~ hyperbolic(concentration,
+                                                   parameters = list(
+                                                       signal_min = signal_min,
+                                                       signal_max = signal_max,
+                                                       kd = kd)))
     data %>%
         dplyr::group_by(Experiment) %>%
         dplyr::do(fit = minpack.lm::nlsLM(formula = model,
@@ -153,12 +153,12 @@ fit_hyperbolic <- function(data) {
 #' @importFrom magrittr %>%
 
 fit_quadratic <- function(data, probe_concentration) {
-    model = stats::as.formula(signal ~ quadratic(concentration,
-                                                 parameters = list(
-                                                     signal_min = signal_min,
-                                                     signal_max = signal_max,
-                                                     kd = kd,
-                                                     probe_conc = probe_concentration)))
+    model <- stats::as.formula(signal ~ quadratic(concentration,
+                                                  parameters = list(
+                                                      signal_min = signal_min,
+                                                      signal_max = signal_max,
+                                                      kd = kd,
+                                                      probe_conc = probe_concentration)))
     data %>%
         dplyr::group_by(Experiment) %>%
         dplyr::do(fit = minpack.lm::nlsLM(formula = model,

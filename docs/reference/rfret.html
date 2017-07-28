@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Hyperbolic model equation — hyperbolic • rfret</title>
+<title>rfret: Analyze FRET binding data — rfret • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,38 +96,24 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Hyperbolic model equation</h1>
+    <h1>rfret: Analyze FRET binding data</h1>
     </div>
 
     
-    <p>This function sets up the hyperbolic model equation for use by
-    <code><a href='fit_binding_model.html'>fit_binding_model</a></code>.</p>
+    <p>The rfret package provides functions to perform all steps of the analysis of
+FRET binding data: inspection of raw data, averaging of technical replicates,
+correction of the FRET signal using signal from a blank experiment, fitting
+of a binding model equation to the experimental data to determine the binding
+constant, making a final figure, and performing analysis in batch processing
+mode.</p>
     
 
-    <pre class="usage"><span class='fu'>hyperbolic</span>(<span class='no'>conc</span>, <span class='no'>parameters</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>conc</th>
-      <td><p>Ligand concentration.</p></td>
-    </tr>
-    <tr>
-      <th>parameters</th>
-      <td><p>A named list of parameters to be refined against the
-experimental data. Parameters for this equation are a binding constant
-(<code>kd</code>), and values of minimal and maximal signal (<code>signal_min</code>,
-<code>signal_max</code>).</p></td>
-    </tr>
-    </table>
-    
+        
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
                 </ul>
 
   </div>

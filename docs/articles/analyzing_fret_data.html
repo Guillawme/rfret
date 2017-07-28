@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Using rfret • rfret</title>
+<title>Analyzing FRET binding data • rfret</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
@@ -29,10 +29,34 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/analyzing_fret_data.html">Analyzing FRET binding data</a>
+    </li>
+    <li>
+      <a href="../articles/hyperbolic_model_equation.html">Deriving the hyperbolic model equation</a>
+    </li>
+    <li>
+      <a href="../articles/quadratic_model_equation.html">Deriving the quadratic model equation</a>
+    </li>
+    <li>
+      <a href="../articles/setting_up_experiment.html">Setting up a FRET titration experiment</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -47,16 +71,16 @@
       </header><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
-      <h1>Using rfret</h1>
+      <h1>Analyzing FRET binding data</h1>
                         <h4 class="author">Guillaume Gaullier</h4>
             
-            <h4 class="date">2017-06-28</h4>
+            <h4 class="date">2017-07-27</h4>
           </div>
 
     
     
 <div class="contents">
-<p>This documentation explains how to use the functions provided by the <code>rfret</code> package to analyze FRET titration experiments and determine the binding constant (Kd) of a macromolecular interaction. An example using a real-life dataset is presented and discussed.</p>
+<p>This documentation explains how to use the functions provided by the <code>rfret</code> package to analyze FRET binding data from titration experiments, and determine the binding constant (Kd) of a macromolecular interaction. An example using a real-life dataset is presented and discussed.</p>
 <div id="overview" class="section level1">
 <h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1>
@@ -265,13 +289,13 @@
 <span class="st">    </span><span class="kw"><a href="../reference/fret_inspect_raw_data.html">fret_inspect_raw_data</a></span>()</code></pre></div>
 <pre><code>## $.
 ## $.$donor</code></pre>
-<p><img src="using_rfret_files/figure-html/Inspect%20raw%20data-1.png" width="672"></p>
+<p><img src="analyzing_fret_data_files/figure-html/Inspect%20raw%20data-1.png" width="672"></p>
 <pre><code>## 
 ## $.$acceptor</code></pre>
-<p><img src="using_rfret_files/figure-html/Inspect%20raw%20data-2.png" width="672"></p>
+<p><img src="analyzing_fret_data_files/figure-html/Inspect%20raw%20data-2.png" width="672"></p>
 <pre><code>## 
 ## $.$fret</code></pre>
-<p><img src="using_rfret_files/figure-html/Inspect%20raw%20data-3.png" width="672"></p>
+<p><img src="analyzing_fret_data_files/figure-html/Inspect%20raw%20data-3.png" width="672"></p>
 <p>In the donor channel plot, all fluorescence intensities should be equal, since the donor-labeled molecule is present at the same concentration in all samples. In the titration experiment, it is expected that the fluorescence intensity of the donor channel will decrease at high concentration of acceptor if FRET happens (because part of the donor fluorescence is transferred to the acceptor instead of being emitted).</p>
 <p>In the acceptor channel plot, the fluorescence intensity should increase linearly with the acceptor-labeled molecule concentration across the titrations series. If the serial dilution was performed with good precision, all data points should cluster around a straight line, as in this example.</p>
 <p>The FRET channel plot quickly tells if the data contains useful signal: the titration and acceptor_only experiments should have visible differences in fluorescence intensity at some point in the titration series. If their data points perfectly overlap, it means the data doesn’t contain any useful signal.</p>
@@ -339,7 +363,7 @@ fret_binding_data %&gt;%
                       <span class="dt">probe_concentration =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw"><a href="../reference/make_figure.html">make_figure</a></span>(<span class="dt">probe_concentration =</span> <span class="dv">5</span>)</code></pre></div>
 <pre><code>## $.</code></pre>
-<p><img src="using_rfret_files/figure-html/Figure%20making-1.png" width="672"></p>
+<p><img src="analyzing_fret_data_files/figure-html/Figure%20making-1.png" width="672"></p>
 </div>
 </div>
 <div id="automated-processing-and-analysis" class="section level1">
@@ -387,7 +411,8 @@ my_files %&gt;%
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li>
 <a href="#overview">Overview</a><ul class="nav nav-pills nav-stacked">
@@ -414,7 +439,7 @@ my_files %&gt;%
 
 
       <footer><div class="copyright">
-  <p>Developed by Guillaume Gaullier.</p>
+  <p>Developed by Guillaume Gaullier, Karolin Luger.</p>
 </div>
 
 <div class="pkgdown">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Hyperbolic model equation — hyperbolic • rfret</title>
+<title>Average technical replicates from a fluorescence polarization or anisotropy experiment — fp_average_replicates • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,31 +96,50 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Hyperbolic model equation</h1>
+    <h1>Average technical replicates from a fluorescence polarization or anisotropy experiment</h1>
     </div>
 
     
-    <p>This function sets up the hyperbolic model equation for use by
-    <code><a href='fit_binding_model.html'>fit_binding_model</a></code>.</p>
+    <p>This function calculates averages of fluorescence polarization
+    or anisotropy values from an arbitrary number of technical replicates.</p>
     
 
-    <pre class="usage"><span class='fu'>hyperbolic</span>(<span class='no'>conc</span>, <span class='no'>parameters</span>)</pre>
+    <pre class="usage"><span class='fu'>fp_average_replicates</span>(<span class='no'>raw_data</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>conc</th>
-      <td><p>Ligand concentration.</p></td>
-    </tr>
-    <tr>
-      <th>parameters</th>
-      <td><p>A named list of parameters to be refined against the
-experimental data. Parameters for this equation are a binding constant
-(<code>kd</code>), and values of minimal and maximal signal (<code>signal_min</code>,
-<code>signal_max</code>).</p></td>
+      <th>raw_data</th>
+      <td><p>A dataframe containing the fluorescence polarization or
+anisotropy data. It must contain at least 8 columns named:</p><dl class='dl-horizontal'>
+<dt>Experiment</dt><dd><p>A unique name identifying each experiment.</p></dd>
+<dt>Type</dt><dd><p>For example, "titration".</p></dd>
+<dt>Replicate</dt><dd><p>A number identifying the technical replicate (1, 2, etc.).</p></dd>
+<dt>Observation</dt><dd><p>A number identifying each observation in a titration
+series (corresponds to the plate column numbers, if experiments are set
+up as rows in a 384-well plate). The number of observations for an
+experiment and its blanks must match, and a given observation number must
+associate data points at the same concentration in the titration series.</p></dd>
+<dt>concentration</dt><dd><p>The ligand concentration in the titration series.</p></dd>
+<dt>Polarization</dt><dd><p>Fluorescence polarization.</p></dd>
+<dt>Anisotropy</dt><dd><p>Fluorescence anisotropy.</p></dd>
+<dt>Intensity</dt><dd><p>Fluorescence intensity.</p></dd>
+</dl><p>The output of <code><a href='fp_format_data.html'>fp_format_data</a></code> can be used directly as input
+for this function.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A dataframe containing the reduced dataset after averaging across
+    replicates. It contains all of the above columns <em>except</em>
+    <code>Replicate</code>, because it returns the average values over replicates.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><code><a href='fp_format_data.html'>fp_format_data</a></code> to prepare datasets for use with
+    <code>fp_average_replicates</code>.</p>
     
 
   </div>
@@ -128,7 +147,11 @@ experimental data. Parameters for this equation are a binding constant
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
 
   </div>
 </div>
