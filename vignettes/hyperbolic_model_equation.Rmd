@@ -79,6 +79,8 @@ Substituting equation 4 into equation 5 gives us:
 
 In equation 6, $S_{min}$ and $S$ can be measured experimentally: they are,
 respectively, the signal observed without ligand, and across the titration
-series at given values of $L_{tot}$. The experimental data is, indeed,
-$S = f(L_{tot})$. $L_{tot}$ is a known experimental parameter. Therefore, $K_D$
-and $S_{max}$ can be determined by fitting equation 6 to the experimental data.
+series at given values of $L_{tot}$. The observed signal is, indeed, a function
+of the total ligand concentration. $L_{tot}$ is a known experimental parameter.
+Therefore, $K_D$ and $S_{max}$ can be determined by fitting equation 6 to the
+experimental data. In practice, $S_{min}$ is also obtained from fitting the
+equation to the experimental data.

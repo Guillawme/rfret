@@ -24,51 +24,8 @@
 #' @export
 
 fp_format_data <- function(input = NULL, skip_lines = 0) {
-    # Check the input type to determine how to access the data
-    if (is.null(input)) {
-        # If no input is provided, ask for one
-        stop("You must specify an input: a directory name, a vector of file names, a dataframe, or a list of dataframes.")
-    } else if (is.list(input) && is.data.frame(input)) {
-        # If a single dataframe is provided, we put it in a named list so mapply
-        # can process it
-        raw_data <- list(input)
-        names(raw_data) <- deparse(substitute(input))
-    } else if (is.list(input) && !is.data.frame(input)) {
-        # If we receive a list, we will assume it is a list of dataframes
-        # corresponding to already loaded datasets
-        raw_data <- input
-    } else if (is.character(input) && length(input) == 1) {
-        # If we receive a character, try to figure out whether it is the name
-        # of a directory or a vector of file names
-        if (dir.exists(input)) {
-            files <- list.files(pattern = ".csv")
-            raw_data <- lapply(files, readr::read_csv, skip = skip_lines)
-            names(raw_data) <- sub(files,
-                                   pattern = ".csv",
-                                   replacement = "")
-        } else if (file.exists(input)) {
-            raw_data <- lapply(input, readr::read_csv, skip = skip_lines)
-            names(raw_data) <- sub(input,
-                                   pattern = ".csv",
-                                   replacement = "")
-        } else {
-            stop("File or directory not found: ", input)
-        }
-    } else if (is.character(input) && length(input) > 1) {
-        # If we receive a character vector longer than 1, it has to be a set of
-        # fine names
-        if (FALSE %in% file.exists(input)) {
-            stop("File not found: ", input[file.exists(input) == FALSE])
-        } else {
-            raw_data <- lapply(input, readr::read_csv, skip = skip_lines)
-            names(raw_data) <- sub(input,
-                                   pattern = ".csv",
-                                   replacement = "")
-        }
-    } else {
-        # If the input doesn't match any of the above, complain!
-        stop("Please provide a valid directory name, or valid file names.")
-    }
+    # Load data
+    raw_data <- load_data(input, skip_lines)
 
     # Format data and return a single large dataframe
     raw_data %>%

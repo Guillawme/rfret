@@ -9,19 +9,14 @@ reference:
       Function for inspecting and processing FRET data
     contents:
       - fret_inspect_raw_data
-      - fret_inspect_one_dataset
-      - fret_save_inspection_plots
       - fret_format_data
-      - fret_format_one_dataset
       - fret_average_replicates
       - fret_correct_signal
-      - fret_correct_one_dataset
   - title: "Fluorescence polarization and anisotropy analysis"
     desc: >
-      Function for inspecting and processing FP and FA data
+      Function for processing FP and FA data
     contents:
       - fp_format_data
-      - fp_format_one_dataset
       - fp_average_replicates
       - fp_use_signal
   - title: "Curve fitting"
@@ -31,8 +26,6 @@ reference:
       - guess_parameters
       - fit_binding_model
       - make_figure
-      - make_one_figure
-      - detect_binding_model
   - title: "Equations"
     desc: >
        Definitions of binding model equations
@@ -41,8 +34,21 @@ reference:
       - hill
       - quadratic
   - title: "Datasets"
-  - desc: >
+    desc: >
       Example datasets
-  - contents:
+    contents:
       - fret_binding_data
       - fp_binding_data
+  - title: "Internal functions"
+    desc: >
+      Internal functions and utilities
+    contents:
+      - load_data
+      - read_files
+      - fret_inspect_one_dataset
+      - fret_save_inspection_plots
+      - fret_format_one_dataset
+      - fret_correct_one_dataset
+      - fp_format_one_dataset
+      - make_one_figure
+      - detect_binding_model
