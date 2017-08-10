@@ -7,20 +7,22 @@
 read_files(input = NULL, skip_lines = NULL)
 }
 \arguments{
-\item{input}{A vector of file names.}
+\item{input}{A vector of file names, optionally with named items.}
 
 \item{skip_lines}{The number of lines to skip at the beginning of CSV files
 (usually containing header information before the actual data starts).}
 }
 \value{
 A named list of dataframes to be further processed by
-    \code{*_format_data} functions.
+    \code{*_format_data} functions. If the input vector is named, these item
+    names will be retained in the output list. Otherwise, the list items will
+    be named after the files read fron disk.
 }
 \description{
 This internal function simply reads in data files.
 }
 \examples{
 \dontrun{
-load_data("my_data_directory", 4)
+read_files(my_file_list, 4)
 }
 }

@@ -63,18 +63,24 @@ load_data <- function(input = NULL, skip_lines = NULL) {
 #' @title Read files
 #'
 #' @description This internal function simply reads in data files.
-#' @param input A vector of file names.
+#' @param input A vector of file names, optionally with named items.
 #' @param skip_lines The number of lines to skip at the beginning of CSV files
 #'     (usually containing header information before the actual data starts).
 #' @return A named list of dataframes to be further processed by
-#'     \code{*_format_data} functions.
+#'     \code{*_format_data} functions. If the input vector is named, these item
+#'     names will be retained in the output list. Otherwise, the list items will
+#'     be named after the files read fron disk.
 #' @examples
 #' \dontrun{
-#' load_data("my_data_directory", 4)
+#' read_files(my_file_list, 4)
 #' }
 
 read_files <- function(input = NULL, skip_lines = NULL) {
     loaded_files <- lapply(input, readr::read_csv, skip = skip_lines)
-    names(loaded_files) <- sub(input, pattern = ".csv", replacement = "")
+    if(is.null(names(input))) {
+        names(loaded_files) <- sub(input, pattern = ".csv", replacement = "")
+    } else {
+        names(loaded_files) <- names(input)
+    }
     loaded_files
 }
