@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/analyzing_fp_data.html">Analyzing fluorescence polarization/anisotropy binding data</a>
+    </li>
+    <li>
       <a href="../articles/analyzing_fret_data.html">Analyzing FRET binding data</a>
     </li>
     <li>
@@ -77,7 +80,7 @@
       <a href="../articles/quadratic_model_equation.html">Deriving the quadratic model equation</a>
     </li>
     <li>
-      <a href="../articles/setting_up_experiment.html">Setting up a FRET titration experiment</a>
+      <a href="../articles/setting_up_fret_experiment.html">Setting up a FRET titration experiment</a>
     </li>
   </ul>
 </li>
@@ -140,27 +143,9 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="fret_inspect_one_dataset.html">fret_inspect_one_dataset</a></code> </p>
-          </td>
-          <td><p>Inspect raw fluorescence data from a single FRET binding assay</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fret_save_inspection_plots.html">fret_save_inspection_plots</a></code> </p>
-          </td>
-          <td><p>Save raw data plots from a single FRET binding dataset</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
             <p><code><a href="fret_format_data.html">fret_format_data</a></code> </p>
           </td>
           <td><p>Format raw experimental FRET binding data for subsequent processing</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fret_format_one_dataset.html">fret_format_one_dataset</a></code> </p>
-          </td>
-          <td><p>Format a single dataframe for subsequent processing</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -173,18 +158,12 @@
             <p><code><a href="fret_correct_signal.html">fret_correct_signal</a></code> </p>
           </td>
           <td><p>Correct FRET signal</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fret_correct_one_dataset.html">fret_correct_one_dataset</a></code> </p>
-          </td>
-          <td><p>Correct FRET signal for one experiment</p></td>
         </tr>
       </tbody><tbody>
         <tr>
           <th colspan="2">
             <h2 id="section-fluorescence-polarization-and-anisotropy-analysis" class="hasAnchor"><a href="#section-fluorescence-polarization-and-anisotropy-analysis" class="anchor"></a>Fluorescence polarization and anisotropy analysis</h2>
-            <p class="section-desc"><p>Function for inspecting and processing FP and FA data</p></p>
+            <p class="section-desc"><p>Function for processing FP and FA data</p></p>
           </th>
         </tr>
         <tr>
@@ -193,12 +172,6 @@
             <p><code><a href="fp_format_data.html">fp_format_data</a></code> </p>
           </td>
           <td><p>Format raw experimental fluorescence polarization or anisotropy binding data for subsequent processing</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fp_format_one_dataset.html">fp_format_one_dataset</a></code> </p>
-          </td>
-          <td><p>Format a single fluorescence polarization or anisotropy dataset for subsequent processing</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -237,18 +210,6 @@
             <p><code><a href="make_figure.html">make_figure</a></code> </p>
           </td>
           <td><p>Make a figure with experimental data and fitted binding curve</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="make_one_figure.html">make_one_figure</a></code> </p>
-          </td>
-          <td><p>Make a figure with data and binding curve from a single experiment</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="detect_binding_model.html">detect_binding_model</a></code> </p>
-          </td>
-          <td><p>Detect which binding model equation was used to fit a dataset</p></td>
         </tr>
       </tbody><tbody>
         <tr>
@@ -276,6 +237,88 @@
           </td>
           <td><p>Quadratic model equation</p></td>
         </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-datasets" class="hasAnchor"><a href="#section-datasets" class="anchor"></a>Datasets</h2>
+            <p class="section-desc"><p>Example datasets</p></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="fret_binding_data.html">fret_binding_data</a></code> </p>
+          </td>
+          <td><p>A FRET binding assay dataset</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="fp_binding_data.html">fp_binding_data</a></code> </p>
+          </td>
+          <td><p>A fluorecence polarization/anisotropy binding assay dataset</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-internal-functions" class="hasAnchor"><a href="#section-internal-functions" class="anchor"></a>Internal functions</h2>
+            <p class="section-desc"><p>Internal functions and utilities</p></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="load_data.html">load_data</a></code> </p>
+          </td>
+          <td><p>Check and load input data</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="read_files.html">read_files</a></code> </p>
+          </td>
+          <td><p>Read files</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="fret_inspect_one_dataset.html">fret_inspect_one_dataset</a></code> </p>
+          </td>
+          <td><p>Inspect raw fluorescence data from a single FRET binding assay</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="fret_save_inspection_plots.html">fret_save_inspection_plots</a></code> </p>
+          </td>
+          <td><p>Save raw data plots from a single FRET binding dataset</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="fret_format_one_dataset.html">fret_format_one_dataset</a></code> </p>
+          </td>
+          <td><p>Format a single dataframe for subsequent processing</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="fret_correct_one_dataset.html">fret_correct_one_dataset</a></code> </p>
+          </td>
+          <td><p>Correct FRET signal for one experiment</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="fp_format_one_dataset.html">fp_format_one_dataset</a></code> </p>
+          </td>
+          <td><p>Format a single fluorescence polarization or anisotropy dataset for subsequent processing</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="make_one_figure.html">make_one_figure</a></code> </p>
+          </td>
+          <td><p>Make a figure with data and binding curve from a single experiment</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="detect_binding_model.html">detect_binding_model</a></code> </p>
+          </td>
+          <td><p>Detect which binding model equation was used to fit a dataset</p></td>
+        </tr>
       </tbody>
       </table>
     </div>
@@ -289,6 +332,8 @@
       <li><a href="#section-fluorescence-polarization-and-anisotropy-analysis">Fluorescence polarization and anisotropy analysis</a></li>
       <li><a href="#section-curve-fitting">Curve fitting</a></li>
       <li><a href="#section-equations">Equations</a></li>
+      <li><a href="#section-datasets">Datasets</a></li>
+      <li><a href="#section-internal-functions">Internal functions</a></li>
     </ul>
   </div>
 </div>

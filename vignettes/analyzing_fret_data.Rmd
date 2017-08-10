@@ -8,7 +8,7 @@ output:
         fig_width: 5
         fig_height: 3.76
 vignette: >
-  %\VignetteIndexEntry{Using rfret}
+  %\VignetteIndexEntry{Analyzing FRET binding data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -52,12 +52,13 @@ calculation or any edit to the numbers obtained from a plate reader instrument:
 such manipulations in spreadsheet programs are time-consuming and error-prone,
 and doing calculations in a spreadsheet can accidentally alter the raw data.
 
-The raw data must be formatted like the following example (first and last 6 rows
-of a real-life dataset):
+The raw data must be formatted like the following example. This first table shows
+the first 6 rows of a real-life dataset:
 ```{r Raw data format (head), echo=FALSE, message=FALSE, warning=FALSE}
 knitr::kable(head(rfret::fret_binding_data))
 ```
 
+And this second table shows the last 6 rows of the same dataset:
 ```{r Raw data format (tail), echo=FALSE, message=FALSE, warning=FALSE}
 knitr::kable(tail(rfret::fret_binding_data))
 ```
