@@ -38,7 +38,7 @@ plan_experiment <- function(kd,
                                kd)
     } else if (binding_model == "hill") {
         my_equation <- hill
-        my_plot_title <- paste("Simulated curve: hill model,",
+        my_plot_title <- paste("Simulated curve: Hill model,",
                                "Kd =",
                                kd,
                                ", Hill coefficient =",
