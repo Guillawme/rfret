@@ -78,8 +78,12 @@ load_data <- function(input = NULL, skip_lines = NULL) {
 read_files <- function(input = NULL, skip_lines = NULL) {
     loaded_files <- lapply(input, readr::read_csv, skip = skip_lines)
     if(is.null(names(input))) {
+        # If the vector of files has no names attribute, use each corresponding
+        # file name without the .csv extension to name each element of the vector
         names(loaded_files) <- sub(input, pattern = ".csv", replacement = "")
     } else {
+        # Or simply keep the names attribute from the original vector, if
+        # it already exists
         names(loaded_files) <- names(input)
     }
     loaded_files
