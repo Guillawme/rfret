@@ -18,7 +18,8 @@ loaded in memory as dataframes.}
 A single dataframe with the combined input data, containing 8
     columns: \code{Experiment}, \code{Type}, \code{Replicate},
     \code{Observation}, \code{Polarization}, \code{Anisotropy},
-    \code{Intensity} and \code{concentration}.
+    \code{Intensity} and \code{concentration}. Rows with missing values
+    will be dropped.
 }
 \description{
 This function formats data for subsequent processing by

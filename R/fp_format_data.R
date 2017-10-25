@@ -13,7 +13,8 @@
 #' @return A single dataframe with the combined input data, containing 8
 #'     columns: \code{Experiment}, \code{Type}, \code{Replicate},
 #'     \code{Observation}, \code{Polarization}, \code{Anisotropy},
-#'     \code{Intensity} and \code{concentration}.
+#'     \code{Intensity} and \code{concentration}. Rows with missing values
+#'     will be dropped.
 #' @examples
 #' \dontrun{
 #' fp_format_data("my_data_directory", 4)
@@ -33,7 +34,8 @@ fp_format_data <- function(input = NULL, skip_lines = 0) {
                .,
                names(raw_data),
                SIMPLIFY = FALSE) %>%
-        dplyr::bind_rows()
+        dplyr::bind_rows() %>%
+        tidyr::drop_na()
 }
 
 #' @title Format a single fluorescence polarization or anisotropy dataset for subsequent processing
@@ -52,7 +54,7 @@ fp_format_data <- function(input = NULL, skip_lines = 0) {
 #' fp_format_one_dataset(my_data, "my_experiment")
 #' }
 #'
-#' @importFrom magrittr %>% %<>%
+#' @importFrom magrittr %>%
 
 fp_format_one_dataset <- function(raw_data, experiment_name) {
     # Generate an Experiment column, where the experiment name is its
@@ -60,31 +62,28 @@ fp_format_one_dataset <- function(raw_data, experiment_name) {
     raw_data$Experiment <- experiment_name
 
     # Generate columns Type and Replicate, based on column Content
-    raw_data %<>%
+    raw_data %>%
         dplyr::rowwise() %>%
         dplyr::mutate(intermediate = strsplit(Content,
                                               split = ".",
                                               fixed = TRUE),
                       Type = intermediate[1],
                       Replicate = intermediate[2]) %>%
-        dplyr::select(-intermediate)
-
-    # Generate an Observation column, to label observations across different
-    # types of experiments (blank, titration) and replicates
-    raw_data %<>%
+        dplyr::select(-intermediate) %>%
+        # Generate an Observation column, to label observations across different
+        # types of experiments (blank, titration) and replicates
         dplyr::group_by(Experiment, Type, Replicate) %>%
         dplyr::mutate(Observation =
                           dplyr::row_number(dplyr::desc(concentration))) %>%
-        dplyr::ungroup()
-
-    # Reorder columns and return dataset
-    raw_data[c("Experiment",
-               "Type",
-               "Replicate",
-               "Observation",
-               "Polarization",
-               "Anisotropy",
-               "Intensity",
-               "concentration")] %>%
+        dplyr::ungroup() %>%
+        # Reorder columns and return dataset
+        dplyr::select(Experiment,
+                      Type,
+                      Replicate,
+                      Observation,
+                      Polarization,
+                      Anisotropy,
+                      Intensity,
+                      concentration) %>%
         dplyr::mutate(Replicate = as.integer(Replicate))
 }

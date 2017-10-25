@@ -18,7 +18,8 @@ loaded in memory as dataframes.}
 A single dataframe with the combined input data, containing 8
     columns: \code{Experiment}, \code{Type}, \code{Replicate},
     \code{Observation}, \code{fret_channel}, \code{acceptor_channel},
-    \code{donor_channel} and \code{concentration}.
+    \code{donor_channel} and \code{concentration}. Rows with missing values
+    will be dropped.
 }
 \description{
 This function formats data for subsequent processing by
