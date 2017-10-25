@@ -58,7 +58,9 @@ fit_binding_model <- function(data,
     fits_failure <- fits %>%
         dplyr::filter(status == "failure")
     if(nrow(fits_failure) > 0) {
-        warning("Failed to fit datasets: ", fits_failure$Experiment)
+        warning("Failed to fit datasets: ",
+                paste(fits_failure$Experiment, collapse = " "),
+                call. = FALSE)
     }
 
     # Optionally write the results in CSV files in the specified output directory
