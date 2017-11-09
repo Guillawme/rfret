@@ -1,0 +1,34 @@
+{
+// Only change the right-hand side of the pairs delimited by `:'.
+
+// Map internal column names to the corresponding column names in data files.
+
+// Common columns:
+"content": "Content",
+"concentration": "concentration",
+
+// FRET columns:
+"fret_channel": "fret_channel",
+"acceptor_channel": "acceptor_channel",
+"donor_channel": "donor_channel",
+
+// FP columns:
+"parallel": "Raw Data (parallel)",
+"perpendicular": "Raw Data (perpendicular)",
+"polarization": "Polarization",
+"anisotropy": "Anisotropy",
+"intensity": "Intensity",
+
+// Map internal sample types to the corresponding factors in data files.
+
+// Common sample types:
+"titration": "titration",
+
+// FRET sample types:
+"acceptor_only": "acceptor_only",
+"donor_only": "donor_only",
+"buffer_only": "buffer_only",
+
+// FP sample types:
+"baseline": "baseline"
+}

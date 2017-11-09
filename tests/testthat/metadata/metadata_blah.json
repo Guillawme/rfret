@@ -1,0 +1,11 @@
+{
+// Map internal column names to the corresponding column names in data files.
+// Only change the right-hand side of the pairs delimited by `:'.
+"fret_channel": "fret_blah",
+"acceptor_channel": "acceptor_blah",
+"donor_channel": "donor_blah",
+"acceptor_only": "acceptor_only_bleh",
+"donor_only": "donor_only_bleh",
+"titration": "titration_bleh",
+"concentration": "concentration_blah"
+}

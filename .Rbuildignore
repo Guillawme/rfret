@@ -7,3 +7,4 @@ binding-curve.png
 ^docs$
 _pkgdown.yml
 ^_pkgdown\.yml$
+data-raw/*
