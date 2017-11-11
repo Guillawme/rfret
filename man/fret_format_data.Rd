@@ -4,7 +4,7 @@
 \alias{fret_format_data}
 \title{Format raw experimental FRET binding data for subsequent processing}
 \usage{
-fret_format_data(input = NULL, skip_lines = 0)
+fret_format_data(input = NULL, skip_lines = 0, metadata_json = NULL)
 }
 \arguments{
 \item{input}{A directory name, a vector of file names, a single dataset
@@ -13,6 +13,30 @@ loaded in memory as dataframes.}
 
 \item{skip_lines}{The number of lines to skip at the beginning of CSV files
 (usually containing header information before the actual data starts).}
+
+\item{metadata_json}{A JSON file describing mappings between internal
+names and metadata information in the actual data files. It can contain
+the following entries:
+\describe{
+\item{\code{content}}{The name of the column describing sample content.
+Default value: \code{"Content"}.}
+\item{\code{concentration}}{The name of the column containing the
+concentration series. Default value: \code{"concentration"}.}
+\item{\code{fret_channel}}{The name of the column containing fluorescence
+intensities from the FRET channel. Default value: \code{"fret_channel"}.}
+\item{\code{acceptor_channel}}{The name of the column containing
+fluorescence intensities from the acceptor channel. Default value:
+\code{"acceptor_channel"}.}
+\item{\code{donor_channel}}{The name of the column containing fluorescence
+intensities from the donor channel. Default value: \code{"donor_channel"}.}
+\item{\code{titration}}{The name describing points of the titration
+series. Default value: \code{"titration"}.}
+\item{\code{acceptor_only}}{The name describing points of the control
+series with only acceptor. Default value: \code{"acceptor_only"}.}
+\item{\code{donor_only}}{The name describing points of the control series
+with only donor. Default value: \code{"donor_only"}.}
+\item{\code{buffer_only}}{The name describing points of the control
+series with only buffer. Default value: \code{"buffer_only"}.}}}
 }
 \value{
 A single dataframe with the combined input data, containing 8
@@ -27,10 +51,4 @@ This function formats data for subsequent processing by
     in a given directory, or any number of data files specified by their
     names, or any number of dataframes supplied as a named list, or even a
     single dataframe supplied as is.
-}
-\examples{
-\dontrun{
-format_data("my_data_directory", 4)
-}
-
 }

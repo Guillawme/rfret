@@ -33,6 +33,7 @@
 #' @export
 
 fret_average_replicates <- function(raw_data) {
+    # Perform replicate averaging.
     raw_data %>%
         dplyr::group_by(Experiment, Type, Observation, concentration) %>%
         dplyr::summarise(fret_channel     = mean(fret_channel),
