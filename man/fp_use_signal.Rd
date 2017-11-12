@@ -18,9 +18,9 @@ up as rows in a 384-well plate). The number of observations for an
 experiment and its blanks must match, and a given observation number must
 associate data points at the same concentration in the titration series.}
 \item{concentration}{The ligand concentration in the titration series.}
-\item{Polarization}{Fluorescence polarization.}
-\item{Anisotropy}{Fluorescence anisotropy.}
-\item{Intensity}{Fluorescence intensity.}
+\item{polarization}{Fluorescence polarization.}
+\item{anisotropy}{Fluorescence anisotropy.}
+\item{intensity}{Fluorescence intensity.}
 }
 The output of \code{\link{fp_average_replicates}} can be used directly as
 input for this function.}

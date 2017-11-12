@@ -1,4 +1,4 @@
-Experiment,Type,Observation,concentration,Polarization,Anisotropy,Intensity
+Experiment,Type,Observation,concentration,polarization,anisotropy,intensity
 input,baseline,1,0,62.7,42.7,35946.5
 input,baseline,2,0,67.4,45.900000000000006,35490
 input,titration,1,1e3,283.2,208.45,34276

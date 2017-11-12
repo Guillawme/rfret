@@ -4,7 +4,7 @@
 \alias{fp_format_data}
 \title{Format raw experimental fluorescence polarization or anisotropy binding data for subsequent processing}
 \usage{
-fp_format_data(input = NULL, skip_lines = 0)
+fp_format_data(input = NULL, skip_lines = 0, metadata_json = NULL)
 }
 \arguments{
 \item{input}{A directory name, a vector of file names, a single dataset
@@ -13,12 +13,42 @@ loaded in memory as dataframes.}
 
 \item{skip_lines}{The number of lines to skip at the beginning of CSV files
 (usually containing header information before the actual data starts).}
+
+\item{metadata_json}{A JSON file describing mappings between internal
+names and metadata information in the actual data files. It can contain
+the following entries:
+\describe{
+\item{\code{content}}{The name of the column describing sample content.
+Default value: \code{"Content"}.}
+\item{\code{concentration}}{The name of the column containing the
+concentration series. Default value: \code{"concentration"}.}
+\item{\code{parallel}}{The name of the column containing fluorescence
+intensities from the parallel channel. Default value: \code{"parallel"}.}
+\item{\code{perpendicular}}{The name of the column containing
+fluorescence intensities from the perpendicular channel. Default value:
+\code{"perpendicular"}.}
+\item{\code{polarization}}{The name of the column containing fluorescence
+polarization values, if already calculated by the instrument. Default
+value: \code{"polarization"}.}
+\item{\code{anisotropy}}{The name of the column containing fluorescence
+anisotropy values, if already calculated by the instrument. Default
+value: \code{"anisotropy"}.}
+\item{\code{intensity}}{The name of the column containing total
+fluorescence intensity values, if already calculated by the instrument.
+Default value: \code{"intensity"}.}
+\item{\code{titration}}{The name describing points of the titration
+series. Default value: \code{"titration"}.}
+\item{\code{baseline}}{The name describing points of the baseline series
+(fluorescent probe only, without titrant molecule). Default value:
+\code{"baseline"}.}
+\item{\code{buffer_only}}{The name describing points of the control
+series with only buffer. Default value: \code{"buffer_only"}.}}}
 }
 \value{
 A single dataframe with the combined input data, containing 8
     columns: \code{Experiment}, \code{Type}, \code{Replicate},
-    \code{Observation}, \code{Polarization}, \code{Anisotropy},
-    \code{Intensity} and \code{concentration}. Rows with missing values
+    \code{Observation}, \code{polarization}, \code{anisotropy},
+    \code{intensity} and \code{concentration}. Rows with missing values
     will be dropped.
 }
 \description{
