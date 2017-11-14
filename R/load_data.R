@@ -37,9 +37,9 @@ load_data <- function(input = NULL, skip_lines = NULL) {
         # of a directory or a vector of file names
         if (dir.exists(input)) {
             files <- list.files(path = input, pattern = ".csv")
-            raw_data <- read_files(files, skip = skip_lines)
+            raw_data <- read_files(files, skip_lines = skip_lines)
         } else if (file.exists(input)) {
-            raw_data <- read_files(input, skip = skip_lines)
+            raw_data <- read_files(input, skip_lines = skip_lines)
         } else {
             stop("File or directory not found: ", input)
         }
@@ -49,7 +49,7 @@ load_data <- function(input = NULL, skip_lines = NULL) {
         if (FALSE %in% file.exists(input)) {
             stop("File not found: ", input[file.exists(input) == FALSE])
         } else {
-            raw_data <- read_files(input, skip = skip_lines)
+            raw_data <- read_files(input, skip_lines = skip_lines)
         }
     } else {
         # If the input doesn't match any of the above, complain!
