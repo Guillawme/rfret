@@ -46,7 +46,7 @@ get_user_metadata <- function(user_json_file) {
     }
 
     # Remember default metadata for when we need to reset it.
-    default_metadata <- .rfret$metadata
+    default_metadata <- get(x = "metadata", envir = .rfret)
 
     # Read new metadata supplied by the user.
     user_metadata <- user_json_file %>%
@@ -54,7 +54,7 @@ get_user_metadata <- function(user_json_file) {
         rlang::syms()
 
     # Merge them with default metadata.
-    current_metadata <- .rfret$metadata
+    current_metadata <- get(x = "metadata", envir = .rfret)
     new_metadata <- utils::modifyList(x = current_metadata,
                                       val = user_metadata)
 

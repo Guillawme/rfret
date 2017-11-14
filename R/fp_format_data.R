@@ -61,7 +61,7 @@ fp_format_data <- function(input = NULL,
     # after the function terminates.
     if(!is.null(metadata_json)) {
         default <- get_user_metadata(metadata_json)
-        on.exit(.rfret$metadata <- default)
+        on.exit(assign(x = "metadata", value = default, envir = .rfret))
     }
 
     # Load data

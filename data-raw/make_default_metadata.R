@@ -11,10 +11,14 @@ metadata <- "./data-raw/default_metadata.json" %>%
     jsonlite::read_json() %>%
     rlang::syms()
 
+# Build environment and store metadata in it.
+.rfret <- rlang::new_environment()
+assign(x = "metadata", value = metadata, envir = .rfret)
+
 # Save environment in the internal data store.
 devtools::use_data(internal = TRUE,
                    overwrite = TRUE,
-                   metadata)
+                   .rfret)
 
-# Clean up
-remove(metadata)
+# Clean up workspace.
+remove(metadata, .rfret)
