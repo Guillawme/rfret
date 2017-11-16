@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Guess initial values for parameters of the binding model equations — guess_parameters • rfret</title>
+<title>Calculate fluorescence polarization and anisotropy from raw data — fp_calculate_polarization_anisotropy • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
+  <a href="..//index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -72,9 +72,6 @@
     </li>
     <li>
       <a href="../articles/analyzing_fret_data.html">Analyzing FRET binding data</a>
-    </li>
-    <li>
-      <a href="../articles/extending_rfret.html">Extending rfret</a>
     </li>
     <li>
       <a href="../articles/hyperbolic_model_equation.html">Deriving the hyperbolic model equation</a>
@@ -102,32 +99,50 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Guess initial values for parameters of the binding model equations</h1>
+    <h1>Calculate fluorescence polarization and anisotropy from raw data</h1>
     </div>
 
     
-    <p>This function provides reasonable initial guesses for <code>kd</code>,
-    <code>signal_min</code> and <code>signal_max</code> (parameters of the binding model
-    equations used to fit the data).</p>
+    <p>This function calculates fluorescence polarization and
+    anisotropy values from the raw data of parallel and perpendicularly
+    polarized channels.</p>
     
 
-    <pre class="usage"><span class='fu'>guess_parameters</span>(<span class='no'>input_data</span>)</pre>
+    <pre class="usage"><span class='fu'>fp_calculate_polarization_anisotropy</span>(<span class='no'>raw_data</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>input_data</th>
-      <td><p>A dataframe containing the corrected binding signal. It must
-contain at least two columns: <code>concentration</code> (the ligand
-concentration) and <code>signal</code> (the observed binding signal).</p></td>
+      <th>raw_data</th>
+      <td><p>A dataframe containing the raw data. It must contain at least
+8 columns named:</p><dl class='dl-horizontal'>
+<dt>Experiment</dt><dd><p>A unique name identifying each experiment.</p></dd>
+<dt>Type</dt><dd><p>For example, "titration".</p></dd>
+<dt>Replicate</dt><dd><p>A number identifying the technical replicate (1, 2, etc.).</p></dd>
+<dt>Observation</dt><dd><p>A number identifying each observation in a titration
+series (corresponds to the plate column numbers, if experiments are set
+up as rows in a 384-well plate). The number of observations for an
+experiment and its blanks must match, and a given observation number must
+associate data points at the same concentration in the titration series.</p></dd>
+<dt>concentration</dt><dd><p>The ligand concentration in the titration series.</p></dd>
+<dt>parallel</dt><dd><p></p></dd>
+<dt>perpendicular</dt><dd><p></p></dd>
+<dt>Intensity</dt><dd><p>Fluorescence intensity.</p></dd>
+</dl><p>The output of <code><a href='fp_format_data.html'>fp_format_data</a></code> can be used directly as input
+for this function.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list containing initial guesses for <code>kd</code>,
-    <code>signal_min</code> and <code>signal_max</code>.</p>
+    <p>A dataframe containing the same columns as the input dataframe, plus
+    two columns called <code>Polarization</code> and <code>Anisotropy</code>.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><code><a href='fp_format_data.html'>fp_format_data</a></code> to prepare datasets for use with
+    <code>fp_calculate_polarization_anisotropy</code>.</p>
     
 
   </div>
@@ -137,6 +152,8 @@ concentration) and <code>signal</code> (the observed binding signal).</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>

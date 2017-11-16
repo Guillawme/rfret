@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Guess initial values for parameters of the binding model equations — guess_parameters • rfret</title>
+<title>Save raw data plots from a single FP binding dataset — fp_save_inspection_plot • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -102,32 +102,43 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Guess initial values for parameters of the binding model equations</h1>
+    <h1>Save raw data plots from a single FP binding dataset</h1>
     </div>
 
     
-    <p>This function provides reasonable initial guesses for <code>kd</code>,
-    <code>signal_min</code> and <code>signal_max</code> (parameters of the binding model
-    equations used to fit the data).</p>
+    <p>This internal function saves the total fluorescence intensity
+    plots from an FP dataset to PNG, PDF or SVG files.</p>
     
 
-    <pre class="usage"><span class='fu'>guess_parameters</span>(<span class='no'>input_data</span>)</pre>
+    <pre class="usage"><span class='fu'>fp_save_inspection_plot</span>(<span class='no'>input_plot</span>, <span class='no'>dataset_name</span>, <span class='no'>output_directory</span>, <span class='no'>plot_format</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>input_data</th>
-      <td><p>A dataframe containing the corrected binding signal. It must
-contain at least two columns: <code>concentration</code> (the ligand
-concentration) and <code>signal</code> (the observed binding signal).</p></td>
+      <th>input_plot</th>
+      <td><p>The output of  <code><a href='fp_inspect_one_dataset.html'>fp_inspect_one_dataset</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>dataset_name</th>
+      <td><p>The name of the corresponding dataset.</p></td>
+    </tr>
+    <tr>
+      <th>output_directory</th>
+      <td><p>The name of the output directory where plots will be
+saved.</p></td>
+    </tr>
+    <tr>
+      <th>plot_format</th>
+      <td><p>A character string indicating the file format to use to
+save plots. Possible values are <code>"png"</code> (default value),
+<code>"pdf"</code> and <code>"svg"</code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list containing initial guesses for <code>kd</code>,
-    <code>signal_min</code> and <code>signal_max</code>.</p>
+    <p>Writes plots in files on disk.</p>
     
 
   </div>

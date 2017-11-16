@@ -29,7 +29,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="/index.html">
+  <a href="index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -45,7 +45,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/analyzing_fp_data.html">Analyzing fluorescence polarization/anisotropy binding data</a>
+    </li>
+    <li>
       <a href="articles/analyzing_fret_data.html">Analyzing FRET binding data</a>
+    </li>
+    <li>
+      <a href="articles/extending_rfret.html">Extending rfret</a>
     </li>
     <li>
       <a href="articles/hyperbolic_model_equation.html">Deriving the hyperbolic model equation</a>
@@ -70,9 +76,7 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-    <div id="rfret-analyze-fret-binding-data-with-r" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#rfret-analyze-fret-binding-data-with-r" class="anchor"></a>rfret: Analyze FRET Binding Data with R</h1></div>
+    <section class="level1"><div class="page-header"><h1>rfret: Analyze FRET Binding Data with R</h1></div>
 
 <p>This R package allows you to analyze FRET binding data and produce this kind of binding curve figure:</p>
 <p><img src="binding-curve.png" alt="Binding curve"></p>
@@ -87,23 +91,20 @@
 <li>plot the corrected FRET signal and the binding curve obtained by fitting the data.</li>
 </ol>
 <p>This package allows batch processing and analysis of any number of datasets at a time.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<section class="level2"><h2>Installation</h2>
 <p>First, install the <code>devtools</code> package, if not already present on your system:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"devtools"</span>)</code></pre></div>
+<pre class="sourceCode r" id="cb1"><code class="sourceCode r"><div class="sourceLine" id="cb1-1" data-line-number="1">
+<span class="kw">install.packages</span>(<span class="st">"devtools"</span>)</div></code></pre>
 <p>You can then install <code>rfret</code> from GitHub, right from within R:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"Guilz/rfret"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</code></pre></div>
-</div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
+<pre class="sourceCode r" id="cb2"><code class="sourceCode r"><div class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"Guilz/rfret"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</div></code></pre>
+</section><section class="level2"><h2>Usage</h2>
 <p>You can access a detailed tutorial using the following commands:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rfret)
-<span class="kw">vignette</span>(<span class="st">"using_rfret"</span>)</code></pre></div>
+<pre class="sourceCode r" id="cb3"><code class="sourceCode r"><div class="sourceLine" id="cb3-1" data-line-number="1">
+<span class="kw">library</span>(rfret)</div>
+<div class="sourceLine" id="cb3-2" data-line-number="2">
+<span class="kw">vignette</span>(<span class="st">"using_rfret"</span>)</div></code></pre>
+</section></section>
 </div>
-</div>
-  </div>
 
   <div class="col-md-3" id="sidebar">
     <h2>License</h2>

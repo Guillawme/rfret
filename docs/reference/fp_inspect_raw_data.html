@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Guess initial values for parameters of the binding model equations — guess_parameters • rfret</title>
+<title>Inspect raw fluorescence data from FP binding assays — fp_inspect_raw_data • rfret</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -102,32 +102,51 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Guess initial values for parameters of the binding model equations</h1>
+    <h1>Inspect raw fluorescence data from FP binding assays</h1>
     </div>
 
     
-    <p>This function provides reasonable initial guesses for <code>kd</code>,
-    <code>signal_min</code> and <code>signal_max</code> (parameters of the binding model
-    equations used to fit the data).</p>
+    <p>This function plots the total fluorescence intensity from FP
+    datasets as a function of the titration series.</p>
     
 
-    <pre class="usage"><span class='fu'>guess_parameters</span>(<span class='no'>input_data</span>)</pre>
+    <pre class="usage"><span class='fu'>fp_inspect_raw_data</span>(<span class='no'>raw_data</span>, <span class='kw'>highest_signal</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>output_directory</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>plot_format</span> <span class='kw'>=</span> <span class='st'>"png"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>input_data</th>
-      <td><p>A dataframe containing the corrected binding signal. It must
-contain at least two columns: <code>concentration</code> (the ligand
-concentration) and <code>signal</code> (the observed binding signal).</p></td>
+      <th>raw_data</th>
+      <td><p>A dataframe containing the raw fluorescence data. It must
+be the output of <code><a href='fp_format_data.html'>fp_format_data</a></code> or
+<code><a href='fp_calculate_pola_aniso_int.html'>fp_calculate_pola_aniso_int</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>highest_signal</th>
+      <td><p>An optional number corresponding to the maximal signal
+measurable by the plate reader instrument used. Defaults to <code>NULL</code>,
+which won't check for the presence of saturated reads. The input number
+is not checked in any way: make sure it really corresponds to a saturated
+read with your instrument.</p></td>
+    </tr>
+    <tr>
+      <th>output_directory</th>
+      <td><p>An optional directory name where to write plots. This
+directory will be created if it does not already exist.</p></td>
+    </tr>
+    <tr>
+      <th>plot_format</th>
+      <td><p>A character string indicating the file format to use to
+save plots. Possible values are <code>"png"</code> (default value),
+<code>"pdf"</code> and <code>"svg"</code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list containing initial guesses for <code>kd</code>,
-    <code>signal_min</code> and <code>signal_max</code>.</p>
+    <p>A list in which each item is named after the corresponding experiment,
+    and holds a <code>ggplot2</code> graph objects named <code>fluo_intensity</code>.</p>
     
 
   </div>
