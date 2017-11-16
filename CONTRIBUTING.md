@@ -13,9 +13,9 @@ Contributors, please follow this standard workflow:
 1. Fork this repository to your GitHub account.
 2. Make your modifications, ideally in a branch named after the particular
    feature or modification you are contributing.
-3. Send a pull request.
+3. Send a pull request to my `dev` branch.
 4. Be patient, and don't be upset if I take days to get back to you: I am
-   maintaining this package in my free time.
+   maintaining this package on my free time.
 
 Also please follow these additional guidelines:
 
@@ -27,10 +27,12 @@ Also please follow these additional guidelines:
     * vignettes build without errors (use `devtools::build_vignettes()`);
     * you rebuilt the documentation website (use `pkgdown::build_site()`);
     * all unit tests pass (use `devtools::test()`);
-    * in case you modified an interface, you updated the corresponding unit test
-      or added an appropriate unit test to cover this new case;
+    * in case you modified an interface, you updated the documentation and the 
+      corresponding unit test, or added an appropriate unit test to cover this 
+      new case;
     * `devtools::check()` finishes with no errors and no warnings (notes are OK,
-      but please explain what caused them in your PR);
+      but please explain what caused them in your PR if you get more notes than
+      my `master` branch);
     * `devtools::install()` finishes with no errors and no warnings.
 
 
