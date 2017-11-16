@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -72,6 +72,9 @@
     </li>
     <li>
       <a href="../articles/analyzing_fret_data.html">Analyzing FRET binding data</a>
+    </li>
+    <li>
+      <a href="../articles/extending_rfret.html">Extending rfret</a>
     </li>
     <li>
       <a href="../articles/hyperbolic_model_equation.html">Deriving the hyperbolic model equation</a>
@@ -110,7 +113,7 @@
     single dataframe supplied as is.</p>
     
 
-    <pre class="usage"><span class='fu'>fp_format_data</span>(<span class='kw'>input</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>skip_lines</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+    <pre class="usage"><span class='fu'>fp_format_data</span>(<span class='kw'>input</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>skip_lines</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>metadata_json</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -126,14 +129,46 @@ loaded in memory as dataframes.</p></td>
       <td><p>The number of lines to skip at the beginning of CSV files
 (usually containing header information before the actual data starts).</p></td>
     </tr>
+    <tr>
+      <th>metadata_json</th>
+      <td><p>A JSON file describing mappings between internal
+names and metadata information in the actual data files. It can contain
+the following entries:</p><dl class='dl-horizontal'>
+<dt><code>content</code></dt><dd><p>The name of the column describing sample content.
+Default value: <code>"Content"</code>.</p></dd>
+<dt><code>concentration</code></dt><dd><p>The name of the column containing the
+concentration series. Default value: <code>"concentration"</code>.</p></dd>
+<dt><code>parallel</code></dt><dd><p>The name of the column containing fluorescence
+intensities from the parallel channel. Default value: <code>"parallel"</code>.</p></dd>
+<dt><code>perpendicular</code></dt><dd><p>The name of the column containing
+fluorescence intensities from the perpendicular channel. Default value:
+<code>"perpendicular"</code>.</p></dd>
+<dt><code>polarization</code></dt><dd><p>The name of the column containing fluorescence
+polarization values, if already calculated by the instrument. Default
+value: <code>"polarization"</code>.</p></dd>
+<dt><code>anisotropy</code></dt><dd><p>The name of the column containing fluorescence
+anisotropy values, if already calculated by the instrument. Default
+value: <code>"anisotropy"</code>.</p></dd>
+<dt><code>intensity</code></dt><dd><p>The name of the column containing total
+fluorescence intensity values, if already calculated by the instrument.
+Default value: <code>"intensity"</code>.</p></dd>
+<dt><code>titration</code></dt><dd><p>The name describing points of the titration
+series. Default value: <code>"titration"</code>.</p></dd>
+<dt><code>baseline</code></dt><dd><p>The name describing points of the baseline series
+(fluorescent probe only, without titrant molecule). Default value:
+<code>"baseline"</code>.</p></dd>
+<dt><code>buffer_only</code></dt><dd><p>The name describing points of the control
+series with only buffer. Default value: <code>"buffer_only"</code>.</p></dd></dl></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A single dataframe with the combined input data, containing 8
     columns: <code>Experiment</code>, <code>Type</code>, <code>Replicate</code>,
-    <code>Observation</code>, <code>Polarization</code>, <code>Anisotropy</code>,
-    <code>Intensity</code> and <code>concentration</code>.</p>
+    <code>Observation</code>, <code>polarization</code>, <code>anisotropy</code>,
+    <code>intensity</code> and <code>concentration</code>. Rows with missing values
+    will be dropped.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

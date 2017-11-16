@@ -25,18 +25,18 @@ Analysis of FRET data can be broken down into the following steps, each of
 which `rfret` provides functions for:
 
 1. inspect raw data to detect possible outliers (function
-   `fret_inspect_raw_data`);
+   `fret_inspect_raw_data()`);
 2. average fluorescence intensities across technical replicates, if such
-   replicates were measured (function `fret_average_replicates`);
+   replicates were measured (function `fret_average_replicates()`);
 3. correct FRET signal of the titration experiment, using signal from blank
    experiments which contain no donor or no acceptor fluorophores (function
-   `fret_correct_signal`);
+   `fret_correct_signal()`);
 5. fit a binding model equation to the experimental data, to determine the
-   binding constant Kd (function `fit_binding_model`).
+   binding constant Kd (function `fit_binding_model()`).
 
-The `fit_binding_model` function is independent of the others. It can accept any
-data from other types of experiments, as long as this data comes as two columns
-called `concentration` and `signal`.
+The `fit_binding_model()` function is independent of the others. It can accept 
+any data from other types of experiments, as long as this data comes as two 
+columns called `concentration` and `signal`.
 
 On the other hand, all the FRET data processing functions (named with a common
 `fret_` prefix) are designed to work together: each function produces an output
@@ -70,8 +70,7 @@ export the data in a format similar to the previous table.
 
 The `Well Row` and `Well Col` columns present in this example dataset were
 created by the plate reader software used to produce this dataset, but `rfret`
-will simply ignore them and any other column except the following ones (these
-can come in any order, but must have the exact following case sensitive names):
+will simply ignore them and any other column except the following ones:
 
 - `Content`
 - `fret_channel`
@@ -79,24 +78,57 @@ can come in any order, but must have the exact following case sensitive names):
 - `donor_channel`
 - `concentration`
 
-Therefore, you will need to either edit these column names manually when you
-save your data, or set up your plate reader software to write these column
-names automatically for you. You might need to add the `concentration` column
-manually, if your plate reader software is not aware of your titration series.
+Your own datasets don't have to use the same column names, because `rfret` uses
+a mechanism to map the names found in the actual data files to the names it uses
+internally. This is achieved by providing a file in the JSON format indicating
+these mappings. **Note that the names mapped by this file are case-sensitive.**
 
-The `Content` column should contain, for each row, a name indicating what part
-of the experiment and what replicate this row belongs to, with the format
-`type.replicate` where `type` can be any word, and `replicate` is a number. They
-must be separated by a dot, and there can be only one dot in the entire resulting
-character string. The example dataset contains the following contents:
+Using this method, you won't ever need to edit column names manually in each file 
+when you save your data (which is tedious and error-prone). However, you might 
+need to add the `concentration` column manually if your plate reader software is 
+not aware of your titration series, and to fill the `content` column manually as 
+well if your plate reader software doesn't allow you to describe the contents of 
+your plate before performing the measurements. The `content` column should contain, 
+for each row, a name indicating what part of the experiment and what replicate 
+this row belongs to, with the format `type.replicate` where `type` can be any 
+word, and `replicate` must be a number. They must be separated by a dot, and 
+there can be only one dot in the entire resulting character string. The example 
+dataset contains the following contents:
 ```{r Content column levels, echo=FALSE, message=FALSE, warning=FALSE}
 levels(as.factor(rfret::fret_binding_data$Content))
 ```
 
+Here is an example of a JSON file mapping column names and contents description
+to `rfret`'s internal names. In such a file, you would simply have to indicate 
+the names found in your data files in the rigth-hand side of the key-value pairs 
+(the left-hand side being the name used internally by `rfret`):
+
+```
+{
+// Only change the right-hand side of the pairs delimited by ':'.
+
+// Map internal column names to the corresponding column names in data files.
+
+"content": "Content",
+"concentration": "concentration",
+"fret_channel": "Raw Data (488-20/680-50 1)",
+"acceptor_channel": "Raw Data (620-30/680-50 2)",
+"donor_channel": "Raw Data (488-20/535-30 3)",
+
+// Map internal sample types to the corresponding factors in data files.
+
+"titration": "my_titration",
+"acceptor_only": "my_acceptor_only_series",
+"donor_only": "my_donor_only_series",
+"buffer_only": "my_buffer_only_series"
+}
+```
+
 This data preparation step is the only one for which you will need to use a
-spreadsheet program (you can also edit the CSV file in a simple text editor,
+spreadsheet program (you can also edit the CSV files in a simple text editor,
 but a spreadsheet displays this sort of data in a way that is much easier to
-navigate). This step can be automated in the plate reader software as well.
+navigate). This step can probably be automated in most plate reader softwares as 
+well.
 
 # Analyzing a dataset
 
@@ -108,17 +140,17 @@ library(rfret)
 
 ## Data preparation for processing
 
-All `fret_` functions in this package work by first agregating together any
+All `fret_` functions in this package work by first concatenating together any
 number of datasets, to perform all subsequent data processing and analysis steps
-on a single, large internal data table. Any analysis must start by using the
-`fret_format_data` function to prepare the raw data.
+on a single, large internal dataframe. Any analysis must start by using the
+`fret_format_data()` function to prepare the raw data.
 
-The function `fret_format_data` takes either:
+The function `fret_format_data()` takes either:
 
 - the name of a single directory from which it will read all CSV files,
-- a single file name or a set of file names,
+- a single file name or a set of file names (as a character vector),
 - a single dataset already loaded in memory as a dataframe,
-- or a list of datasets already loaded in memory as dataframes.
+- or a named list of datasets already loaded in memory as dataframes.
 
 It will format the data properly for subsequent processing by the other
 functions.
@@ -133,8 +165,8 @@ detection is sensitive enough to detect very small pipetting errors, therefore,
 inspecting the fluorescence intensities in the donor and acceptor channels 
 provides an easy way to check for outliers in the series.
 
-The function `fret_inspect_raw_data` takes the output of `fret_format_data` and
-outputs, for each experiment, plots of the fluorescence intensity across the
+The function `fret_inspect_raw_data()` takes the output of `fret_format_data()`
+and outputs, for each experiment, plots of the fluorescence intensity across the
 titration series for the donor, acceptor and FRET channels.
 
 Let's look at an example:
@@ -163,11 +195,12 @@ points perfectly overlap, it means the data doesn't contain any useful signal.
 
 ## Data processing
 
-Automatic processing of raw data can be achieved using the pipe operator `%>%`
-from [the `magrittr` package][magrittr], and the three functions
-`fret_format_data`, `fret_average_replicates` and `fret_correct_signal`:
+Automatic processing of any number of data files can be achieved using the pipe
+operator `%>%` from [the `magrittr` package][magrittr], and the three functions
+`fret_format_data()`, `fret_average_replicates()` and `fret_correct_signal()`:
 ```
 library(magrittr)
+library(rfret)
 fret_binding_data %>%
     fret_format_data() %>%
     fret_average_replicates() %>%
@@ -179,13 +212,13 @@ other in the order of execution.
 
 ### Average technical replicates
 
-The function `fret_average_replicates` takes a raw dataset from
-`fret_format_data` and returns a dataset where the fluorescence intensity values
-have been averaged over the technical replicates.
+The function `fret_average_replicates()` takes the output of `fret_format_data()` 
+and returns a dataset where the fluorescence intensity values have been averaged 
+over the technical replicates.
 
 ### Correct FRET signal
 
-The function `fret_correct_signal` applies the correction described in the
+The function `fret_correct_signal()` applies the correction described in the
 following references:
 
 - Hieb AR *et al* (2012) Fluorescence Strategies for High-Throughput
@@ -195,20 +228,21 @@ following references:
   HI-FI System. In *Methods in Enzymology* pp 243–274. Elsevier.
   <https://doi.org/10.1016/B978-0-12-391940-3.00011-1>
 
-It takes a reduced dataset from `fret_average_replicates` and outputs the
-corrected FRET signal. Given a directory name, it will write out the corrected
-datasets to CSV files. These output files will have the same names as the input
-files, appended with `_corrected`. These files can be used to plot the
-corrected data using a different software, for example.
+It takes a reduced dataset from `fret_average_replicates()`, or the output of 
+`fret_format_data()` in case there are no replicates, and outputs the corrected 
+FRET signal. Given a directory name, it will write out the corrected datasets to 
+CSV files. These output files will have the same names as the input files, 
+appended with `_corrected`. These files can be used to plot the corrected data 
+using a different software, for example.
 
 ## Curve fitting
 
-The last step involves the function `fit_binding_model`. It takes a corrected
-dataset (output of `fret_correct_signal`) and a binding model. Currently available
-binding models are: `hyperbolic`, `hill` and `quadratic`. To use the quadratic,
-model the function also need the fixed concentration of probe molecule. It
-returns an `nls` object that can be further examined with standard functions
-(like `summary`) or used as input for `make_figure`.
+The last step involves the function `fit_binding_model()`. It takes a corrected
+dataset (output of `fret_correct_signal()`) and a binding model. Currently available
+binding models are: `"hyperbolic"`, `"hill"` and `"quadratic"`. To use the 
+quadratic model, the function also needs the fixed concentration of probe molecule. 
+It returns an `nls` object that can be further examined with standard functions
+(like `summary()`) or used as input for `make_figure()`.
 
 Fitting the example dataset with the quadratic model can be achieved as follows:
 ```{r Curve fitting, message=FALSE, warning=FALSE}
@@ -220,14 +254,14 @@ fret_binding_data %>%
                       probe_concentration = 5)
 ```
 
-Given a directory name, `fit_binding_model` will write its results to CSV files.
+Given a directory name, `fit_binding_model()` will write its results to CSV files.
 
 ## Final figure
 
-The function `make_figure` takes the output of `fit_binding_model` and returns
-a figure with a plot of the binding curve and a residual plot. Given a directory
-name, it will write the figure in a file named like the original input file.
-The figure is written as a PNG file by default, but the function can also write
+The function `make_figure()` takes the output of `fit_binding_model()` and returns
+figures with a plot of the binding curve and a residual plot. Given a directory
+name, it will write the figures in files named like the original input files.
+Figure are written as PNG files by default, but the function can also write
 PDF and SVG files.
 ```{r Figure making, message=FALSE, warning=FALSE}
 fret_binding_data %>%
@@ -254,7 +288,8 @@ my_files <- list.files(path = ".", pattern = ".csv")
 
 # Generate raw data plots and save them in a directory called 'data_inspection'
 my_files %>%
-    fret_format_data(skip_lines = 4) %>%
+    fret_format_data(skip_lines = 4, 
+                     metadata_json = "column_names.json") %>%
     fret_inspect_raw_data(output_directory = "./data_inspection",
                           plot_format = "png")
 
@@ -266,7 +301,8 @@ my_files %>%
 # 3. generate binding curve figures and save them as PNG files in a
 # directory 'final_figures'
 my_files %>%
-    fret_format_data(skip_lines = 4) %>%
+    fret_format_data(skip_lines = 4,
+                     metadata_json = "column_names.json") %>%
     fret_average_replicates() %>%
     fret_correct_signal(output_directory = "./corrected_data") %>%
     fit_binding_model(binding_model = "quadratic",

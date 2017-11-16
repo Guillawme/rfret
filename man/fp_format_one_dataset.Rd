@@ -13,8 +13,8 @@ fp_format_one_dataset(raw_data, experiment_name)
 }
 \value{
 A dataframe containing 8 columns: \code{Experiment}, \code{Type},
-    \code{Replicate}, \code{Observation}, \code{Polarization},
-    \code{Anisotropy}, \code{Intensity} and \code{concentration}.
+    \code{Replicate}, \code{Observation}, \code{polarization},
+    \code{anisotropy}, \code{intensity} and \code{concentration}.
 }
 \description{
 This internal function processes a single dataframe to generate

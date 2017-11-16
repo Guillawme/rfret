@@ -37,9 +37,9 @@ load_data <- function(input = NULL, skip_lines = NULL) {
         # of a directory or a vector of file names
         if (dir.exists(input)) {
             files <- list.files(path = input, pattern = ".csv")
-            raw_data <- read_files(files, skip = skip_lines)
+            raw_data <- read_files(files, skip_lines = skip_lines)
         } else if (file.exists(input)) {
-            raw_data <- read_files(input, skip = skip_lines)
+            raw_data <- read_files(input, skip_lines = skip_lines)
         } else {
             stop("File or directory not found: ", input)
         }
@@ -49,7 +49,7 @@ load_data <- function(input = NULL, skip_lines = NULL) {
         if (FALSE %in% file.exists(input)) {
             stop("File not found: ", input[file.exists(input) == FALSE])
         } else {
-            raw_data <- read_files(input, skip = skip_lines)
+            raw_data <- read_files(input, skip_lines = skip_lines)
         }
     } else {
         # If the input doesn't match any of the above, complain!
@@ -78,8 +78,12 @@ load_data <- function(input = NULL, skip_lines = NULL) {
 read_files <- function(input = NULL, skip_lines = NULL) {
     loaded_files <- lapply(input, readr::read_csv, skip = skip_lines)
     if(is.null(names(input))) {
+        # If the vector of files has no names attribute, use each corresponding
+        # file name without the .csv extension to name each element of the vector
         names(loaded_files) <- sub(input, pattern = ".csv", replacement = "")
     } else {
+        # Or simply keep the names attribute from the original vector, if
+        # it already exists
         names(loaded_files) <- names(input)
     }
     loaded_files

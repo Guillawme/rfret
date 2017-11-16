@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -72,6 +72,9 @@
     </li>
     <li>
       <a href="../articles/analyzing_fret_data.html">Analyzing FRET binding data</a>
+    </li>
+    <li>
+      <a href="../articles/extending_rfret.html">Extending rfret</a>
     </li>
     <li>
       <a href="../articles/hyperbolic_model_equation.html">Deriving the hyperbolic model equation</a>
@@ -143,8 +146,8 @@ This directory will be created if it does not already exist.</p></td>
 
     <p>A named list where each element is named after the corresponding
     experiment and holds an <code><a href='http://www.rdocumentation.org/packages/stats/topics/nls'>nls</a></code> object containing the
-    results of the fit. This list can be directly used
-    as input to <code><a href='make_figure.html'>make_figure</a></code>.</p>
+    results of the fit. Only succesful fits will be returned. This list can
+    be directly used as input for <code><a href='make_figure.html'>make_figure</a></code>.</p>
     
 
   </div>

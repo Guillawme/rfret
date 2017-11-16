@@ -29,7 +29,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -49,6 +49,9 @@
     </li>
     <li>
       <a href="../articles/analyzing_fret_data.html">Analyzing FRET binding data</a>
+    </li>
+    <li>
+      <a href="../articles/extending_rfret.html">Extending rfret</a>
     </li>
     <li>
       <a href="../articles/hyperbolic_model_equation.html">Deriving the hyperbolic model equation</a>
@@ -77,16 +80,14 @@
       <h1>Deriving the quadratic model equation</h1>
                         <h4 class="author">Guillaume Gaullier</h4>
             
-            <h4 class="date">2017-08-09</h4>
+            <h4 class="date">2017-11-16</h4>
           </div>
 
     
     
 <div class="contents">
 <p>This documentation explains how the quadratic model equation used to fit binding data from a FRET experiment is derived from the law of mass action.</p>
-<div id="binding-equilibrium" class="section level2">
-<h2 class="hasAnchor">
-<a href="#binding-equilibrium" class="anchor"></a>Binding equilibrium</h2>
+<section id="binding-equilibrium" class="level2"><h2>Binding equilibrium</h2>
 <p>In this document, we will call M the macromolecule, L the ligand, ML the macromolecule/ligand complex, and [M], [L] and [ML] their molar concentrations at equilibrium. Moreover, we will call <span class="math inline">\(M_{tot}\)</span> the total concentration of macromolecule, and <span class="math inline">\(L_{tot}\)</span> the total concentration of ligand. We have, by definition because of mass conservation:</p>
 <p>1: <span class="math inline">\(M_{tot} = [M] + [ML]\)</span> 2: <span class="math inline">\(L_{tot} = [L] + [ML]\)</span></p>
 <p>The binding equilibrium is represented by the following reaction:</p>
@@ -94,10 +95,7 @@
 <p>The equilibrium binding constant <span class="math inline">\(K_D\)</span> is defined by the following equation (law of mass action):</p>
 <p>3: <span class="math inline">\(K_D = \frac{[M] \times [L]}{[ML]}\)</span></p>
 <p>Determining <span class="math inline">\(K_D\)</span> is the goal of a binding assay, like a FRET titration experiment.</p>
-</div>
-<div id="deriving-the-quadratic-binding-equation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#deriving-the-quadratic-binding-equation" class="anchor"></a>Deriving the quadratic binding equation</h2>
+</section><section id="deriving-the-quadratic-binding-equation" class="level2"><h2>Deriving the quadratic binding equation</h2>
 <p>To determine <span class="math inline">\(K_D\)</span>, we need to measure [ML] at equilibrium. [M] and [L] can be expressed as a function of [ML] from equations 1 and 2, and <span class="math inline">\(M_{tot}\)</span> and <span class="math inline">\(L_{tot}\)</span> are known parameters of the experiment.</p>
 <p>Rewriting equation 3 gives us:</p>
 <p>4: <span class="math inline">\(K_D \times [ML] - [M] \times [L] = 0\)</span></p>
@@ -110,17 +108,14 @@
 <p>Equation 5 is of the form <span class="math inline">\(ax^2 + bx + c = 0\)</span>, of solutions <span class="math inline">\(x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}\)</span>.</p>
 <p>This gives us [ML] expressed as a function of <span class="math inline">\(K_D\)</span> and the known parameters <span class="math inline">\(M_{tot}\)</span> and <span class="math inline">\(L_{tot}\)</span>:</p>
 <p>6: <span class="math inline">\([ML] = \frac{(K_D + M_{tot} + L_{tot}) \pm \sqrt{(-(K_D + M_{tot} + L_{tot}))^2 - 4 \times M_{tot} \times L_{tot}}}{2}\)</span></p>
-</div>
-<div id="using-the-quadratic-binding-equation-to-fit-a-binding-curve" class="section level2">
-<h2 class="hasAnchor">
-<a href="#using-the-quadratic-binding-equation-to-fit-a-binding-curve" class="anchor"></a>Using the quadratic binding equation to fit a binding curve</h2>
+</section><section id="using-the-quadratic-binding-equation-to-fit-a-binding-curve" class="level2"><h2>Using the quadratic binding equation to fit a binding curve</h2>
 <p>If we have a detectable signal <span class="math inline">\(S\)</span> proportional to [ML] (like FRET), we can express it as a function of its minimal and maximal values (<span class="math inline">\(S_{min}\)</span> and <span class="math inline">\(S_{max}\)</span>) and the fraction of ligand bound <span class="math inline">\(\frac{[ML]}{M_{tot}}\)</span>:</p>
 <p>7: <span class="math inline">\(S = S_{min} + (S_{max} - S_{min}) \times \frac{[ML]}{M_{tot}}\)</span></p>
 <p>With this expression, <span class="math inline">\(S = S_{min}\)</span> when <span class="math inline">\(\frac{[ML]}{M_{tot}} = 0\)</span> and <span class="math inline">\(S = S_{max}\)</span> when <span class="math inline">\(\frac{[ML]}{M_{tot}} = 1\)</span>.</p>
 <p>Substituting equation 6 into equation 7 gives:</p>
 <p>8: <span class="math inline">\(S = S_{min} + (S_{max} - S_{min}) \times \frac{(K_D + M_{tot} + L_{tot}) \pm \sqrt{(-(K_D + M_{tot} + L_{tot}))^2 - 4 \times M_{tot} \times L_{tot}}}{2 \times M_{tot}}\)</span></p>
-<p>In equation 8, <span class="math inline">\(S\)</span> and <span class="math inline">\(S_{min}\)</span> can be measured experimentally: <span class="math inline">\(S_{min}\)</span> and <span class="math inline">\(S\)</span> can be measured experimentally: they are, respectively, the signal observed without ligand, and across the titration series at given values of <span class="math inline">\(L_{tot}\)</span>. The experimental data is, indeed, <span class="math inline">\(S = f(L_{tot})\)</span>. <span class="math inline">\(M_{tot}\)</span> and <span class="math inline">\(L_{tot}\)</span> are known experimental parameters. Therefore, <span class="math inline">\(K_D\)</span> and <span class="math inline">\(S_{max}\)</span> can be determined by fitting equation 8 to the experimental data.</p>
-</div>
+<p>In equation 8, <span class="math inline">\(S_{min}\)</span> and <span class="math inline">\(S\)</span> can be measured experimentally: they are, respectively, the signal observed without ligand, and across the titration series at given values of <span class="math inline">\(L_{tot}\)</span>. The observed signal is, indeed, a function of the total ligand concentration. <span class="math inline">\(M_{tot}\)</span> and <span class="math inline">\(L_{tot}\)</span> are known experimental parameters. Therefore, <span class="math inline">\(K_D\)</span> and <span class="math inline">\(S_{max}\)</span> can be determined by fitting equation 8 to the experimental data. In practice, <span class="math inline">\(S_{min}\)</span> is also obtained from fitting the equation to the experimental data.</p>
+</section>
 </div>
   </div>
 

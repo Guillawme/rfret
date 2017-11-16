@@ -29,7 +29,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -49,6 +49,9 @@
     </li>
     <li>
       <a href="../articles/analyzing_fret_data.html">Analyzing FRET binding data</a>
+    </li>
+    <li>
+      <a href="../articles/extending_rfret.html">Extending rfret</a>
     </li>
     <li>
       <a href="../articles/hyperbolic_model_equation.html">Deriving the hyperbolic model equation</a>
@@ -77,98 +80,91 @@
       <h1>Analyzing FRET binding data</h1>
                         <h4 class="author">Guillaume Gaullier</h4>
             
-            <h4 class="date">2017-08-09</h4>
+            <h4 class="date">2017-11-16</h4>
           </div>
 
     
     
 <div class="contents">
 <p>This documentation explains how to use the functions provided by the <code>rfret</code> package to analyze FRET binding data from titration experiments, and determine the binding constant (Kd) of a macromolecular interaction. An example using a real-life dataset is presented and discussed.</p>
-<div id="overview" class="section level1">
-<h1 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h1>
-<div id="fret-data-analysis-workflow" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fret-data-analysis-workflow" class="anchor"></a>FRET data analysis workflow</h2>
+<section id="overview" class="level1"><h1>Overview</h1>
+<section id="fret-data-analysis-workflow" class="level2"><h2>FRET data analysis workflow</h2>
 <p>Analysis of FRET data can be broken down into the following steps, each of which <code>rfret</code> provides functions for:</p>
-<ol style="list-style-type: decimal">
-<li>inspect raw data to detect possible outliers (function <code>fret_inspect_raw_data</code>);</li>
-<li>average fluorescence intensities across technical replicates, if such replicates were measured (function <code>fret_average_replicates</code>);</li>
-<li>correct FRET signal of the titration experiment, using signal from blank experiments which contain no donor or no acceptor fluorophores (function <code>fret_correct_signal</code>);</li>
-<li>fit a binding model equation to the experimental data, to determine the binding constant Kd (function <code>fit_binding_model</code>).</li>
+<ol type="1">
+<li>inspect raw data to detect possible outliers (function <code><a href="../reference/fret_inspect_raw_data.html">fret_inspect_raw_data()</a></code>);</li>
+<li>average fluorescence intensities across technical replicates, if such replicates were measured (function <code><a href="../reference/fret_average_replicates.html">fret_average_replicates()</a></code>);</li>
+<li>correct FRET signal of the titration experiment, using signal from blank experiments which contain no donor or no acceptor fluorophores (function <code><a href="../reference/fret_correct_signal.html">fret_correct_signal()</a></code>);</li>
+<li>fit a binding model equation to the experimental data, to determine the binding constant Kd (function <code><a href="../reference/fit_binding_model.html">fit_binding_model()</a></code>).</li>
 </ol>
-<p>The <code>fit_binding_model</code> function is independent of the others. It can accept any data from other types of experiments, as long as this data comes as two columns called <code>concentration</code> and <code>signal</code>.</p>
+<p>The <code><a href="../reference/fit_binding_model.html">fit_binding_model()</a></code> function is independent of the others. It can accept any data from other types of experiments, as long as this data comes as two columns called <code>concentration</code> and <code>signal</code>.</p>
 <p>On the other hand, all the FRET data processing functions (named with a common <code>fret_</code> prefix) are designed to work together: each function produces an output that can be directly used as input for the next one, making the whole analysis free of any need for more data reformatting as long as input files are properly formatted in the first place. These functions work ideally with the pipe operator (<code>%&gt;%</code>) from <a href="http://magrittr.tidyverse.org">the <code>magrittr</code> package</a>.</p>
-</div>
-<div id="raw-data-format" class="section level2">
-<h2 class="hasAnchor">
-<a href="#raw-data-format" class="anchor"></a>Raw data format</h2>
+</section><section id="raw-data-format" class="level2"><h2>Raw data format</h2>
 <p><code>rfret</code> is designed such that the user doesn’t have to manually do any calculation or any edit to the numbers obtained from a plate reader instrument: such manipulations in spreadsheet programs are time-consuming and error-prone, and doing calculations in a spreadsheet can accidentally alter the raw data.</p>
 <p>The raw data must be formatted like the following example. This first table shows the first 6 rows of a real-life dataset:</p>
 <table class="table">
 <thead><tr class="header">
-<th align="left">Well Row</th>
-<th align="right">Well Col</th>
-<th align="left">Content</th>
-<th align="right">fret_channel</th>
-<th align="right">acceptor_channel</th>
-<th align="right">donor_channel</th>
-<th align="right">concentration</th>
+<th style="text-align: left;">Well Row</th>
+<th style="text-align: right;">Well Col</th>
+<th style="text-align: left;">Content</th>
+<th style="text-align: right;">fret_channel</th>
+<th style="text-align: right;">acceptor_channel</th>
+<th style="text-align: right;">donor_channel</th>
+<th style="text-align: right;">concentration</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">E</td>
-<td align="right">1</td>
-<td align="left">acceptor_only.1</td>
-<td align="right">82505</td>
-<td align="right">181183</td>
-<td align="right">5320</td>
-<td align="right">1000.00</td>
+<td style="text-align: left;">E</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">acceptor_only.1</td>
+<td style="text-align: right;">82505</td>
+<td style="text-align: right;">181183</td>
+<td style="text-align: right;">5320</td>
+<td style="text-align: right;">1000.00</td>
 </tr>
 <tr class="even">
-<td align="left">E</td>
-<td align="right">2</td>
-<td align="left">acceptor_only.1</td>
-<td align="right">31562</td>
-<td align="right">73822</td>
-<td align="right">2617</td>
-<td align="right">500.00</td>
+<td style="text-align: left;">E</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">acceptor_only.1</td>
+<td style="text-align: right;">31562</td>
+<td style="text-align: right;">73822</td>
+<td style="text-align: right;">2617</td>
+<td style="text-align: right;">500.00</td>
 </tr>
 <tr class="odd">
-<td align="left">E</td>
-<td align="right">3</td>
-<td align="left">acceptor_only.1</td>
-<td align="right">20306</td>
-<td align="right">47155</td>
-<td align="right">2102</td>
-<td align="right">250.00</td>
+<td style="text-align: left;">E</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">acceptor_only.1</td>
+<td style="text-align: right;">20306</td>
+<td style="text-align: right;">47155</td>
+<td style="text-align: right;">2102</td>
+<td style="text-align: right;">250.00</td>
 </tr>
 <tr class="even">
-<td align="left">E</td>
-<td align="right">4</td>
-<td align="left">acceptor_only.1</td>
-<td align="right">9709</td>
-<td align="right">23141</td>
-<td align="right">1471</td>
-<td align="right">125.00</td>
+<td style="text-align: left;">E</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">acceptor_only.1</td>
+<td style="text-align: right;">9709</td>
+<td style="text-align: right;">23141</td>
+<td style="text-align: right;">1471</td>
+<td style="text-align: right;">125.00</td>
 </tr>
 <tr class="odd">
-<td align="left">E</td>
-<td align="right">5</td>
-<td align="left">acceptor_only.1</td>
-<td align="right">5713</td>
-<td align="right">12712</td>
-<td align="right">1252</td>
-<td align="right">62.50</td>
+<td style="text-align: left;">E</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">acceptor_only.1</td>
+<td style="text-align: right;">5713</td>
+<td style="text-align: right;">12712</td>
+<td style="text-align: right;">1252</td>
+<td style="text-align: right;">62.50</td>
 </tr>
 <tr class="even">
-<td align="left">E</td>
-<td align="right">6</td>
-<td align="left">acceptor_only.1</td>
-<td align="right">2779</td>
-<td align="right">6970</td>
-<td align="right">1156</td>
-<td align="right">31.25</td>
+<td style="text-align: left;">E</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">acceptor_only.1</td>
+<td style="text-align: right;">2779</td>
+<td style="text-align: right;">6970</td>
+<td style="text-align: right;">1156</td>
+<td style="text-align: right;">31.25</td>
 </tr>
 </tbody>
 </table>
@@ -176,79 +172,79 @@
 <table class="table">
 <thead><tr class="header">
 <th></th>
-<th align="left">Well Row</th>
-<th align="right">Well Col</th>
-<th align="left">Content</th>
-<th align="right">fret_channel</th>
-<th align="right">acceptor_channel</th>
-<th align="right">donor_channel</th>
-<th align="right">concentration</th>
+<th style="text-align: left;">Well Row</th>
+<th style="text-align: right;">Well Col</th>
+<th style="text-align: left;">Content</th>
+<th style="text-align: right;">fret_channel</th>
+<th style="text-align: right;">acceptor_channel</th>
+<th style="text-align: right;">donor_channel</th>
+<th style="text-align: right;">concentration</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td>139</td>
-<td align="left">J</td>
-<td align="right">19</td>
-<td align="left">titration.2</td>
-<td align="right">600</td>
-<td align="right">47</td>
-<td align="right">167162</td>
-<td align="right">0.0038147</td>
+<td style="text-align: left;">J</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: left;">titration.2</td>
+<td style="text-align: right;">600</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">167162</td>
+<td style="text-align: right;">0.0038147</td>
 </tr>
 <tr class="even">
 <td>140</td>
-<td align="left">J</td>
-<td align="right">20</td>
-<td align="left">titration.2</td>
-<td align="right">763</td>
-<td align="right">47</td>
-<td align="right">232535</td>
-<td align="right">0.0019073</td>
+<td style="text-align: left;">J</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: left;">titration.2</td>
+<td style="text-align: right;">763</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">232535</td>
+<td style="text-align: right;">0.0019073</td>
 </tr>
 <tr class="odd">
 <td>141</td>
-<td align="left">J</td>
-<td align="right">21</td>
-<td align="left">titration.2</td>
-<td align="right">389</td>
-<td align="right">34</td>
-<td align="right">97324</td>
-<td align="right">0.0009537</td>
+<td style="text-align: left;">J</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: left;">titration.2</td>
+<td style="text-align: right;">389</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">97324</td>
+<td style="text-align: right;">0.0009537</td>
 </tr>
 <tr class="even">
 <td>142</td>
-<td align="left">J</td>
-<td align="right">22</td>
-<td align="left">titration.2</td>
-<td align="right">577</td>
-<td align="right">42</td>
-<td align="right">174001</td>
-<td align="right">0.0004768</td>
+<td style="text-align: left;">J</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: left;">titration.2</td>
+<td style="text-align: right;">577</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">174001</td>
+<td style="text-align: right;">0.0004768</td>
 </tr>
 <tr class="odd">
 <td>143</td>
-<td align="left">J</td>
-<td align="right">23</td>
-<td align="left">titration.2</td>
-<td align="right">670</td>
-<td align="right">45</td>
-<td align="right">172322</td>
-<td align="right">0.0002384</td>
+<td style="text-align: left;">J</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: left;">titration.2</td>
+<td style="text-align: right;">670</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">172322</td>
+<td style="text-align: right;">0.0002384</td>
 </tr>
 <tr class="even">
 <td>144</td>
-<td align="left">J</td>
-<td align="right">24</td>
-<td align="left">titration.2</td>
-<td align="right">630</td>
-<td align="right">35</td>
-<td align="right">170277</td>
-<td align="right">0.0001192</td>
+<td style="text-align: left;">J</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: left;">titration.2</td>
+<td style="text-align: right;">630</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">170277</td>
+<td style="text-align: right;">0.0001192</td>
 </tr>
 </tbody>
 </table>
 <p>Most (if not all) plate reader instruments have an “export to CSV” feature, which is best suited to save raw data in a format usable by <code>rfret</code>. If offered a choice between “plate layout” and “table view”, choose “table view”: this will export the data in a format similar to the previous table.</p>
-<p>The <code>Well Row</code> and <code>Well Col</code> columns present in this example dataset were created by the plate reader software used to produce this dataset, but <code>rfret</code> will simply ignore them and any other column except the following ones (these can come in any order, but must have the exact following case sensitive names):</p>
+<p>The <code>Well Row</code> and <code>Well Col</code> columns present in this example dataset were created by the plate reader software used to produce this dataset, but <code>rfret</code> will simply ignore them and any other column except the following ones:</p>
 <ul>
 <li><code>Content</code></li>
 <li><code>fret_channel</code></li>
@@ -256,94 +252,108 @@
 <li><code>donor_channel</code></li>
 <li><code>concentration</code></li>
 </ul>
-<p>Therefore, you will need to either edit these column names manually when you save your data, or set up your plate reader software to write these column names automatically for you. You might need to add the <code>concentration</code> column manually, if your plate reader software is not aware of your titration series.</p>
-<p>The <code>Content</code> column should contain, for each row, a name indicating what part of the experiment and what replicate this row belongs to, with the format <code>type.replicate</code> where <code>type</code> can be any word, and <code>replicate</code> is a number. They must be separated by a dot, and there can be only one dot in the entire resulting character string. The example dataset contains the following contents:</p>
+<p>Your own datasets don’t have to use the same column names, because <code>rfret</code> uses a mechanism to map the names found in the actual data files to the names it uses internally. This is achieved by providing a file in the JSON format indicating these mappings. <strong>Note that the names mapped by this file are case-sensitive.</strong></p>
+<p>Using this method, you won’t ever need to edit column names manually in each file when you save your data (which is tedious and error-prone). However, you might need to add the <code>concentration</code> column manually if your plate reader software is not aware of your titration series, and to fill the <code>content</code> column manually as well if your plate reader software doesn’t allow you to describe the contents of your plate before performing the measurements. The <code>content</code> column should contain, for each row, a name indicating what part of the experiment and what replicate this row belongs to, with the format <code>type.replicate</code> where <code>type</code> can be any word, and <code>replicate</code> must be a number. They must be separated by a dot, and there can be only one dot in the entire resulting character string. The example dataset contains the following contents:</p>
 <pre><code>## [1] "acceptor_only.1" "acceptor_only.2" "donor_only.1"    "donor_only.2"   
 ## [5] "titration.1"     "titration.2"</code></pre>
-<p>This data preparation step is the only one for which you will need to use a spreadsheet program (you can also edit the CSV file in a simple text editor, but a spreadsheet displays this sort of data in a way that is much easier to navigate). This step can be automated in the plate reader software as well.</p>
-</div>
-</div>
-<div id="analyzing-a-dataset" class="section level1">
-<h1 class="hasAnchor">
-<a href="#analyzing-a-dataset" class="anchor"></a>Analyzing a dataset</h1>
+<p>Here is an example of a JSON file mapping column names and contents description to <code>rfret</code>’s internal names. In such a file, you would simply have to indicate the names found in your data files in the rigth-hand side of the key-value pairs (the left-hand side being the name used internally by <code>rfret</code>):</p>
+<pre><code>{
+// Only change the right-hand side of the pairs delimited by ':'.
+
+// Map internal column names to the corresponding column names in data files.
+
+"content": "Content",
+"concentration": "concentration",
+"fret_channel": "Raw Data (488-20/680-50 1)",
+"acceptor_channel": "Raw Data (620-30/680-50 2)",
+"donor_channel": "Raw Data (488-20/535-30 3)",
+
+// Map internal sample types to the corresponding factors in data files.
+
+"titration": "my_titration",
+"acceptor_only": "my_acceptor_only_series",
+"donor_only": "my_donor_only_series",
+"buffer_only": "my_buffer_only_series"
+}</code></pre>
+<p>This data preparation step is the only one for which you will need to use a spreadsheet program (you can also edit the CSV files in a simple text editor, but a spreadsheet displays this sort of data in a way that is much easier to navigate). This step can probably be automated in most plate reader softwares as well.</p>
+</section></section><section id="analyzing-a-dataset" class="level1"><h1>Analyzing a dataset</h1>
 <p>We first need to load the <code>rfret</code> and <code>magrittr</code> packages:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
-<span class="kw">library</span>(rfret)</code></pre></div>
-<div id="data-preparation-for-processing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-preparation-for-processing" class="anchor"></a>Data preparation for processing</h2>
-<p>All <code>fret_</code> functions in this package work by first agregating together any number of datasets, to perform all subsequent data processing and analysis steps on a single, large internal data table. Any analysis must start by using the <code>fret_format_data</code> function to prepare the raw data.</p>
-<p>The function <code>fret_format_data</code> takes either:</p>
+<pre class="sourceCode r" id="cb3"><code class="sourceCode r"><div class="sourceLine" id="cb3-1" data-line-number="1">
+<span class="kw">library</span>(magrittr)</div>
+<div class="sourceLine" id="cb3-2" data-line-number="2">
+<span class="kw">library</span>(rfret)</div></code></pre>
+<pre><code>## Successfully loaded rfret from /Users/guillaume/Library/R/3.4/library</code></pre>
+<section id="data-preparation-for-processing" class="level2"><h2>Data preparation for processing</h2>
+<p>All <code>fret_</code> functions in this package work by first concatenating together any number of datasets, to perform all subsequent data processing and analysis steps on a single, large internal dataframe. Any analysis must start by using the <code><a href="../reference/fret_format_data.html">fret_format_data()</a></code> function to prepare the raw data.</p>
+<p>The function <code><a href="../reference/fret_format_data.html">fret_format_data()</a></code> takes either:</p>
 <ul>
 <li>the name of a single directory from which it will read all CSV files,</li>
-<li>a single file name or a set of file names,</li>
+<li>a single file name or a set of file names (as a character vector),</li>
 <li>a single dataset already loaded in memory as a dataframe,</li>
-<li>or a list of datasets already loaded in memory as dataframes.</li>
+<li>or a named list of datasets already loaded in memory as dataframes.</li>
 </ul>
 <p>It will format the data properly for subsequent processing by the other functions.</p>
-</div>
-<div id="raw-data-inspection" class="section level2">
-<h2 class="hasAnchor">
-<a href="#raw-data-inspection" class="anchor"></a>Raw data inspection</h2>
+</section><section id="raw-data-inspection" class="level2"><h2>Raw data inspection</h2>
 <p>A FRET experiment provides built-in controls for the correct preparation of the titration samples. In a typical experiment, the donor-labeled molecule is kept constant at a low concentration, and the acceptor-labeled molecule is titrated across a wide concentration series prepared by serial dilutions. Fluorescence detection is sensitive enough to detect very small pipetting errors, therefore, inspecting the fluorescence intensities in the donor and acceptor channels provides an easy way to check for outliers in the series.</p>
-<p>The function <code>fret_inspect_raw_data</code> takes the output of <code>fret_format_data</code> and outputs, for each experiment, plots of the fluorescence intensity across the titration series for the donor, acceptor and FRET channels.</p>
+<p>The function <code><a href="../reference/fret_inspect_raw_data.html">fret_inspect_raw_data()</a></code> takes the output of <code><a href="../reference/fret_format_data.html">fret_format_data()</a></code> and outputs, for each experiment, plots of the fluorescence intensity across the titration series for the donor, acceptor and FRET channels.</p>
 <p>Let’s look at an example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fret_binding_data <span class="op">%&gt;%</span>
+<pre class="sourceCode r" id="cb5"><code class="sourceCode r"><div class="sourceLine" id="cb5-1" data-line-number="1">fret_binding_data <span class="op">%&gt;%</span>
+</div>
+<div class="sourceLine" id="cb5-2" data-line-number="2">
 <span class="st">    </span><span class="kw"><a href="../reference/fret_format_data.html">fret_format_data</a></span>() <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw"><a href="../reference/fret_inspect_raw_data.html">fret_inspect_raw_data</a></span>()</code></pre></div>
-<pre><code>## $.
-## $.$donor</code></pre>
+</div>
+<div class="sourceLine" id="cb5-3" data-line-number="3">
+<span class="st">    </span><span class="kw"><a href="../reference/fret_inspect_raw_data.html">fret_inspect_raw_data</a></span>()</div></code></pre>
+<pre><code>## $input
+## $input$donor</code></pre>
 <p><img src="analyzing_fret_data_files/figure-html/Inspect%20raw%20data-1.png" width="672"></p>
 <pre><code>## 
-## $.$acceptor</code></pre>
+## $input$acceptor</code></pre>
 <p><img src="analyzing_fret_data_files/figure-html/Inspect%20raw%20data-2.png" width="672"></p>
 <pre><code>## 
-## $.$fret</code></pre>
+## $input$fret</code></pre>
 <p><img src="analyzing_fret_data_files/figure-html/Inspect%20raw%20data-3.png" width="672"></p>
 <p>In the donor channel plot, all fluorescence intensities should be equal, since the donor-labeled molecule is present at the same concentration in all samples. In the titration experiment, it is expected that the fluorescence intensity of the donor channel will decrease at high concentration of acceptor if FRET happens (because part of the donor fluorescence is transferred to the acceptor instead of being emitted).</p>
 <p>In the acceptor channel plot, the fluorescence intensity should increase linearly with the acceptor-labeled molecule concentration across the titrations series. If the serial dilution was performed with good precision, all data points should cluster around a straight line, as in this example.</p>
 <p>The FRET channel plot quickly tells if the data contains useful signal: the titration and acceptor_only experiments should have visible differences in fluorescence intensity at some point in the titration series. If their data points perfectly overlap, it means the data doesn’t contain any useful signal.</p>
-</div>
-<div id="data-processing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-processing" class="anchor"></a>Data processing</h2>
-<p>Automatic processing of raw data can be achieved using the pipe operator <code>%&gt;%</code> from <a href="http://magrittr.tidyverse.org">the <code>magrittr</code> package</a>, and the three functions <code>fret_format_data</code>, <code>fret_average_replicates</code> and <code>fret_correct_signal</code>:</p>
+</section><section id="data-processing" class="level2"><h2>Data processing</h2>
+<p>Automatic processing of any number of data files can be achieved using the pipe operator <code>%&gt;%</code> from <a href="http://magrittr.tidyverse.org">the <code>magrittr</code> package</a>, and the three functions <code><a href="../reference/fret_format_data.html">fret_format_data()</a></code>, <code><a href="../reference/fret_average_replicates.html">fret_average_replicates()</a></code> and <code><a href="../reference/fret_correct_signal.html">fret_correct_signal()</a></code>:</p>
 <pre><code>library(magrittr)
+library(rfret)
 fret_binding_data %&gt;%
     fret_format_data() %&gt;%
     fret_average_replicates() %&gt;%
     fret_correct_signal(output_directory = "./my_results")</code></pre>
 <p>The pipe operator allows to write this code in a natural way, one step after the other in the order of execution.</p>
-<div id="average-technical-replicates" class="section level3">
-<h3 class="hasAnchor">
-<a href="#average-technical-replicates" class="anchor"></a>Average technical replicates</h3>
-<p>The function <code>fret_average_replicates</code> takes a raw dataset from <code>fret_format_data</code> and returns a dataset where the fluorescence intensity values have been averaged over the technical replicates.</p>
-</div>
-<div id="correct-fret-signal" class="section level3">
-<h3 class="hasAnchor">
-<a href="#correct-fret-signal" class="anchor"></a>Correct FRET signal</h3>
-<p>The function <code>fret_correct_signal</code> applies the correction described in the following references:</p>
+<section id="average-technical-replicates" class="level3"><h3>Average technical replicates</h3>
+<p>The function <code><a href="../reference/fret_average_replicates.html">fret_average_replicates()</a></code> takes the output of <code><a href="../reference/fret_format_data.html">fret_format_data()</a></code> and returns a dataset where the fluorescence intensity values have been averaged over the technical replicates.</p>
+</section><section id="correct-fret-signal" class="level3"><h3>Correct FRET signal</h3>
+<p>The function <code><a href="../reference/fret_correct_signal.html">fret_correct_signal()</a></code> applies the correction described in the following references:</p>
 <ul>
 <li>Hieb AR <em>et al</em> (2012) Fluorescence Strategies for High-Throughput Quantification of Protein Interactions. <em>Nucleic Acids Research</em> 40 (5): e33 <a href="https://doi.org/10.1093/nar/gkr1045" class="uri">https://doi.org/10.1093/nar/gkr1045</a>
 </li>
 <li>Winkler DD <em>et al</em> (2012) Quantifying Chromatin-Associated Interactions: The HI-FI System. In <em>Methods in Enzymology</em> pp 243–274. Elsevier. <a href="https://doi.org/10.1016/B978-0-12-391940-3.00011-1" class="uri">https://doi.org/10.1016/B978-0-12-391940-3.00011-1</a>
 </li>
 </ul>
-<p>It takes a reduced dataset from <code>fret_average_replicates</code> and outputs the corrected FRET signal. Given a directory name, it will write out the corrected datasets to CSV files. These output files will have the same names as the input files, appended with <code>_corrected</code>. These files can be used to plot the corrected data using a different software, for example.</p>
-</div>
-</div>
-<div id="curve-fitting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#curve-fitting" class="anchor"></a>Curve fitting</h2>
-<p>The last step involves the function <code>fit_binding_model</code>. It takes a corrected dataset (output of <code>fret_correct_signal</code>) and a binding model. Currently available binding models are: <code>hyperbolic</code>, <code>hill</code> and <code>quadratic</code>. To use the quadratic, model the function also need the fixed concentration of probe molecule. It returns an <code>nls</code> object that can be further examined with standard functions (like <code>summary</code>) or used as input for <code>make_figure</code>.</p>
+<p>It takes a reduced dataset from <code><a href="../reference/fret_average_replicates.html">fret_average_replicates()</a></code>, or the output of <code><a href="../reference/fret_format_data.html">fret_format_data()</a></code> in case there are no replicates, and outputs the corrected FRET signal. Given a directory name, it will write out the corrected datasets to CSV files. These output files will have the same names as the input files, appended with <code>_corrected</code>. These files can be used to plot the corrected data using a different software, for example.</p>
+</section></section><section id="curve-fitting" class="level2"><h2>Curve fitting</h2>
+<p>The last step involves the function <code><a href="../reference/fit_binding_model.html">fit_binding_model()</a></code>. It takes a corrected dataset (output of <code><a href="../reference/fret_correct_signal.html">fret_correct_signal()</a></code>) and a binding model. Currently available binding models are: <code>"hyperbolic"</code>, <code>"hill"</code> and <code>"quadratic"</code>. To use the quadratic model, the function also needs the fixed concentration of probe molecule. It returns an <code>nls</code> object that can be further examined with standard functions (like <code>summary()</code>) or used as input for <code><a href="../reference/make_figure.html">make_figure()</a></code>.</p>
 <p>Fitting the example dataset with the quadratic model can be achieved as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fret_binding_data <span class="op">%&gt;%</span>
+<pre class="sourceCode r" id="cb10"><code class="sourceCode r"><div class="sourceLine" id="cb10-1" data-line-number="1">fret_binding_data <span class="op">%&gt;%</span>
+</div>
+<div class="sourceLine" id="cb10-2" data-line-number="2">
 <span class="st">    </span><span class="kw"><a href="../reference/fret_format_data.html">fret_format_data</a></span>() <span class="op">%&gt;%</span>
+</div>
+<div class="sourceLine" id="cb10-3" data-line-number="3">
 <span class="st">    </span><span class="kw"><a href="../reference/fret_average_replicates.html">fret_average_replicates</a></span>() <span class="op">%&gt;%</span>
+</div>
+<div class="sourceLine" id="cb10-4" data-line-number="4">
 <span class="st">    </span><span class="kw"><a href="../reference/fret_correct_signal.html">fret_correct_signal</a></span>() <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw"><a href="../reference/fit_binding_model.html">fit_binding_model</a></span>(<span class="dt">binding_model =</span> <span class="st">"quadratic"</span>,
-                      <span class="dt">probe_concentration =</span> <span class="dv">5</span>)</code></pre></div>
-<pre><code>## $.
+</div>
+<div class="sourceLine" id="cb10-5" data-line-number="5">
+<span class="st">    </span><span class="kw"><a href="../reference/fit_binding_model.html">fit_binding_model</a></span>(<span class="dt">binding_model =</span> <span class="st">"quadratic"</span>,</div>
+<div class="sourceLine" id="cb10-6" data-line-number="6">                      <span class="dt">probe_concentration =</span> <span class="dv">5</span>)</div></code></pre>
+<pre><code>## $input
 ## Nonlinear regression model
 ##   model: signal ~ quadratic(concentration, parameters = list(signal_min = signal_min,     signal_max = signal_max, kd = kd, probe_conc = probe_concentration))
 ##    data: .
@@ -353,26 +363,29 @@ fret_binding_data %&gt;%
 ## 
 ## Number of iterations to convergence: 5 
 ## Achieved convergence tolerance: 1.49e-08</code></pre>
-<p>Given a directory name, <code>fit_binding_model</code> will write its results to CSV files.</p>
+<p>Given a directory name, <code><a href="../reference/fit_binding_model.html">fit_binding_model()</a></code> will write its results to CSV files.</p>
+</section><section id="final-figure" class="level2"><h2>Final figure</h2>
+<p>The function <code><a href="../reference/make_figure.html">make_figure()</a></code> takes the output of <code><a href="../reference/fit_binding_model.html">fit_binding_model()</a></code> and returns figures with a plot of the binding curve and a residual plot. Given a directory name, it will write the figures in files named like the original input files. Figure are written as PNG files by default, but the function can also write PDF and SVG files.</p>
+<pre class="sourceCode r" id="cb12"><code class="sourceCode r"><div class="sourceLine" id="cb12-1" data-line-number="1">fret_binding_data <span class="op">%&gt;%</span>
 </div>
-<div id="final-figure" class="section level2">
-<h2 class="hasAnchor">
-<a href="#final-figure" class="anchor"></a>Final figure</h2>
-<p>The function <code>make_figure</code> takes the output of <code>fit_binding_model</code> and returns a figure with a plot of the binding curve and a residual plot. Given a directory name, it will write the figure in a file named like the original input file. The figure is written as a PNG file by default, but the function can also write PDF and SVG files.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fret_binding_data <span class="op">%&gt;%</span>
+<div class="sourceLine" id="cb12-2" data-line-number="2">
 <span class="st">    </span><span class="kw"><a href="../reference/fret_format_data.html">fret_format_data</a></span>() <span class="op">%&gt;%</span>
+</div>
+<div class="sourceLine" id="cb12-3" data-line-number="3">
 <span class="st">    </span><span class="kw"><a href="../reference/fret_average_replicates.html">fret_average_replicates</a></span>() <span class="op">%&gt;%</span>
+</div>
+<div class="sourceLine" id="cb12-4" data-line-number="4">
 <span class="st">    </span><span class="kw"><a href="../reference/fret_correct_signal.html">fret_correct_signal</a></span>() <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw"><a href="../reference/fit_binding_model.html">fit_binding_model</a></span>(<span class="dt">binding_model =</span> <span class="st">"quadratic"</span>,
-                      <span class="dt">probe_concentration =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw"><a href="../reference/make_figure.html">make_figure</a></span>(<span class="dt">probe_concentration =</span> <span class="dv">5</span>)</code></pre></div>
-<pre><code>## $.</code></pre>
+</div>
+<div class="sourceLine" id="cb12-5" data-line-number="5">
+<span class="st">    </span><span class="kw"><a href="../reference/fit_binding_model.html">fit_binding_model</a></span>(<span class="dt">binding_model =</span> <span class="st">"quadratic"</span>,</div>
+<div class="sourceLine" id="cb12-6" data-line-number="6">                      <span class="dt">probe_concentration =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
+</div>
+<div class="sourceLine" id="cb12-7" data-line-number="7">
+<span class="st">    </span><span class="kw"><a href="../reference/make_figure.html">make_figure</a></span>(<span class="dt">probe_concentration =</span> <span class="dv">5</span>)</div></code></pre>
+<pre><code>## $input</code></pre>
 <p><img src="analyzing_fret_data_files/figure-html/Figure%20making-1.png" width="672"></p>
-</div>
-</div>
-<div id="automated-processing-and-analysis" class="section level1">
-<h1 class="hasAnchor">
-<a href="#automated-processing-and-analysis" class="anchor"></a>Automated processing and analysis</h1>
+</section></section><section id="automated-processing-and-analysis" class="level1"><h1>Automated processing and analysis</h1>
 <p>The entire data inspection, processing and analysis can be performed by a single script run from the directory containing raw data files in CSV format. Here is an example script:</p>
 <pre><code># Load required packages
 library(magrittr)
@@ -383,7 +396,8 @@ my_files &lt;- list.files(path = ".", pattern = ".csv")
 
 # Generate raw data plots and save them in a directory called 'data_inspection'
 my_files %&gt;%
-    fret_format_data(skip_lines = 4) %&gt;%
+    fret_format_data(skip_lines = 4, 
+                     metadata_json = "column_names.json") %&gt;%
     fret_inspect_raw_data(output_directory = "./data_inspection",
                           plot_format = "png")
 
@@ -395,7 +409,8 @@ my_files %&gt;%
 # 3. generate binding curve figures and save them as PNG files in a
 # directory 'final_figures'
 my_files %&gt;%
-    fret_format_data(skip_lines = 4) %&gt;%
+    fret_format_data(skip_lines = 4,
+                     metadata_json = "column_names.json") %&gt;%
     fret_average_replicates() %&gt;%
     fret_correct_signal(output_directory = "./corrected_data") %&gt;%
     fit_binding_model(binding_model = "quadratic",
@@ -404,12 +419,9 @@ my_files %&gt;%
     make_figure(probe_concentration = 5,
                 output_directory = "./final_figures",
                 plot_format = "png")</code></pre>
-</div>
-<div id="automated-report-generation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#automated-report-generation" class="anchor"></a>Automated report generation</h1>
+</section><section id="automated-report-generation" class="level1"><h1>Automated report generation</h1>
 <p>Used in combination with <a href="http://rmarkdown.rstudio.com">R Markdown</a>, <code>rfret</code> can make the process of data analysis fully integrated with lab notebook record keeping.</p>
-</div>
+</section>
 </div>
   </div>
 

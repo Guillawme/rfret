@@ -170,4 +170,4 @@ fret_correct_one_dataset <- function(one_dataset) {
 
     # Subtract baseline
     corrected_data %>% dplyr::mutate(signal = signal - min(signal))
-  }
+}

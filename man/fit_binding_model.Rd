@@ -27,8 +27,8 @@ This directory will be created if it does not already exist.}
 \value{
 A named list where each element is named after the corresponding
     experiment and holds an \code{\link[stats]{nls}} object containing the
-    results of the fit. This list can be directly used
-    as input to \code{\link{make_figure}}.
+    results of the fit. Only succesful fits will be returned. This list can
+    be directly used as input for \code{\link{make_figure}}.
 }
 \description{
 This function fits a binding model equation (hyperbolic model,

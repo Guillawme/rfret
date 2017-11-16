@@ -15,9 +15,9 @@
 #'     experiment and its blanks must match, and a given observation number must
 #'     associate data points at the same concentration in the titration series.}
 #'     \item{concentration}{The ligand concentration in the titration series.}
-#'     \item{Polarization}{Fluorescence polarization.}
-#'     \item{Anisotropy}{Fluorescence anisotropy.}
-#'     \item{Intensity}{Fluorescence intensity.}
+#'     \item{polarization}{Fluorescence polarization.}
+#'     \item{anisotropy}{Fluorescence anisotropy.}
+#'     \item{intensity}{Fluorescence intensity.}
 #'     }
 #'     The output of \code{\link{fp_average_replicates}} can be used directly as
 #'     input for this function.
@@ -40,9 +40,9 @@ fp_use_signal <- function(data, sig = NULL) {
 
     # Rename appropriate column to 'signal' for use by fit_binding_model
     if (sig %in% c("polarization", "p")) {
-        return(dplyr::rename(data, signal = Polarization))
+        return(dplyr::rename(data, signal = polarization))
     }
     if (sig %in% c("anisotropy", "a")) {
-        return(dplyr::rename(data, signal = Anisotropy))
+        return(dplyr::rename(data, signal = anisotropy))
     }
 }

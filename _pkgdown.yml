@@ -17,6 +17,8 @@ reference:
       Function for processing FP and FA data
     contents:
       - fp_format_data
+      - fp_inspect_raw_data
+      - fp_calculate_pola_aniso_int
       - fp_average_replicates
       - fp_use_signal
   - title: "Curve fitting"
@@ -45,10 +47,13 @@ reference:
     contents:
       - load_data
       - read_files
+      - get_user_metadata
       - fret_inspect_one_dataset
       - fret_save_inspection_plots
       - fret_format_one_dataset
       - fret_correct_one_dataset
       - fp_format_one_dataset
+      - fp_inspect_one_dataset
+      - fp_save_inspection_plot
       - make_one_figure
       - detect_binding_model
