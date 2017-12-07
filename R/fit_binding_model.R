@@ -99,7 +99,9 @@ fit_binding_model <- function(data,
     # the corresponding fit object. Return only successful fits.
     results <- fits$fit
     names(results) <- fits$Experiment
-    successful_fits <- sapply(results, function(x) class(x) == "nls")
+    successful_fits <- vapply(results,
+                              function(x) class(x) == "nls",
+                              logical(length = length(results)))
     results[successful_fits]
 }
 

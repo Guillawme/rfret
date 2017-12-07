@@ -26,7 +26,9 @@ make_figure <- function(fits,
                         output_directory = NULL,
                         plot_format = "png") {
     # Get binding models used to obtain the input fits
-    binding_models <- sapply(fits, detect_binding_model)
+    binding_models <- vapply(fits,
+                             detect_binding_model,
+                             character(length = length(fits)))
 
     # Generate plot for each input model
     figures <- mapply(make_one_figure,
