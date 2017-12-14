@@ -1,4 +1,4 @@
-context("FRET: average replicates")
+context("FRET - average replicates")
 
 # Load pre-computed expected result
 my_expected_result <-

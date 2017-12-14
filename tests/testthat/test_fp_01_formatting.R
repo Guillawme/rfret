@@ -1,4 +1,4 @@
-context("FP: format data")
+context("FP - format data")
 
 # Load pre-computed expected result
 my_expected_result <-
