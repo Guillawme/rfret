@@ -11,7 +11,9 @@ fret_correct_one_dataset(one_dataset)
 technical replicates. This dataframe must contain the following columns:
 \describe{
 \item{Experiment}{A unique name identifying each experiment.}
-\item{Type}{Either "blank" (no donor) or "titration" (donor present).}
+\item{Type}{Either "acceptor_only" (no donor control), "donor_only" (no
+acceptor control), or "titration" (experiment with both donor and
+acceptor).}
 \item{Observation}{A number identifying each observation in a titration
 series (corresponds to the plate column numbers, if experiments are set
 up as rows in a 384-well plate). The number of observations for an
