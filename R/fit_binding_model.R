@@ -75,11 +75,10 @@ fit_binding_model <- function(data,
         }
 
         # Filter out failed fits
-        fits_success <- fits %>%
-            dplyr::filter(status == "success") %>%
+        fits_success %>%
+            dplyr::ungroup() %>%
             # Tidy results
             broom::tidy(fit) %>%
-            dplyr::ungroup() %>%
             dplyr::select(Experiment, parameter = term, estimate, std.error) %>%
             # Split by experiment name, then write each fit summary to a CSV
             # file in the output directory
@@ -97,10 +96,9 @@ fit_binding_model <- function(data,
 
     # Build a named list where items are named after experiments and contain
     # the corresponding fit object. Return only successful fits.
-    results <- fits$fit
-    names(results) <- fits$Experiment
-    successful_fits <- sapply(results, function(x) class(x) == "nls")
-    results[successful_fits]
+    results <- fits_success$fit
+    names(results) <- fits_success$Experiment
+    results
 }
 
 #' @title Fit the Hill model equation to the experimental binding data

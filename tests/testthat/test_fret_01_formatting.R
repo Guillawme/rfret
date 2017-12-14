@@ -1,4 +1,4 @@
-context("FRET: format data")
+context("FRET - format data")
 
 # Load pre-computed expected result
 my_expected_result <-

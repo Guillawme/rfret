@@ -10,7 +10,9 @@
 #'     technical replicates. This dataframe must contain the following columns:
 #'     \describe{
 #'     \item{Experiment}{A unique name identifying each experiment.}
-#'     \item{Type}{Either "blank" (no donor) or "titration" (donor present).}
+#'     \item{Type}{Either "acceptor_only" (no donor control), "donor_only" (no
+#'     acceptor control), or "titration" (experiment with both donor and
+#'     acceptor).}
 #'     \item{Observation}{A number identifying each observation in a titration
 #'     series (corresponds to the plate column numbers, if experiments are set
 #'     up as rows in a 384-well plate). The number of observations for an
@@ -104,7 +106,9 @@ fret_correct_signal <- function(data,
 #'     technical replicates. This dataframe must contain the following columns:
 #'     \describe{
 #'     \item{Experiment}{A unique name identifying each experiment.}
-#'     \item{Type}{Either "blank" (no donor) or "titration" (donor present).}
+#'     \item{Type}{Either "acceptor_only" (no donor control), "donor_only" (no
+#'     acceptor control), or "titration" (experiment with both donor and
+#'     acceptor).}
 #'     \item{Observation}{A number identifying each observation in a titration
 #'     series (corresponds to the plate column numbers, if experiments are set
 #'     up as rows in a 384-well plate). The number of observations for an
@@ -156,18 +160,34 @@ fret_correct_one_dataset <- function(one_dataset) {
         dplyr::filter(Type == "acceptor_only") %>%
         dplyr::mutate(acceptor_direct_excitation = fret_channel / acceptor_channel)
 
-    # Apply correction factors
+    # If there are less controls than actual titration points, average controls
+    # and warn the user.
     titration <- dplyr::filter(one_dataset, Type == "titration")
-    titration$donor_bleed_through <- donor_only$donor_bleed_through
-    titration$acceptor_direct_excitation <- acceptor_only$acceptor_direct_excitation
+    if (nrow(donor_only) != nrow(titration)) {
+        message("Donor only control has a different number of points compared to titration.")
+        message("Averaging donor_bleed_through values.")
+        donor_bleed_through <- mean(donor_only$donor_bleed_through)
+    } else {
+        donor_bleed_through <- donor_only$donor_bleed_through
+    }
+    if (nrow(acceptor_only) != nrow(titration)) {
+        message("Acceptor only control has a different number of points compared to titration.")
+        message("Averaging acceptor_direct_excitation values.")
+        acceptor_direct_excitation <- mean(acceptor_only$acceptor_direct_excitation)
+    } else {
+        acceptor_direct_excitation <- acceptor_only$acceptor_direct_excitation
+    }
+
+    # Apply correction factors
+    titration$donor_bleed_through <- donor_bleed_through
+    titration$acceptor_direct_excitation <- acceptor_direct_excitation
     corrected_data <- titration %>%
         dplyr::transmute(
             concentration = concentration,
             signal = fret_channel -
                 donor_channel * donor_bleed_through -
                 acceptor_channel * acceptor_direct_excitation
-            )
-
+            ) %>%
     # Subtract baseline
-    corrected_data %>% dplyr::mutate(signal = signal - min(signal))
+        dplyr::mutate(signal = signal - min(signal))
 }

@@ -21,19 +21,20 @@ Given raw fluorescence data from a FRET binding experiment, you can:
    the data.
 
 This package allows batch processing and analysis of any number of datasets at
-a time.
+a time. It can also process and analyze fluorescence polarization or anisotropy
+binding data. Support for fluorescence quenching data is also planned.
 
 ## Installation
 
 First, install the `devtools` package, if not already present on your system:
 
-```R
+```r
 install.packages("devtools")
 ```
 
 You can then install `rfret` from GitHub, right from within R:
 
-```R
+```r
 devtools::install_github("Guilz/rfret", build_vignettes = TRUE)
 ```
 
@@ -41,7 +42,7 @@ devtools::install_github("Guilz/rfret", build_vignettes = TRUE)
 
 You can access a detailed tutorial using the following commands:
 
-```R
+```r
 library(rfret)
-vignette("using_rfret")
+vignette("analyzing_fret_data")
 ```

@@ -1,4 +1,4 @@
-context("FP: average replicates")
+context("FP - average replicates")
 
 # Load pre-computed expected result
 my_expected_result <-
