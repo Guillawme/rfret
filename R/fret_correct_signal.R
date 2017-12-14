@@ -166,16 +166,16 @@ fret_correct_one_dataset <- function(one_dataset) {
     if (nrow(donor_only) != nrow(titration)) {
         message("Donor only control has a different number of points compared to titration.")
         message("Averaging donor_bleed_through values.")
-        donor_bleed_through <- mean(donor_only[["donor_bleed_through"]])
+        donor_bleed_through <- mean(donor_only$donor_bleed_through)
     } else {
-        donor_bleed_through <- donor_only[["donor_bleed_through"]]
+        donor_bleed_through <- donor_only$donor_bleed_through
     }
     if (nrow(acceptor_only) != nrow(titration)) {
         message("Acceptor only control has a different number of points compared to titration.")
         message("Averaging acceptor_direct_excitation values.")
-        acceptor_direct_excitation <- mean(acceptor_only[["acceptor_direct_excitation"]])
+        acceptor_direct_excitation <- mean(acceptor_only$acceptor_direct_excitation)
     } else {
-        acceptor_direct_excitation <- acceptor_only[["acceptor_direct_excitation"]]
+        acceptor_direct_excitation <- acceptor_only$acceptor_direct_excitation
     }
 
     # Apply correction factors
