@@ -59,10 +59,9 @@ fret_format_data <- function(input = NULL,
 
     # Format data and return a single large dataframe
     raw_data %>%
-        mapply(fret_format_one_dataset,
-               .,
-               names(raw_data),
-               SIMPLIFY = FALSE) %>%
+        purrr::map2(.x = .,
+                    .y = names(raw_data),
+                    .f = fret_format_one_dataset) %>%
         dplyr::bind_rows()%>%
         tidyr::drop_na()
 }

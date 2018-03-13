@@ -23,7 +23,7 @@ load_data <- function(input = NULL, skip_lines = NULL) {
         # If no input is provided, ask for one
         stop("You must specify an input: a directory name, a vector of file names, a dataframe, or a list of dataframes.")
     } else if (is.list(input) && is.data.frame(input)) {
-        # If a single dataframe is provided, we put it in a named list so mapply
+        # If a single dataframe is provided, we put it in a named list so map
         # can process it
         raw_data <- list(input)
         names(raw_data) <- deparse(substitute(input))
@@ -76,7 +76,9 @@ load_data <- function(input = NULL, skip_lines = NULL) {
 #' }
 
 read_files <- function(input = NULL, skip_lines = NULL) {
-    loaded_files <- lapply(input, readr::read_csv, skip = skip_lines)
+    loaded_files <- purrr::map(.x = input,
+                               .f = readr::read_csv,
+                               skip = skip_lines)
     if(is.null(names(input))) {
         # If the vector of files has no names attribute, use each corresponding
         # file name without the .csv extension to name each element of the vector

@@ -69,10 +69,9 @@ fp_format_data <- function(input = NULL,
 
     # Format data and return a single large dataframe
     raw_data %>%
-        mapply(fp_format_one_dataset,
-               .,
-               names(raw_data),
-               SIMPLIFY = FALSE) %>%
+        purrr::map2(.x = .,
+                    .y = names(raw_data),
+                    .f = fp_format_one_dataset) %>%
         dplyr::bind_rows() %>%
         tidyr::drop_na()
 }

@@ -30,10 +30,8 @@ fp_inspect_raw_data <- function(raw_data,
     # Split input data by Experiment and make plots for each dataset
     results <- raw_data %>%
         split(raw_data$Experiment) %>%
-        mapply(fp_inspect_one_dataset,
-               .,
-               MoreArgs = list(highest_signal = highest_signal),
-               SIMPLIFY = FALSE)
+        purrr::map(fp_inspect_one_dataset,
+                   highest_signal = highest_signal)
 
     # Optionally, write plots to files in the specified directory
     if (!is.null(output_directory)) {
@@ -44,11 +42,11 @@ fp_inspect_raw_data <- function(raw_data,
             message("Creating directory: ", output_directory)
             dir.create(output_directory)
         }
-        mapply(fp_save_inspection_plot,
-               results,
-               names(results),
-               MoreArgs = list(output_directory = output_directory,
-                               plot_format = plot_format))
+        purrr::walk2(.x = results,
+                     .y = names(results),
+                     .f = fp_save_inspection_plots,
+                     output_directory = output_directory,
+                     plot_format = plot_format)
     }
 
     # Always return results

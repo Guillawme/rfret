@@ -26,17 +26,12 @@ make_figure <- function(fits,
                         output_directory = NULL,
                         plot_format = "png") {
     # Get binding models used to obtain the input fits
-    binding_models <- vapply(fits,
-                             detect_binding_model,
-                             character(length = 1))
+    binding_models <- purrr::map_chr(fits, detect_binding_model)
 
     # Generate plot for each input model
-    figures <- mapply(make_one_figure,
-                      fit = fits,
-                      experiment_name = names(fits),
-                      binding_model = binding_models,
-                      MoreArgs = list(probe_conc = probe_concentration),
-                      SIMPLIFY = FALSE)
+    figures <- purrr::pmap(.l = list(fits, names(fits), binding_models),
+                           .f = make_one_figure,
+                           probe_conc = probe_concentration)
 
     # Optionally, write plots to files in the specified directory
     if (!is.null(output_directory)) {
