@@ -40,5 +40,5 @@ This function renames the appropriate column in a fluorescence
     \code{\link{fit_binding_model}}.
 }
 \seealso{
-\code{\link{fp_format_data}} and \code{\link{fp_average_replicates}}.
+\code{\link{format_data}} and \code{\link{fp_average_replicates}}.
 }

@@ -4,7 +4,7 @@
 #'     acceptor and FRET channels, as a function of the titration series.
 #'
 #' @param raw_data A dataframe containing the raw fluorescence data. It must
-#'     be the output of \code{\link{fret_format_data}}.
+#'     be the output of \code{\link{format_data}}.
 #' @param highest_signal An optional number corresponding to the maximal signal
 #'     measurable by the plate reader instrument used. Defaults to \code{NULL},
 #'     which won't check for the presence of saturated reads. The input number
@@ -59,7 +59,7 @@ fret_inspect_raw_data <- function(raw_data,
 #'     donor, acceptor and FRET channels, as a function of the titration series.
 #'
 #' @param dataset A dataframe containing the raw fluorescence data. It must
-#'     be the output of \code{\link{fret_format_data}}.
+#'     be the output of \code{\link{format_data}}.
 #' @param highest_signal An optional number corresponding to the maximal signal
 #'     measurable by the plate reader instrument used. Defaults to \code{NULL},
 #'     which won't check for the presence of saturated reads. The input number

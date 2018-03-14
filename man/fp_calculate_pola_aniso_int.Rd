@@ -24,7 +24,7 @@ intensities from the parallel channel.}
 \item{\code{perpendicular}}{The name of the column containing fluorescence
 intensities from the perpendicular channel.}
 }
-The output of \code{\link{fp_format_data}} can be used directly as input
+The output of \code{\link{format_data}} can be used directly as input
 for this function.}
 }
 \value{
@@ -38,6 +38,6 @@ This function calculates fluorescence polarization and
     polarized channels.
 }
 \seealso{
-\code{\link{fp_format_data}} to prepare datasets for use with
+\code{\link{format_data}} to prepare datasets for use with
     \code{fp_calculate_pola_aniso_int}.
 }

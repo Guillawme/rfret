@@ -6,7 +6,7 @@ my_expected_result <-
 
 # Run example dataset through the formatting and averaging functions
 my_result <- fret_binding_data %>%
-    fret_format_data() %>%
+    format_data(data_type = "fret") %>%
     fret_average_replicates()
 
 # Test that result matches expected precomputed result

@@ -7,7 +7,7 @@
 #' @param dataset A dataframe containing at least three columns called
 #'     \code{Experiment}, \code{fret_channel} (or \code{signal}), and
 #'     \code{concentration}. This can be the output of
-#'     \code{\link{fret_format_data}} or \code{\link{fret_correct_signal}}.
+#'     \code{\link{format_data}} or \code{\link{fret_correct_signal}}.
 #' @param output_directory An optional directory name where to write the plot.
 #'     This directory will be created if it does not already exist.
 #' @param plot_format A character string indicating the file format to use to

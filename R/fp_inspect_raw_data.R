@@ -4,7 +4,7 @@
 #'     datasets as a function of the titration series.
 #'
 #' @param raw_data A dataframe containing the raw fluorescence data. It must
-#'     be the output of \code{\link{fp_format_data}} or
+#'     be the output of \code{\link{format_data}} or
 #'     \code{\link{fp_calculate_pola_aniso_int}}.
 #' @param highest_signal An optional number corresponding to the maximal signal
 #'     measurable by the plate reader instrument used. Defaults to \code{NULL},
@@ -44,7 +44,7 @@ fp_inspect_raw_data <- function(raw_data,
         }
         purrr::walk2(.x = results,
                      .y = names(results),
-                     .f = fp_save_inspection_plots,
+                     .f = fp_save_inspection_plot,
                      output_directory = output_directory,
                      plot_format = plot_format)
     }
@@ -59,7 +59,7 @@ fp_inspect_raw_data <- function(raw_data,
 #'     from an FP dataset as a function of the titration series.
 #'
 #' @param dataset A dataframe containing the raw fluorescence data. It must
-#'     be the output of \code{\link{fp_format_data}} or
+#'     be the output of \code{\link{format_data}} or
 #'     \code{\link{fp_calculate_pola_aniso_int}}.
 #' @param highest_signal An optional number corresponding to the maximal signal
 #'     measurable by the plate reader instrument used. Defaults to \code{NULL},

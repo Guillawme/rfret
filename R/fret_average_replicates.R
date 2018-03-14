@@ -19,13 +19,13 @@
 #'     \item{acceptor_channel}{Fluorescence intensity in the acceptor channel.}
 #'     \item{donor_channel}{Fluorescence intensity in the donor channel.}
 #'     }
-#'     The output of \code{\link{fret_format_data}} can be used directly as input
+#'     The output of \code{\link{format_data}} can be used directly as input
 #'     for this function.
 #' @return A dataframe containing the reduced dataset after averaging across
 #'     replicates. It contains all of the above columns \emph{except}
 #'     \code{Replicate}, because it returns the average values over replicates.
 #'
-#' @seealso \code{\link{fret_format_data}} to prepare datasets for use with
+#' @seealso \code{\link{format_data}} to prepare datasets for use with
 #'     \code{fret_average_replicates}.
 #'
 #' @importFrom magrittr %>%

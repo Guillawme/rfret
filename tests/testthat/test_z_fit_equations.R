@@ -6,19 +6,19 @@ load(file = "./fret/fret_expected_fits.rda")
 
 # Run example dataset through the entire pipeline and keep resulting fit objects
 fret_hyperbolic_fit <- fret_binding_data %>%
-    fret_format_data() %>%
+    format_data(data_type = "fret") %>%
     fret_average_replicates() %>%
     fret_correct_signal() %>%
     fit_binding_model(binding_model = "hyperbolic")
 
 fret_hill_fit <- fret_binding_data %>%
-    fret_format_data() %>%
+    format_data(data_type = "fret") %>%
     fret_average_replicates() %>%
     fret_correct_signal() %>%
     fit_binding_model(binding_model = "hill")
 
 fret_quadratic_fit <- fret_binding_data %>%
-    fret_format_data() %>%
+    format_data(data_type = "fret") %>%
     fret_average_replicates() %>%
     fret_correct_signal() %>%
     fit_binding_model(binding_model = "quadratic", probe_concentration = 5)
@@ -40,38 +40,38 @@ load(file = "./fp/fp_expected_fits.rda")
 # Run example dataset through the entire pipeline and keep resulting fit objects
 # Using polarization signal
 fp_hyperbolic_fit <- fp_binding_data %>%
-    fp_format_data() %>%
+    format_data(data_type = "fp") %>%
     fp_average_replicates() %>%
     fp_use_signal("polarization") %>%
     fit_binding_model(binding_model = "hyperbolic")
 
 fp_hill_fit <- fp_binding_data %>%
-    fp_format_data() %>%
+    format_data(data_type = "fp") %>%
     fp_average_replicates() %>%
     fp_use_signal("polarization") %>%
     fit_binding_model(binding_model = "hill")
 
 fp_quadratic_fit <- fp_binding_data %>%
-    fp_format_data() %>%
+    format_data(data_type = "fp") %>%
     fp_average_replicates() %>%
     fp_use_signal("polarization") %>%
     fit_binding_model(binding_model = "quadratic", probe_concentration = 3)
 
 # Using anisotropy signal
 fa_hyperbolic_fit <- fp_binding_data %>%
-    fp_format_data() %>%
+    format_data(data_type = "fp") %>%
     fp_average_replicates() %>%
     fp_use_signal("anisotropy") %>%
     fit_binding_model(binding_model = "hyperbolic")
 
 fa_hill_fit <- fp_binding_data %>%
-    fp_format_data() %>%
+    format_data(data_type = "fp") %>%
     fp_average_replicates() %>%
     fp_use_signal("anisotropy") %>%
     fit_binding_model(binding_model = "hill")
 
 fa_quadratic_fit <- fp_binding_data %>%
-    fp_format_data() %>%
+    format_data(data_type = "fp") %>%
     fp_average_replicates() %>%
     fp_use_signal("anisotropy") %>%
     fit_binding_model(binding_model = "quadratic", probe_concentration = 3)

@@ -13,13 +13,13 @@ my_expected_result_3 <-
 # Run example datasets and test files through the formatting, averaging and
 # correction functions
 my_result_1 <- fret_binding_data %>%
-    fret_format_data() %>%
+    format_data(data_type = "fret") %>%
     fret_average_replicates() %>%
     fret_correct_signal()
 
 my_result_2_command <- rlang::quo(
     c(fret_less_donor = "./fret/fret_less_donor_controls.csv") %>%
-    fret_format_data() %>%
+    format_data(data_type = "fret") %>%
     fret_average_replicates() %>%
     fret_correct_signal()
 )
@@ -28,7 +28,7 @@ my_result_2 <-  rlang::eval_tidy(my_result_2_command)
 
 my_result_3_command <- rlang::quo(
     c(fret_less_donor = "./fret/fret_less_acceptor_controls.csv") %>%
-        fret_format_data() %>%
+        format_data(data_type = "fret") %>%
         fret_average_replicates() %>%
         fret_correct_signal()
 )

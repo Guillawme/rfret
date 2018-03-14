@@ -13,7 +13,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This documentation explains how to use the functions provided by the `rfret`
+This document explains how to use the functions provided by the `rfret`
 package to analyze FRET binding data from titration experiments, and determine
 the binding constant (Kd) of a macromolecular interaction. An example using a
 real-life dataset is presented and discussed.
@@ -143,14 +143,18 @@ library(rfret)
 All `fret_` functions in this package work by first concatenating together any
 number of datasets, to perform all subsequent data processing and analysis steps
 on a single, large internal dataframe. Any analysis must start by using the
-`fret_format_data()` function to prepare the raw data.
+`format_data()` function to prepare the raw data.
 
-The function `fret_format_data()` takes either:
+The function `format_data()` takes either:
 
 - the name of a single directory from which it will read all CSV files,
 - a single file name or a set of file names (as a character vector),
 - a single dataset already loaded in memory as a dataframe,
 - or a named list of datasets already loaded in memory as dataframes.
+
+It also needs a parameter `data_type = "fret"` to indicate that we want to
+pre-process FRET data (because `rfret` can also handle FP data, and can be
+extended to support more data types).
 
 It will format the data properly for subsequent processing by the other
 functions.
@@ -172,7 +176,7 @@ titration series for the donor, acceptor and FRET channels.
 Let's look at an example:
 ```{r Inspect raw data, message=FALSE, warning=FALSE}
 fret_binding_data %>%
-    fret_format_data() %>%
+    format_data(data_type = "fret") %>%
     fret_inspect_raw_data()
 ```
 
@@ -202,7 +206,7 @@ operator `%>%` from [the `magrittr` package][magrittr], and the three functions
 library(magrittr)
 library(rfret)
 fret_binding_data %>%
-    fret_format_data() %>%
+    format_data(data_type = "fret") %>%
     fret_average_replicates() %>%
     fret_correct_signal(output_directory = "./my_results")
 ```
@@ -229,7 +233,7 @@ following references:
   <https://doi.org/10.1016/B978-0-12-391940-3.00011-1>
 
 It takes a reduced dataset from `fret_average_replicates()`, or the output of 
-`fret_format_data()` in case there are no replicates, and outputs the corrected 
+`format_data()` in case there are no replicates, and outputs the corrected 
 FRET signal. Given a directory name, it will write out the corrected datasets to 
 CSV files. These output files will have the same names as the input files, 
 appended with `_corrected`. These files can be used to plot the corrected data 
@@ -247,7 +251,7 @@ It returns an `nls` object that can be further examined with standard functions
 Fitting the example dataset with the quadratic model can be achieved as follows:
 ```{r Curve fitting, message=FALSE, warning=FALSE}
 fret_binding_data %>%
-    fret_format_data() %>%
+    format_data(data_type = "fret") %>%
     fret_average_replicates() %>%
     fret_correct_signal() %>%
     fit_binding_model(binding_model = "quadratic",
@@ -265,7 +269,7 @@ Figure are written as PNG files by default, but the function can also write
 PDF and SVG files.
 ```{r Figure making, message=FALSE, warning=FALSE}
 fret_binding_data %>%
-    fret_format_data() %>%
+    format_data(data_type = "fret") %>%
     fret_average_replicates() %>%
     fret_correct_signal() %>%
     fit_binding_model(binding_model = "quadratic",
@@ -288,8 +292,9 @@ my_files <- list.files(path = ".", pattern = ".csv")
 
 # Generate raw data plots and save them in a directory called 'data_inspection'
 my_files %>%
-    fret_format_data(skip_lines = 4, 
-                     metadata_json = "column_names.json") %>%
+    format_data(data_type = "fret",
+                skip_lines = 4, 
+                metadata_json = "column_names.json") %>%
     fret_inspect_raw_data(output_directory = "./data_inspection",
                           plot_format = "png")
 
@@ -301,8 +306,9 @@ my_files %>%
 # 3. generate binding curve figures and save them as PNG files in a
 # directory 'final_figures'
 my_files %>%
-    fret_format_data(skip_lines = 4,
-                     metadata_json = "column_names.json") %>%
+    format_data(data_type = "fret",
+                skip_lines = 4,
+                metadata_json = "column_names.json") %>%
     fret_average_replicates() %>%
     fret_correct_signal(output_directory = "./corrected_data") %>%
     fit_binding_model(binding_model = "quadratic",

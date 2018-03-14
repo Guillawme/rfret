@@ -6,7 +6,7 @@ my_expected_result <-
 
 # Run example dataset through the formatting and averaging functions
 my_result <- fp_binding_data %>%
-    fp_format_data() %>%
+    format_data(data_type = "fp") %>%
     fp_average_replicates()
 
 # Test that result matches expected precomputed result

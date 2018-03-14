@@ -8,7 +8,7 @@ fret_inspect_one_dataset(dataset, highest_signal = NULL)
 }
 \arguments{
 \item{dataset}{A dataframe containing the raw fluorescence data. It must
-be the output of \code{\link{fret_format_data}}.}
+be the output of \code{\link{format_data}}.}
 
 \item{highest_signal}{An optional number corresponding to the maximal signal
 measurable by the plate reader instrument used. Defaults to \code{NULL},

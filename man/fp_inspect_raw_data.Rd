@@ -9,7 +9,7 @@ fp_inspect_raw_data(raw_data, highest_signal = NULL,
 }
 \arguments{
 \item{raw_data}{A dataframe containing the raw fluorescence data. It must
-be the output of \code{\link{fp_format_data}} or
+be the output of \code{\link{format_data}} or
 \code{\link{fp_calculate_pola_aniso_int}}.}
 
 \item{highest_signal}{An optional number corresponding to the maximal signal

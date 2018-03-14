@@ -9,14 +9,15 @@ my_expected_result <- readr::read_csv(file = "./metadata/expected_output.csv")
 # Prepare failing and correct commands
 my_failing_command <- rlang::quo(
     my_dataset %>%
-        fret_format_data() %>%
+        format_data(data_type = "fret") %>%
         fret_average_replicates() %>%
         fret_correct_signal()
 )
 
 my_successful_command <- rlang::quo(
     my_dataset %>%
-        fret_format_data(metadata_json = "./metadata/metadata_blah.json") %>%
+        format_data(metadata_json = "./metadata/metadata_blah.json",
+                    data_type = "fret") %>%
         fret_average_replicates() %>%
         fret_correct_signal()
 )

@@ -21,13 +21,13 @@
 #'     \item{\code{perpendicular}}{The name of the column containing fluorescence
 #'     intensities from the perpendicular channel.}
 #'     }
-#'     The output of \code{\link{fp_format_data}} can be used directly as input
+#'     The output of \code{\link{format_data}} can be used directly as input
 #'     for this function.
 #' @return A dataframe containing the same columns as the input dataframe, plus
 #'     three columns called \code{polarization}, \code{anisotropy} and
 #'     \code{intensity}.
 #'
-#' @seealso \code{\link{fp_format_data}} to prepare datasets for use with
+#' @seealso \code{\link{format_data}} to prepare datasets for use with
 #'     \code{fp_calculate_pola_aniso_int}.
 #'
 #' @importFrom magrittr %>%

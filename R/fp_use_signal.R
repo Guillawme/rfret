@@ -28,7 +28,7 @@
 #' @return A dataframe containing the same dataset with columns appropriately
 #'     named for \code{\link{fit_binding_model}}.
 #'
-#' @seealso \code{\link{fp_format_data}} and \code{\link{fp_average_replicates}}.
+#' @seealso \code{\link{format_data}} and \code{\link{fp_average_replicates}}.
 #'
 #' @export
 
