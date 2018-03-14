@@ -6,8 +6,8 @@
 #' @param data A dataframe containing the binding signal. It must contain
 #'     at least two columns: \code{concentration} (the ligand concentration) and
 #'     \code{signal} (the observed binding signal). The output of the
-#'     \code{\link{fret_correct_signal}} function can be used directly as input
-#'     here.
+#'     \code{\link{fret_correct_signal}} and \code{\link{fp_use_signal}}
+#'     functions can be used directly as input here.
 #' @param binding_model A binding model equation to fit to the experimental
 #'     data. Possible values are \code{"hyperbolic"}, \code{"hill"} or
 #'     \code{"quadratic"}.
@@ -23,29 +23,15 @@
 #' @export
 
 fit_binding_model <- function(data,
-                              binding_model = NULL,
+                              binding_model,
                               probe_concentration = NULL,
                               output_directory = NULL) {
-    # Sanity checks
-    if (is.null(binding_model)) {
-        stop("Please provide a binding model.")
-    }
-
     # Select model and fit data
-    if (binding_model == "hyperbolic") {
-        fits <- fit_hyperbolic(data)
-    } else if (binding_model == "hill") {
-        fits <- fit_hill(data)
-    } else if (binding_model == "quadratic") {
-        # Sanity check
-        if (is.null(probe_concentration)) {
-            stop("Please provide a probe concentration to use the quadratic model.")
-        }
-        # Fit
-        fits <- fit_quadratic(data, probe_concentration)
-    } else {
-        stop("Unknown binding model. Available models: 'hyperbolic', 'hill', 'quadratic'.")
-    }
+    fits <- switch(binding_model,
+                   "hyperbolic" = fit_hyperbolic(data),
+                   "hill"       = fit_hill(data),
+                   "quadratic"  = fit_quadratic(data, probe_concentration),
+                   stop("Unknown binding model: ", binding_model, "\nAvailable models: hyperbolic, hill, quadratic."))
 
     # Filter out failed fits
     fits_success <- fits %>%
@@ -58,8 +44,8 @@ fit_binding_model <- function(data,
     fits_failure <- fits %>%
         dplyr::filter(status == "failure")
     if(nrow(fits_failure) > 0) {
-        warning("Failed to fit datasets: ",
-                paste(fits_failure$Experiment, collapse = " "),
+        warning("Failed to fit datasets:\n",
+                paste(fits_failure$Experiment, collapse = "\n"),
                 call. = FALSE)
     }
 

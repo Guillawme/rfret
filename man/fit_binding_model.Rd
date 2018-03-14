@@ -4,15 +4,15 @@
 \alias{fit_binding_model}
 \title{Fit a binding model equation to the experimental binding data}
 \usage{
-fit_binding_model(data, binding_model = NULL, probe_concentration = NULL,
+fit_binding_model(data, binding_model, probe_concentration = NULL,
   output_directory = NULL)
 }
 \arguments{
 \item{data}{A dataframe containing the binding signal. It must contain
 at least two columns: \code{concentration} (the ligand concentration) and
 \code{signal} (the observed binding signal). The output of the
-\code{\link{fret_correct_signal}} function can be used directly as input
-here.}
+\code{\link{fret_correct_signal}} and \code{\link{fp_use_signal}}
+functions can be used directly as input here.}
 
 \item{binding_model}{A binding model equation to fit to the experimental
 data. Possible values are \code{"hyperbolic"}, \code{"hill"} or

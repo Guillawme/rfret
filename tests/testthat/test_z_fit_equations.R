@@ -5,22 +5,18 @@ context("Curve fitting and equations")
 load(file = "./fret/fret_expected_fits.rda")
 
 # Run example dataset through the entire pipeline and keep resulting fit objects
-fret_hyperbolic_fit <- fret_binding_data %>%
+fret_data_for_fit <- fret_binding_data %>%
     format_data(data_type = "fret") %>%
     fret_average_replicates() %>%
-    fret_correct_signal() %>%
+    fret_correct_signal()
+
+fret_hyperbolic_fit <- fret_data_for_fit %>%
     fit_binding_model(binding_model = "hyperbolic")
 
-fret_hill_fit <- fret_binding_data %>%
-    format_data(data_type = "fret") %>%
-    fret_average_replicates() %>%
-    fret_correct_signal() %>%
+fret_hill_fit <- fret_data_for_fit %>%
     fit_binding_model(binding_model = "hill")
 
-fret_quadratic_fit <- fret_binding_data %>%
-    format_data(data_type = "fret") %>%
-    fret_average_replicates() %>%
-    fret_correct_signal() %>%
+fret_quadratic_fit <- fret_data_for_fit %>%
     fit_binding_model(binding_model = "quadratic", probe_concentration = 5)
 
 # Test that results match expected precomputed results
@@ -39,41 +35,33 @@ load(file = "./fp/fp_expected_fits.rda")
 
 # Run example dataset through the entire pipeline and keep resulting fit objects
 # Using polarization signal
-fp_hyperbolic_fit <- fp_binding_data %>%
+fp_data_for_fit <- fp_binding_data %>%
     format_data(data_type = "fp") %>%
     fp_average_replicates() %>%
-    fp_use_signal("polarization") %>%
+    fp_use_signal("polarization")
+
+fp_hyperbolic_fit <- fp_data_for_fit %>%
     fit_binding_model(binding_model = "hyperbolic")
 
-fp_hill_fit <- fp_binding_data %>%
-    format_data(data_type = "fp") %>%
-    fp_average_replicates() %>%
-    fp_use_signal("polarization") %>%
+fp_hill_fit <- fp_data_for_fit %>%
     fit_binding_model(binding_model = "hill")
 
-fp_quadratic_fit <- fp_binding_data %>%
-    format_data(data_type = "fp") %>%
-    fp_average_replicates() %>%
-    fp_use_signal("polarization") %>%
+fp_quadratic_fit <- fp_data_for_fit %>%
     fit_binding_model(binding_model = "quadratic", probe_concentration = 3)
 
 # Using anisotropy signal
-fa_hyperbolic_fit <- fp_binding_data %>%
+fa_data_for_fit <- fp_binding_data %>%
     format_data(data_type = "fp") %>%
     fp_average_replicates() %>%
-    fp_use_signal("anisotropy") %>%
+    fp_use_signal("anisotropy")
+
+fa_hyperbolic_fit <- fa_data_for_fit %>%
     fit_binding_model(binding_model = "hyperbolic")
 
-fa_hill_fit <- fp_binding_data %>%
-    format_data(data_type = "fp") %>%
-    fp_average_replicates() %>%
-    fp_use_signal("anisotropy") %>%
+fa_hill_fit <- fa_data_for_fit %>%
     fit_binding_model(binding_model = "hill")
 
-fa_quadratic_fit <- fp_binding_data %>%
-    format_data(data_type = "fp") %>%
-    fp_average_replicates() %>%
-    fp_use_signal("anisotropy") %>%
+fa_quadratic_fit <- fa_data_for_fit %>%
     fit_binding_model(binding_model = "quadratic", probe_concentration = 3)
 
 # Test that results match expected precomputed results
@@ -90,4 +78,14 @@ test_that("fit_binding_model gives correct results on fp_binding_data", {
                  expected = fa_expected_hill_fit)
     expect_equal(object = fa_quadratic_fit,
                  expected = fa_expected_quadratic_fit)
+})
+
+# Test that an unknown binding model gives an error.
+my_failing_command <- rlang::quo(
+    fret_data_for_fit %>%
+        fit_binding_model(binding_model = "unknown")
+)
+
+test_that("fit_binding_model detects unknown models", {
+    expect_error(object = rlang::eval_tidy(my_failing_command))
 })
