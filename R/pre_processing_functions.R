@@ -15,6 +15,7 @@
 #' }
 #'
 #' @importFrom magrittr %>%
+#' @importFrom rlang !!
 
 fret_format_one_dataset <- function(raw_data, experiment_name) {
     # Generate an Experiment column, and retrieve experiment name here
@@ -24,7 +25,7 @@ fret_format_one_dataset <- function(raw_data, experiment_name) {
     # Generate columns Type and Replicate, based on column content
     raw_data %>%
         dplyr::rowwise() %>%
-        dplyr::mutate(intermediate = stringr::str_split(rlang::UQ(.rfret$metadata$content),
+        dplyr::mutate(intermediate = stringr::str_split(!!.rfret$metadata$content,
                                                         pattern = stringr::fixed(".")),
                       Type = intermediate[1],
                       Replicate = intermediate[2]) %>%
@@ -33,7 +34,7 @@ fret_format_one_dataset <- function(raw_data, experiment_name) {
         # Generate an Observation column, to label observations across different
         # types of experiments (controls and titration) and replicates
         dplyr::group_by(Experiment, Type, Replicate) %>%
-        dplyr::mutate(Observation = rlang::UQ(.rfret$metadata$concentration) %>%
+        dplyr::mutate(Observation = !!.rfret$metadata$concentration %>%
                           dplyr::desc() %>%
                           dplyr::row_number()
         ) %>%
@@ -53,10 +54,10 @@ fret_format_one_dataset <- function(raw_data, experiment_name) {
                       Type,
                       Replicate,
                       Observation,
-                      fret_channel     = rlang::UQ(.rfret$metadata$fret_channel),
-                      acceptor_channel = rlang::UQ(.rfret$metadata$acceptor_channel),
-                      donor_channel    = rlang::UQ(.rfret$metadata$donor_channel),
-                      concentration    = rlang::UQ(.rfret$metadata$concentration)) %>%
+                      fret_channel     = !!.rfret$metadata$fret_channel,
+                      acceptor_channel = !!.rfret$metadata$acceptor_channel,
+                      donor_channel    = !!.rfret$metadata$donor_channel,
+                      concentration    = !!.rfret$metadata$concentration) %>%
         dplyr::mutate(Replicate = as.integer(Replicate))
 }
 
@@ -77,6 +78,7 @@ fret_format_one_dataset <- function(raw_data, experiment_name) {
 #' }
 #'
 #' @importFrom magrittr %>%
+#' @importFrom rlang !!
 
 fp_format_one_dataset <- function(raw_data, experiment_name) {
     # Generate an Experiment column, and retrieve experiment name here
@@ -86,7 +88,7 @@ fp_format_one_dataset <- function(raw_data, experiment_name) {
     # Generate columns Type and Replicate, based on column Content
     raw_data %>%
         dplyr::rowwise() %>%
-        dplyr::mutate(intermediate = stringr::str_split(rlang::UQ(.rfret$metadata$content),
+        dplyr::mutate(intermediate = stringr::str_split(!!.rfret$metadata$content,
                                                         pattern = stringr::fixed(".")),
                       Type = intermediate[1],
                       Replicate = intermediate[2]) %>%
@@ -95,7 +97,7 @@ fp_format_one_dataset <- function(raw_data, experiment_name) {
         # Generate an Observation column, to label observations across different
         # types of experiments (baseline and titration) and replicates
         dplyr::group_by(Experiment, Type, Replicate) %>%
-        dplyr::mutate(Observation = rlang::UQ(.rfret$metadata$concentration) %>%
+        dplyr::mutate(Observation = !!.rfret$metadata$concentration %>%
                           dplyr::desc() %>%
                           dplyr::row_number()
         ) %>%
@@ -115,9 +117,9 @@ fp_format_one_dataset <- function(raw_data, experiment_name) {
                       Type,
                       Replicate,
                       Observation,
-                      polarization  = rlang::UQ(.rfret$metadata$polarization),
-                      anisotropy    = rlang::UQ(.rfret$metadata$anisotropy),
-                      intensity     = rlang::UQ(.rfret$metadata$intensity),
-                      concentration = rlang::UQ(.rfret$metadata$concentration)) %>%
+                      polarization  = !!.rfret$metadata$polarization,
+                      anisotropy    = !!.rfret$metadata$anisotropy,
+                      intensity     = !!.rfret$metadata$intensity,
+                      concentration = !!.rfret$metadata$concentration) %>%
         dplyr::mutate(Replicate = as.integer(Replicate))
 }
