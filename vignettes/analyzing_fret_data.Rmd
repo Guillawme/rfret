@@ -25,7 +25,7 @@ Analysis of FRET data can be broken down into the following steps, each of
 which `rfret` provides functions for:
 
 1. inspect raw data to detect possible outliers (function
-   `fret_inspect_raw_data()`);
+   `inspect_raw_data()`);
 2. average fluorescence intensities across technical replicates, if such
    replicates were measured (function `fret_average_replicates()`);
 3. correct FRET signal of the titration experiment, using signal from blank
@@ -169,7 +169,7 @@ detection is sensitive enough to detect very small pipetting errors, therefore,
 inspecting the fluorescence intensities in the donor and acceptor channels 
 provides an easy way to check for outliers in the series.
 
-The function `fret_inspect_raw_data()` takes the output of `fret_format_data()`
+The function `inspect_raw_data()` takes the output of `format_data()`
 and outputs, for each experiment, plots of the fluorescence intensity across the
 titration series for the donor, acceptor and FRET channels.
 
@@ -177,7 +177,7 @@ Let's look at an example:
 ```{r Inspect raw data, message=FALSE, warning=FALSE}
 fret_binding_data %>%
     format_data(data_type = "fret") %>%
-    fret_inspect_raw_data()
+    inspect_raw_data(data_type = "fret")
 ```
 
 In the donor channel plot, all fluorescence intensities should be equal, since
@@ -295,8 +295,9 @@ my_files %>%
     format_data(data_type = "fret",
                 skip_lines = 4, 
                 metadata_json = "column_names.json") %>%
-    fret_inspect_raw_data(output_directory = "./data_inspection",
-                          plot_format = "png")
+    inspect_raw_data(data_type = "fret",
+                     output_directory = "./data_inspection",
+                     plot_format = "png")
 
 # The following commands will:
 # 1. process raw data and save corrected data in CSV files in a
