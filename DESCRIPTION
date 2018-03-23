@@ -2,7 +2,10 @@ Package: rfret
 Title: Analyze FRET Binding Data
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Guillaume", "Gaullier", email = "guillaume@gaullier.org", role = c("aut", "cre", "dtc")),
+    person("Guillaume", "Gaullier",
+           email = "guillaume@gaullier.org",
+           role = c("aut", "cre", "dtc"),
+           comment = c(ORCID = "0000-0003-3405-6021")),
     person("Tiana", "Stastny", role = "ctb"),
     person("Ben", "Jenkins", role = "ctb"),
     person("Andrew", "Blumenfeld", role = "ctb"),
