@@ -34,10 +34,8 @@ fret_format_one_dataset <- function(raw_data, experiment_name) {
         # Generate an Observation column, to label observations across different
         # types of experiments (controls and titration) and replicates
         dplyr::group_by(Experiment, Type, Replicate) %>%
-        dplyr::mutate(Observation = !!.rfret$metadata$concentration %>%
-                          dplyr::desc() %>%
-                          dplyr::row_number()
-        ) %>%
+        dplyr::mutate(Observation =
+                          dplyr::row_number(dplyr::desc(!!.rfret$metadata$concentration))) %>%
         dplyr::ungroup() %>%
         # Rename sample type identifyers
         dplyr::mutate(Type = replace(Type,
@@ -97,10 +95,8 @@ fp_format_one_dataset <- function(raw_data, experiment_name) {
         # Generate an Observation column, to label observations across different
         # types of experiments (baseline and titration) and replicates
         dplyr::group_by(Experiment, Type, Replicate) %>%
-        dplyr::mutate(Observation = !!.rfret$metadata$concentration %>%
-                          dplyr::desc() %>%
-                          dplyr::row_number()
-        ) %>%
+        dplyr::mutate(Observation =
+                          dplyr::row_number(dplyr::desc(!!.rfret$metadata$concentration))) %>%
         dplyr::ungroup() %>%
         # Rename sample type identifyers
         dplyr::mutate(Type = replace(Type,
