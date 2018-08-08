@@ -5,9 +5,9 @@
 #'     and returns a binding curve plot figure for each model.
 #'
 #' @param fits A named list where items are named after the corresponding
-#'     experiment and contain a model object from \code{\link[stats]{nls}}. The
-#'     output of \code{\link{fit_binding_model}} can be used directly as input
-#'     here.
+#'     experiment and contain a model object from \code{\link[minpack.lm]{nlsLM}}.
+#'     The output of \code{\link{fit_binding_model}} can be used directly as
+#'     input here.
 #' @param probe_concentration The fixed concentration of probe molecule. This is
 #'     ignored for models obtained with the hyperbolic and hill equations, but
 #'     required for models obtained with the quadratic equation.
