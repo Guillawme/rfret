@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This documentation explains how the hyperbolic model equation used to fit
+This document explains how the hyperbolic model equation used to fit
 binding data from a FRET experiment is derived from the law of mass action.
 
 ## Binding equilibrium
