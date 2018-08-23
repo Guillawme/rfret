@@ -35,7 +35,8 @@ fret_job_plot <- function(dataset,
     y_axis_title <- NULL
     if (column_fret_channel_present) {
         y_axis <- dataset$fret_channel
-        y_axis_title <- "Raw FRET"}
+        y_axis_title <- "Raw FRET"
+        }
     if (column_signal_present) {
         y_axis <- dataset$signal
         y_axis_title <- "FRET corrected"
