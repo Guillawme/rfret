@@ -8,3 +8,4 @@ binding-curve.png
 _pkgdown.yml
 ^_pkgdown\.yml$
 data-raw/*
+.lintr
