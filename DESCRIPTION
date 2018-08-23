@@ -39,6 +39,7 @@ Imports: broom (>= 0.4.4),
     tidyr (>= 0.8.1),
     zeallot (>= 0.1.0)
 Suggests: knitr (>= 1.20),
+    lintr (>= 1.0.2),
     rmarkdown (>= 1.10),
     testthat (>= 2.0.0)
 VignetteBuilder: knitr

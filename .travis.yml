@@ -1,5 +1,7 @@
 language: r
 r: release
+r_github_packages:
+  - jimhester/lintr
 cache: packages
 pandoc_version: 2.2.1
 latex: false
