@@ -64,6 +64,6 @@ quadratic <- function(conc, parameters) {
 
     # Equation definition
     s_min + (s_max - s_min) / (2 * probe_conc) *
-      ( (kd + probe_conc + conc) -
-          sqrt( (kd + probe_conc + conc)^2 - 4 * probe_conc * conc ) )
+      ((kd + probe_conc + conc) -
+           sqrt((kd + probe_conc + conc)^2 - 4 * probe_conc * conc))
 }
