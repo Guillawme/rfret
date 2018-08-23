@@ -37,13 +37,13 @@ fit_binding_model <- function(data,
     fits_success <- fits %>%
         dplyr::filter(status == "success")
     # Stop here if there is no successful fit left...
-    if(nrow(fits_success) == 0) {
+    if (nrow(fits_success) == 0) {
         stop("All fits failed. Check your raw data.")
     }
     # Report failed fits so the user can investigate
     fits_failure <- fits %>%
         dplyr::filter(status == "failure")
-    if(nrow(fits_failure) > 0) {
+    if (nrow(fits_failure) > 0) {
         warning("Failed to fit datasets:\n",
                 paste(fits_failure$Experiment, collapse = "\n"),
                 call. = FALSE)

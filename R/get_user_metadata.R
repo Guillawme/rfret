@@ -41,7 +41,7 @@
 
 get_user_metadata <- function(user_json_file) {
     # Sanity check
-    if(!file.exists(user_json_file)) {
+    if (!file.exists(user_json_file)) {
         stop("Metadata file not found:", user_json_file)
     }
 

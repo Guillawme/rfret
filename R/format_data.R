@@ -80,7 +80,7 @@ format_data <- function(input,
     # Check if we need to read user-provided metadata (otherwise, defaults will
     # be used automatically). If we use non-default metadata, reset to default
     # after the function terminates.
-    if(!is.null(metadata_json)) {
+    if (!is.null(metadata_json)) {
         default <- get_user_metadata(metadata_json)
         on.exit(assign(x = "metadata", value = default, envir = .rfret))
     }

@@ -79,7 +79,7 @@ read_files <- function(input = NULL, skip_lines = NULL) {
     loaded_files <- purrr::map(.x = input,
                                .f = readr::read_csv,
                                skip = skip_lines)
-    if(is.null(names(input))) {
+    if (is.null(names(input))) {
         # If the vector of files has no names attribute, use each corresponding
         # file name without the .csv extension to name each element of the vector
         names(loaded_files) <- stringr::str_replace(input,
