@@ -1,7 +1,7 @@
 #' @title Package startup messages
 #'
 #' @description This internal function is run when the package gets attached by
-#'     \code{\link[base]{library()}}.
+#'     \code{\link[base]{library}}.
 #' @param libname A character string giving the library directory where the
 #'     package defining the namespace was found. See \code{\link[base]{ns-hooks}}.
 #' @param pkgname A character string giving the name of the package. See
