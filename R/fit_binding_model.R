@@ -137,7 +137,7 @@ fit_hyperbolic <- function(data) {
         dplyr::do(fit = try(minpack.lm::nlsLM(formula = model,
                                               data = .,
                                               start = guess_parameters(.),
-                                              lower =c(0, 0, 0)),
+                                              lower = c(0, 0, 0)),
                             silent = TRUE)) %>%
         dplyr::mutate(status = ifelse(class(fit) == "nls", "success", "failure"))
 }
