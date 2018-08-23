@@ -27,7 +27,7 @@ fret_job_plot <- function(dataset,
     column_signal_present <- "signal" %in% colnames(dataset)
     columns_ok <- xor(column_fret_channel_present, column_signal_present)
     if (!columns_ok) {
-        stop("Could not find FRET signal in this dataset. You need a column named 'fret_channel' or 'signal' (not both).")
+        stop("Could not find FRET signal. You need a column named 'fret_channel' or 'signal' (not both).")
     }
 
     # Get correct column name for the Y axis

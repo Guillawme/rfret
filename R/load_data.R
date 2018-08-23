@@ -21,7 +21,7 @@ load_data <- function(input = NULL, skip_lines = NULL) {
     # Check the input type to determine how to access the data
     if (is.null(input)) {
         # If no input is provided, ask for one
-        stop("You must specify an input: a directory name, a vector of file names, a dataframe, or a list of dataframes.")
+        stop("You must specify an input: a directory name, vector of file names, dataframe, or list of dataframes.")
     } else if (is.list(input) && is.data.frame(input)) {
         # If a single dataframe is provided, we put it in a named list so map
         # can process it

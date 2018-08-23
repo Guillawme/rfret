@@ -1,5 +1,5 @@
 linters: with_defaults(
-    line_length_linter = NULL, # 81
+    line_length_linter(120),
     trailing_blank_lines_linter = NULL, # 6
     #spaces_left_parentheses_linter = NULL, # 5
     #spaces_inside_linter = NULL, # 4
