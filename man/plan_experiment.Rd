@@ -4,8 +4,9 @@
 \alias{plan_experiment}
 \title{Plan a binding assay experiment}
 \usage{
-plan_experiment(kd, min_concentration = 0.001, max_concentration = 1e+05,
-  binding_model = "hyperbolic", probe_conc = NULL, hill_coef = 1)
+plan_experiment(kd, min_concentration = 0.001,
+  max_concentration = 1e+05, binding_model = "hyperbolic",
+  probe_conc = NULL, hill_coef = 1)
 }
 \arguments{
 \item{kd}{A Kd value.}

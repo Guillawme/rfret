@@ -4,7 +4,8 @@
 \alias{fp_save_inspection_plot}
 \title{Save raw data plots from a single FP binding dataset}
 \usage{
-fp_save_inspection_plot(input_plot, dataset_name, output_directory, plot_format)
+fp_save_inspection_plot(input_plot, dataset_name, output_directory,
+  plot_format)
 }
 \arguments{
 \item{input_plot}{The output of  \code{\link{fp_inspect_one_dataset}}.}
