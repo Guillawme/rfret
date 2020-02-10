@@ -1,3 +1,15 @@
+# No longer maintained
+
+**I no longer have time to maintain this package. I won't add new functionality,
+I won't fix bugs, I won't review or merge contributions. Use at your own risk,
+fork if you want.**
+
+Making this package taught me a lot. Most importantly, I realized that I tried
+to make it too broad in scope. A more generic non-linear curve-fitting package
+would still be a useful addition to the R package ecosystem (at the time of this
+writing), but it ought to be a lot narrower in scope and hence a lot simpler in
+design. I may work on this in the future if time allows.
+
 # rfret: Analyze FRET Binding Data with R
 
 [![Build Status](https://travis-ci.org/Guilz/rfret.svg?branch=master)](https://travis-ci.org/Guilz/rfret)
