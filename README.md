@@ -8,7 +8,7 @@ Making this package taught me a lot. Most importantly, I realized that I tried
 to make it too broad in scope. A more generic non-linear curve-fitting package
 would still be a useful addition to the R package ecosystem (at the time of this
 writing), but it ought to be a lot narrower in scope and hence a lot simpler in
-design. I may work on this in the future if time allows.
+design.
 
 # rfret: Analyze FRET Binding Data with R
 
